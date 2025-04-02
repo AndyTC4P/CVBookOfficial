@@ -6,6 +6,8 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\CV;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+
 
 class CvForm extends Component
 {
@@ -89,9 +91,9 @@ class CvForm extends Component
     public function save()
     {
         $this->validate();
-
+    
         $imagenPath = $this->imagen ? $this->imagen->store('imagenes_perfil', 'public') : null;
-
+    
         $data = [
             'user_id' => Auth::id(),
             'nombre' => $this->nombre,
@@ -110,17 +112,24 @@ class CvForm extends Component
             'educacion' => json_encode($this->educacion),
             'publico' => $this->publico,
         ];
-
+    
         if ($this->modo === 'crear') {
-            CV::create($data);
-            return redirect()->route('cv.index')->with('message', '✅ CV creado correctamente.');
+            $slugBase = Str::slug($this->nombre . '-' . $this->apellido);
+            $slug = $slugBase . '-' . Str::random(4);
+            $data['slug'] = $slug;
+    
+            $cv = CV::create($data);
+            return redirect()->route('cv.show', ['slug' => $cv->slug]);
         } else {
             $cv = CV::findOrFail($this->cv_id);
             $data['imagen'] = $imagenPath ?? $cv->imagen;
+            $data['slug'] = $cv->slug; // mantener slug existente
+    
             $cv->update($data);
             return redirect()->route('cv.index')->with('message', '✅ CV actualizado correctamente.');
         }
     }
+    
 
     public function addExperience()
     {

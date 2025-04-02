@@ -3,6 +3,29 @@
 Este archivo documenta los cambios realizados por versión en el proyecto [CV Book](https://cvbook.online).
 
 ---
+
+## [v1.1.3] - 2025-03-27
+✨ Nuevas funcionalidades
+Se implementó un sistema de slugs únicos legibles por humanos para reemplazar el uso de IDs en las URLs de los CVs.
+
+Las URLs ahora son más limpias y fáciles de compartir, por ejemplo:
+https://cvbook.com/cv/juan-perez-x4g7
+
+🔧 Cambios técnicos
+Se agregó el campo slug a la tabla cvs con generación automática.
+
+El modelo CV fue actualizado para permitir la asignación masiva del campo slug.
+
+Se modificaron las rutas (web.php) para usar {slug} en lugar de {id}.
+
+El controlador CVController ahora busca los CVs por slug en lugar de ID.
+
+Se actualizó la vista de índice (index.blade.php) para generar enlaces públicos usando el slug.
+
+El formulario CvForm genera automáticamente slugs únicos en la creación.
+
+🛡️ Seguridad y validación
+Acceso validado para CVs privados: solo el dueño autenticado puede verlos, incluso con URL directa.
 ## [v1.1.2] - 2025-03-27
 
 🛠 Restauración del Proyecto

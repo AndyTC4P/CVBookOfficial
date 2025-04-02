@@ -14,40 +14,44 @@ Route::view('dashboard', 'dashboard')
 
 // Página del perfil del usuario
 Route::view('profile', 'profile')
-    ->middleware(['auth']) // Solo accesible si el usuario ha iniciado sesión
+    ->middleware(['auth'])
     ->name('profile');
 
 // 🔹 RUTAS PARA GESTIONAR CVs 🔹
 
 // Muestra el formulario para crear un nuevo CV
+// (¡IMPORTANTE! Esta ruta debe ir antes que /cv/{slug})
 Route::get('/cv/create', [CVController::class, 'create'])
-    ->middleware(['auth']) // Solo accesible para usuarios autenticados
+    ->middleware(['auth'])
     ->name('cv.create');
 
 // Muestra todos los CVs del usuario autenticado
 Route::get('/cv', [CVController::class, 'index'])
-    ->middleware(['auth']) // Protegido para que solo el usuario vea sus propios CVs
+    ->middleware(['auth'])
     ->name('cv.index');
 
-// Muestra un CV en particular (puede ser público o privado)
-Route::get('/cv/{id}', [CVController::class, 'show'])
+// Mostrar un CV específico por su slug
+Route::get('/cv/{slug}', [CVController::class, 'show'])
     ->name('cv.show');
 
-// Muestra el formulario para editar un CV específico
-Route::get('/cv/{id}/edit', [CVController::class, 'edit'])
-    ->middleware(['auth']) // Solo el dueño del CV puede acceder a esta ruta
+// Mostrar formulario para editar un CV por slug
+Route::get('/cv/{slug}/edit', [CVController::class, 'edit'])
+    ->middleware(['auth'])
     ->name('cv.edit');
 
-// Actualiza un CV con la información editada
-Route::put('/cv/{id}', [CVController::class, 'update'])
+// Actualizar un CV por slug
+Route::put('/cv/{slug}', [CVController::class, 'update'])
     ->middleware(['auth'])
     ->name('cv.update');
 
-    Route::delete('/cv/{id}', [CVController::class, 'destroy'])->name('cv.destroy');
+// Eliminar un CV por slug
+Route::delete('/cv/{slug}', [CVController::class, 'destroy'])
+    ->name('cv.destroy');
 
-// Incluye las rutas de autenticación generadas por Laravel Breeze/Jetstream
+// Rutas de autenticación generadas por Breeze o Jetstream
 require __DIR__.'/auth.php';
 
+// Cierre de sesión manual
 Route::post('/logout', function () {
     Auth::logout();
     request()->session()->invalidate();

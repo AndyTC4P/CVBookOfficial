@@ -28,7 +28,9 @@ class CV extends Model
         'habilidades',
         'idiomas',
         'publico',
+        'slug', // 👈 Agrega esta línea
     ];
+    
 
     protected $casts = [
         'experiencia' => 'array',
