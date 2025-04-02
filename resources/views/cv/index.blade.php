@@ -37,20 +37,22 @@
     </div>
 
     <div class="grid grid-cols-2 gap-2 w-full sm:flex sm:flex-wrap sm:justify-start sm:w-auto">
-        <a href="{{ route('cv.show', $cv->id) }}"
-           class="bg-blue-500 hover:bg-blue-400 text-white text-sm px-3 py-1.5 rounded-md shadow-sm text-center">
-            👀 Ver CV
-        </a>
+    <!-- Ver CV -->
+    <a href="{{ route('cv.show', $cv->id) }}"
+       class="flex justify-center items-center w-36 px-3 py-1.5 bg-blue-500 hover:bg-blue-400 text-white text-sm rounded-md shadow-sm">
+        👀 Ver CV
+    </a>
 
-        @if($cv->publico)
-        <div x-data="{ show: false }" class="relative">
+    <!-- Copiar enlace -->
+    @if($cv->publico)
+        <div x-data="{ show: false }" class="relative w-36">
             <button
                 @click="
                     navigator.clipboard.writeText('{{ route('cv.show', $cv->id) }}');
                     show = true;
                     setTimeout(() => show = false, 3000);
                 "
-                class="bg-green-500 hover:bg-green-400 text-white text-sm px-3 py-1.5 rounded-md shadow-sm w-full text-center"
+                class="flex justify-center items-center w-full px-3 py-1.5 bg-green-500 hover:bg-green-400 text-white text-sm rounded-md shadow-sm"
             >
                 📋 Copiar Enlace
             </button>
@@ -63,53 +65,56 @@
                 Enlace copiado
             </span>
         </div>
-        @endif
+    @endif
 
-        <a href="{{ route('cv.edit', $cv->id) }}"
-           class="bg-yellow-500 hover:bg-yellow-400 text-white text-sm px-3 py-1.5 rounded-md shadow-sm text-center">
-            ✏️ Editar CV
-        </a>
+    <!-- Editar CV -->
+    <a href="{{ route('cv.edit', $cv->id) }}"
+       class="flex justify-center items-center w-36 px-3 py-1.5 bg-yellow-500 hover:bg-yellow-400 text-white text-sm rounded-md shadow-sm">
+        ✏️ Editar CV
+    </a>
 
-        <!-- Eliminar con modal -->
-        <div x-data="{ showModal: false }" x-init="showModal = false" x-cloak>
-            <button
-                @click="showModal = true"
-                class="bg-red-500 hover:bg-red-400 text-white text-sm px-3 py-1.5 rounded-md shadow-sm w-full text-center"
-            >
-                🗑 Eliminar
-            </button>
+    <!-- Eliminar con modal -->
+    <div x-data="{ showModal: false }" class="w-36" x-cloak>
+        <button
+            @click="showModal = true"
+            class="flex justify-center items-center w-full px-3 py-1.5 bg-red-500 hover:bg-red-400 text-white text-sm rounded-md shadow-sm"
+        >
+            🗑 Eliminar
+        </button>
 
-            <!-- Modal -->
-            <div
-                x-show="showModal"
-                x-transition
-                class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-            >
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl w-full max-w-md">
-                    <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">¿Eliminar CV?</h2>
-                    <p class="text-gray-600 dark:text-gray-300 mb-6">¿Estás seguro de que deseas eliminar este CV? Esta acción no se puede deshacer.</p>
-                    <div class="flex justify-end gap-3">
+        <!-- Modal -->
+        <div
+            x-show="showModal"
+            x-transition
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+        >
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl w-full max-w-md">
+                <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">¿Eliminar CV?</h2>
+                <p class="text-gray-600 dark:text-gray-300 mb-6">¿Estás seguro de que deseas eliminar este CV? Esta acción no se puede deshacer.</p>
+                <div class="flex justify-end gap-3">
+                    <button
+                        @click="showModal = false"
+                        class="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-white rounded hover:bg-gray-400 dark:hover:bg-gray-500"
+                    >
+                        Cancelar
+                    </button>
+                    <form method="POST" action="{{ route('cv.destroy', $cv->id) }}" x-ref="deleteForm">
+                        @csrf
+                        @method('DELETE')
                         <button
-                            @click="showModal = false"
-                            class="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-white rounded hover:bg-gray-400 dark:hover:bg-gray-500"
+                            type="submit"
+                            class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
                         >
-                            Cancelar
+                            Sí, eliminar
                         </button>
-                        <form method="POST" action="{{ route('cv.destroy', $cv->id) }}" x-ref="deleteForm">
-                            @csrf
-                            @method('DELETE')
-                            <button
-                                type="submit"
-                                class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-                            >
-                                Sí, eliminar
-                            </button>
-                        </form>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+
 </li>
                     @endforeach
                 </ul>

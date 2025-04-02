@@ -5,7 +5,6 @@
 
     <div class="py-12 max-w-4xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-md rounded-lg p-6">
-
             {{-- Imagen y nombre --}}
             <div class="flex flex-col sm:flex-row items-center gap-6">
                 @if ($cv->imagen)
@@ -22,6 +21,21 @@
                         {{ $cv->nombre }} {{ $cv->apellido }}
                     </h1>
                     <p class="text-lg text-gray-500 dark:text-gray-300">{{ $cv->titulo }}</p>
+
+                    @if($cv->correo)
+                        <p class="text-base text-gray-400 mt-1">📧 {{ $cv->correo }}</p>
+                    @endif
+                    @if($cv->telefono)
+                        <p class="text-base text-gray-400">📱 {{ $cv->telefono }}</p>
+                    @endif
+                    @if($cv->direccion || $cv->ciudad || $cv->pais)
+                        <p class="text-base text-gray-400 mt-1">
+                            📍 {{ $cv->direccion }}
+                            {{ $cv->ciudad ? ', ' . $cv->ciudad : '' }}
+                            {{ $cv->pais ? ', ' . $cv->pais : '' }}
+                        </p>
+                    @endif
+
                     <span class="inline-block mt-2 px-3 py-1 text-sm font-medium 
                         {{ $cv->publico ? 'bg-green-500 text-white' : 'bg-red-500 text-white' }} rounded-md">
                         {{ $cv->publico ? 'CV Público' : 'CV Privado' }}
@@ -30,16 +44,18 @@
             </div>
 
             {{-- Perfil profesional --}}
-            <div class="mt-6">
-                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Perfil Profesional</h3>
-                <p class="text-gray-700 dark:text-gray-300">{{ $cv->perfil }}</p>
-            </div>
+            @if ($cv->perfil)
+                <div class="mt-6">
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Perfil Profesional</h3>
+                    <p class="text-gray-700 dark:text-gray-300">{{ $cv->perfil }}</p>
+                </div>
+            @endif
 
             {{-- Experiencia Laboral --}}
             @if ($cv->experiencia)
                 <div class="mt-6">
                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Experiencia Laboral</h3>
-                    <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300">
+                    <ul class="space-y-4 text-gray-700 dark:text-gray-300">
                         @foreach (json_decode($cv->experiencia, true) as $exp)
                             <li>
                                 <strong>{{ $exp['empresa'] }}</strong> - {{ $exp['puesto'] }}
@@ -47,6 +63,12 @@
                                 <small class="text-sm text-gray-500">
                                     {{ $exp['inicio'] }} al {{ $exp['fin'] ?? 'Actualidad' }}
                                 </small>
+                                @if(!empty($exp['tareas']))
+                                    <p class="mt-1 text-sm">
+                                        <span class="font-medium">Tareas, Responsabilidades y Logros:</span>
+                                        {{ $exp['tareas'] }}
+                                    </p>
+                                @endif
                             </li>
                         @endforeach
                     </ul>
@@ -57,7 +79,7 @@
             @if ($cv->educacion)
                 <div class="mt-6">
                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Estudios Superiores</h3>
-                    <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300">
+                    <ul class="space-y-2 text-gray-700 dark:text-gray-300">
                         @foreach (json_decode($cv->educacion, true) as $edu)
                             <li>
                                 <strong>{{ $edu['universidad'] }}</strong> - {{ $edu['carrera'] }}
@@ -71,8 +93,32 @@
                 </div>
             @endif
 
+            {{-- Habilidades --}}
+            @if ($cv->habilidades)
+                <div class="mt-6">
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Habilidades</h3>
+                    <ul class="flex flex-wrap gap-2 text-sm mt-2">
+                        @foreach (json_decode($cv->habilidades, true) as $hab)
+                            <li class="px-3 py-1 bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-white rounded-full">
+                                {{ $hab }}
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            {{-- Idiomas --}}
+            @if ($cv->idiomas)
+                <div class="mt-6">
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Idiomas</h3>
+                    <p class="text-sm text-gray-700 dark:text-gray-300 mt-1">
+                        {{ implode(', ', json_decode($cv->idiomas, true)) }}
+                    </p>
+                </div>
+            @endif
+
             {{-- Botón volver --}}
-            <div class="mt-6">
+            <div class="mt-8">
                 <a href="{{ route('cv.index') }}"
                    class="px-4 py-2 bg-gray-500 text-white rounded-md shadow hover:bg-gray-600">
                     🔙 Volver
@@ -81,6 +127,7 @@
         </div>
     </div>
 </x-app-layout>
+
 
 
 

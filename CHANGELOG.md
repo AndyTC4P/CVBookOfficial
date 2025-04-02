@@ -3,7 +3,45 @@
 Este archivo documenta los cambios realizados por versión en el proyecto [CV Book](https://cvbook.online).
 
 ---
+## [v1.1.2] - 2025-03-27
 
+🛠 Restauración del Proyecto
+Restauración del proyecto desde el servidor de producción (versión 1.1.1) a entorno local.
+
+Nuevo repositorio: CVBookOfficial
+
+Configuración inicial de Git y migraciones corregidas.
+
+✅ Mejoras en CV
+Se volvió a implementar el componente CvForm con los siguientes campos:
+
+Datos personales: nombre, apellido, título, perfil, correo, teléfono, dirección, país, ciudad.
+
+Imagen de perfil (subida y previsualización).
+
+Habilidades (dinámicas).
+
+Idiomas (selección múltiple).
+
+Experiencia laboral y educación superior con campos dinámicos y validados.
+
+Edición y creación reutilizan el mismo formulario dinámico.
+
+Se agregó validación completa y manejo de errores.
+
+Mejoras en la presentación del formulario (estilos, tamaños, mensajes de éxito).
+
+🎨 Estética y diseño
+Estilo mejorado para los botones de acciones en la vista Mis CVs (index.blade.php):
+
+Botones de "Ver", "Copiar Enlace", "Editar", "Eliminar" ahora tienen el mismo ancho y alineación.
+
+Mejora en la experiencia del usuario con animación de “Enlace copiado”.
+
+🐞 Corrección de errores
+Error de método Livewire [addSkill] not found corregido al agregar el método faltante en el componente.
+
+Error de acceso denegado en base de datos corregido mediante edición de .env.
 ## [v1.1.0] - 2025-03-27
 
 ### 🔧 Corregido

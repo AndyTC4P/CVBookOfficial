@@ -20,8 +20,12 @@ class CvForm extends Component
     public $correo;
     public $telefono;
     public $direccion;
+    public $pais;
+    public $ciudad;
     public $experiencia = [];
     public $educacion = [];
+    public $habilidades = [];
+    public $idiomas = [];
     public $publico = false;
     public $modo = 'crear'; // 'crear' o 'editar'
 
@@ -34,6 +38,12 @@ class CvForm extends Component
         'correo' => 'nullable|email|max:255',
         'telefono' => 'nullable|string|max:20',
         'direccion' => 'nullable|string|max:255',
+        'pais' => 'nullable|string|max:100',
+        'ciudad' => 'nullable|string|max:100',
+        'habilidades' => 'nullable|array',
+        'habilidades.*' => 'required|string|max:100',
+        'idiomas' => 'nullable|array',
+        'idiomas.*' => 'required|string|max:100',
         'experiencia' => 'nullable|array',
         'experiencia.*.empresa' => 'required|string|max:255',
         'experiencia.*.puesto' => 'required|string|max:255',
@@ -58,20 +68,23 @@ class CvForm extends Component
             $this->correo = $cv->correo;
             $this->telefono = $cv->telefono;
             $this->direccion = $cv->direccion;
+            $this->pais = $cv->pais;
+            $this->ciudad = $cv->ciudad;
+            $this->habilidades = is_array($cv->habilidades) ? $cv->habilidades : json_decode($cv->habilidades, true) ?? [];
+            $this->idiomas = is_array($cv->idiomas) ? $cv->idiomas : json_decode($cv->idiomas, true) ?? [];
             $this->publico = (bool) $cv->publico;
-    
+
             $this->experiencia = is_array($cv->experiencia)
                 ? $cv->experiencia
                 : json_decode($cv->experiencia, true) ?? [];
-    
+
             $this->educacion = is_array($cv->educacion)
                 ? $cv->educacion
                 : json_decode($cv->educacion, true) ?? [];
-    
+
             $this->modo = 'editar';
         }
     }
-    
 
     public function save()
     {
@@ -79,47 +92,39 @@ class CvForm extends Component
 
         $imagenPath = $this->imagen ? $this->imagen->store('imagenes_perfil', 'public') : null;
 
-        if ($this->modo === 'crear') {
-            CV::create([
-                'user_id' => Auth::id(),
-                'nombre' => $this->nombre,
-                'apellido' => $this->apellido,
-                'titulo' => $this->titulo,
-                'perfil' => $this->perfil,
-                'imagen' => $imagenPath,
-                'correo' => $this->correo,
-                'telefono' => $this->telefono,
-                'direccion' => $this->direccion,
-                'experiencia' => json_encode($this->experiencia),
-                'educacion' => json_encode($this->educacion),
-                'publico' => $this->publico,
-            ]);
+        $data = [
+            'user_id' => Auth::id(),
+            'nombre' => $this->nombre,
+            'apellido' => $this->apellido,
+            'titulo' => $this->titulo,
+            'perfil' => $this->perfil,
+            'imagen' => $imagenPath,
+            'correo' => $this->correo,
+            'telefono' => $this->telefono,
+            'direccion' => $this->direccion,
+            'pais' => $this->pais,
+            'ciudad' => $this->ciudad,
+            'habilidades' => json_encode($this->habilidades),
+            'idiomas' => json_encode($this->idiomas),
+            'experiencia' => json_encode($this->experiencia),
+            'educacion' => json_encode($this->educacion),
+            'publico' => $this->publico,
+        ];
 
+        if ($this->modo === 'crear') {
+            CV::create($data);
             return redirect()->route('cv.index')->with('message', '✅ CV creado correctamente.');
         } else {
             $cv = CV::findOrFail($this->cv_id);
-
-            $cv->update([
-                'nombre' => $this->nombre,
-                'apellido' => $this->apellido,
-                'titulo' => $this->titulo,
-                'perfil' => $this->perfil,
-                'imagen' => $imagenPath ?? $cv->imagen,
-                'correo' => $this->correo,
-                'telefono' => $this->telefono,
-                'direccion' => $this->direccion,
-                'experiencia' => json_encode($this->experiencia),
-                'educacion' => json_encode($this->educacion),
-                'publico' => $this->publico,
-            ]);
-
+            $data['imagen'] = $imagenPath ?? $cv->imagen;
+            $cv->update($data);
             return redirect()->route('cv.index')->with('message', '✅ CV actualizado correctamente.');
         }
     }
 
     public function addExperience()
     {
-        $this->experiencia[] = ['empresa' => '', 'puesto' => '', 'inicio' => '', 'fin' => ''];
+        $this->experiencia[] = ['empresa' => '', 'puesto' => '', 'inicio' => '', 'fin' => '', 'tareas' => ''];
     }
 
     public function removeExperience($index)
@@ -148,7 +153,17 @@ class CvForm extends Component
     {
         return view('livewire.cv-form');
     }
+    public function addSkill()
+{
+    $this->habilidades[] = '';
 }
+public function removeSkill($index)
+{
+    unset($this->habilidades[$index]);
+    $this->habilidades = array_values($this->habilidades);
+}
+}
+
 
 
 

@@ -1,5 +1,4 @@
 <div class="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md w-full max-w-3xl mx-auto">
-<div class="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md w-full max-w-3xl mx-auto">
     <!-- Mensaje de éxito -->
     <div x-data="{ show: false }" x-show="show" x-transition
          x-init="@this.on('cvSaved', () => { show = true; setTimeout(() => show = false, 3000); })"
@@ -10,7 +9,6 @@
     <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">✍️ Crear mi CV</h2>
 
     <form wire:submit.prevent="save" class="space-y-4">
-
         <!-- Nombre -->
         <div>
             <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Nombre</label>
@@ -57,38 +55,83 @@
             @error('imagen') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 
-        <!-- Contacto -->
+        <!-- Correo -->
         <div>
             <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Correo Electrónico</label>
             <input type="email" wire:model="correo" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
             @error('correo') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 
+        <!-- Teléfono -->
         <div>
             <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Número de Contacto</label>
             <input type="text" wire:model="telefono" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
             @error('telefono') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 
+        <!-- Dirección -->
         <div>
             <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Dirección</label>
             <input type="text" wire:model="direccion" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
             @error('direccion') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 
-        <!-- Experiencia -->
+        <!-- País -->
+        <div>
+            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">País</label>
+            <input type="text" wire:model="pais" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+            @error('pais') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+        </div>
+
+        <!-- Ciudad -->
+        <div>
+            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Ciudad</label>
+            <input type="text" wire:model="ciudad" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+            @error('ciudad') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+        </div>
+
+        <!-- Habilidades -->
+        <div>
+            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Habilidades</label>
+            @foreach($habilidades as $index => $habilidad)
+                <div class="flex gap-2 mt-2">
+                    <input type="text" wire:model="habilidades.{{ $index }}" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm" placeholder="Ej: Trabajo en equipo">
+                    <button type="button" wire:click="removeSkill({{ $index }})" class="text-red-500">🗑</button>
+                </div>
+            @endforeach
+            <button type="button" wire:click="addSkill" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">+ Agregar Habilidad</button>
+        </div>
+
+        <!-- Idiomas -->
+        <div>
+            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Idiomas</label>
+            <div class="flex flex-wrap gap-4 mt-2">
+                @php
+                    $opciones = ['Español', 'Inglés', 'Francés', 'Alemán', 'Portugués', 'Italiano'];
+                @endphp
+                @foreach($opciones as $idioma)
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" wire:model="idiomas" value="{{ $idioma }}" class="text-blue-600">
+                        <span class="text-gray-800 dark:text-gray-300">{{ $idioma }}</span>
+                    </label>
+                @endforeach
+            </div>
+            @error('idiomas') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+        </div>
+
+        <!-- Experiencia laboral -->
         <div>
             <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Experiencia Laboral</label>
             @foreach($experiencia as $index => $exp)
-                <div class="mt-2 flex gap-2 flex-wrap">
-                    <input type="text" wire:model="experiencia.{{ $index }}.empresa" placeholder="Empresa" class="w-full md:w-1/4">
-                    <input type="text" wire:model="experiencia.{{ $index }}.puesto" placeholder="Puesto" class="w-full md:w-1/4">
-                    <input type="date" wire:model="experiencia.{{ $index }}.inicio" class="w-full md:w-1/5">
-                    <input type="date" wire:model="experiencia.{{ $index }}.fin" class="w-full md:w-1/5">
-                    <button type="button" wire:click="removeExperience({{ $index }})" class="text-red-500">🗑</button>
-                    @error("experiencia.$index.empresa") <div class="text-red-500 text-sm w-full">{{ $message }}</div> @enderror
-                    @error("experiencia.$index.puesto") <div class="text-red-500 text-sm w-full">{{ $message }}</div> @enderror
-                    @error("experiencia.$index.inicio") <div class="text-red-500 text-sm w-full">{{ $message }}</div> @enderror
+                <div class="mt-2 flex flex-col gap-2">
+                    <div class="flex flex-wrap gap-2">
+                        <input type="text" wire:model="experiencia.{{ $index }}.empresa" placeholder="Empresa" class="w-full md:w-1/4">
+                        <input type="text" wire:model="experiencia.{{ $index }}.puesto" placeholder="Puesto" class="w-full md:w-1/4">
+                        <input type="date" wire:model="experiencia.{{ $index }}.inicio" class="w-full md:w-1/5">
+                        <input type="date" wire:model="experiencia.{{ $index }}.fin" class="w-full md:w-1/5">
+                        <button type="button" wire:click="removeExperience({{ $index }})" class="text-red-500">🗑</button>
+                    </div>
+                    <textarea wire:model="experiencia.{{ $index }}.tareas" placeholder="Tareas, responsabilidades y logros (máx. 500 caracteres)" maxlength="500" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm" rows="3"></textarea>
                 </div>
             @endforeach
             <button type="button" wire:click="addExperience" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">+ Agregar Experiencia</button>
@@ -104,9 +147,6 @@
                     <input type="date" wire:model="educacion.{{ $index }}.inicio" class="w-full md:w-1/6">
                     <input type="date" wire:model="educacion.{{ $index }}.fin" class="w-full md:w-1/6">
                     <button type="button" wire:click="removeEducation({{ $index }})" class="text-red-500">🗑</button>
-                    @error("educacion.$index.universidad") <div class="text-red-500 text-sm w-full">{{ $message }}</div> @enderror
-                    @error("educacion.$index.carrera") <div class="text-red-500 text-sm w-full">{{ $message }}</div> @enderror
-                    @error("educacion.$index.inicio") <div class="text-red-500 text-sm w-full">{{ $message }}</div> @enderror
                 </div>
             @endforeach
             <button type="button" wire:click="addEducation" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">+ Agregar Estudio</button>
@@ -141,7 +181,6 @@
         <div wire:loading wire:target="save" class="mt-4 text-blue-500 font-semibold flex items-center">
             ⏳ Guardando CV, por favor espera...
         </div>
-
     </form>
 </div>
 
