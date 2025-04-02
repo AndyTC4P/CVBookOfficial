@@ -1,0 +1,2 @@
+[27-Mar-2025 12:06:31 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home3/lineaseg/cvbook_app/vendor/composer/platform_check.php on line 24
+[27-Mar-2025 12:09:26 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home3/lineaseg/cvbook_app/vendor/composer/platform_check.php on line 24
