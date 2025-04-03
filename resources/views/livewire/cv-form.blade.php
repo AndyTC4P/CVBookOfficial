@@ -145,14 +145,30 @@
         <div>
             <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Estudios Superiores</label>
             @foreach($educacion as $index => $edu)
-                <div class="mt-2 flex gap-2 flex-wrap">
-                    <input type="text" wire:model="educacion.{{ $index }}.universidad" placeholder="Universidad" class="w-full md:w-1/3">
-                    <input type="text" wire:model="educacion.{{ $index }}.carrera" placeholder="Carrera" class="w-full md:w-1/3">
-                    <input type="date" wire:model="educacion.{{ $index }}.inicio" class="w-full md:w-1/6">
-                    <input type="date" wire:model="educacion.{{ $index }}.fin" class="w-full md:w-1/6">
-                    <button type="button" wire:click="removeEducation({{ $index }})" class="text-red-500">🗑</button>
-                </div>
-            @endforeach
+    <div class="mt-2 flex flex-col gap-2">
+        <div class="flex flex-wrap gap-2">
+            <input type="text" wire:model="educacion.{{ $index }}.universidad"
+                   placeholder="Universidad"
+                   class="w-full md:w-1/4 dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+
+            <input type="text" wire:model="educacion.{{ $index }}.carrera"
+                   placeholder="Carrera"
+                   class="w-full md:w-1/4 dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+
+            <input type="date" wire:model="educacion.{{ $index }}.inicio"
+                   class="w-full md:w-1/5 dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+
+            <input type="date" wire:model="educacion.{{ $index }}.fin"
+                   class="w-full md:w-1/5 dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+
+            <button type="button" wire:click="removeEducation({{ $index }})"
+                    class="text-red-500 text-xl hover:text-red-700">
+                🗑
+            </button>
+        </div>
+    </div>
+@endforeach
+
             <button type="button" wire:click="addEducation" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">+ Agregar Estudio</button>
         </div>
 
