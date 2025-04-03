@@ -1,10 +1,11 @@
 <div class="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md w-full max-w-3xl mx-auto">
-    <!-- Mensaje de éxito -->
-    <div x-data="{ show: false }" x-show="show" x-transition
-         x-init="@this.on('cvSaved', () => { show = true; setTimeout(() => show = false, 3000); })"
-         class="p-4 mb-4 text-green-800 bg-green-200 rounded-lg flex items-center">
-        ✅ CV creado exitosamente. Asegurate que los campos Nombre,Apellido,Perfil sean obligatorios
+   <!-- Mensaje de éxito -->
+@if ($cvGuardado)
+    <div class="p-4 mb-4 text-green-800 bg-green-200 rounded-lg flex items-center">
+        ✅ CV creado exitosamente. 
     </div>
+@endif
+
 
     <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">✍️ Crear mi CV</h2>
 
@@ -48,11 +49,12 @@
                 <input type="file" id="imagen" wire:model="imagen" class="hidden">
             </div>
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">📌 Recomendación: 400x400 px, JPEG o PNG, máx 2MB.</p>
-            <div x-data="{ show: false }" x-show="show" x-transition
-                 x-init="@this.on('imagenSubida', () => { show = true; setTimeout(() => show = false, 3000); })"
-                 class="mt-2 text-green-600 dark:text-green-400 text-sm">
-                ✅ Imagen subida correctamente.
-            </div>
+            @if ($imagenSubida)
+    <div class="mt-2 text-green-600 dark:text-green-400 text-sm">
+        ✅ Imagen subida correctamente.
+    </div>
+@endif
+
             @error('imagen') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 
@@ -96,29 +98,30 @@
             <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Habilidades</label>
             @foreach($habilidades as $index => $habilidad)
                 <div class="flex gap-2 mt-2">
-                    <input type="text" wire:model="habilidades.{{ $index }}" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm" placeholder="Ej: Trabajo en equipo">
+                <input type="text" wire:model="habilidades.{{ $index }}" maxlength="50" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm" placeholder="Ej: Trabajo en equipo. Max 50 caracteres">
                     <button type="button" wire:click="removeSkill({{ $index }})" class="text-red-500">🗑</button>
                 </div>
             @endforeach
             <button type="button" wire:click="addSkill" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">+ Agregar Habilidad</button>
         </div>
 
-        <!-- Idiomas -->
-        <div>
-            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Idiomas</label>
-            <div class="flex flex-wrap gap-4 mt-2">
-                @php
-                    $opciones = ['Español', 'Inglés', 'Francés', 'Alemán', 'Portugués', 'Italiano'];
-                @endphp
-                @foreach($opciones as $idioma)
-                    <label class="flex items-center space-x-2">
-                        <input type="checkbox" wire:model="idiomas" value="{{ $idioma }}" class="text-blue-600">
-                        <span class="text-gray-800 dark:text-gray-300">{{ $idioma }}</span>
-                    </label>
-                @endforeach
-            </div>
-            @error('idiomas') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-        </div>
+   <!-- Idiomas -->
+<!-- Idiomas -->
+<div>
+    <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Idiomas</label>
+    <div class="flex flex-wrap gap-4 mt-2">
+        @php
+            $opciones = ['Español', 'Inglés', 'Francés', 'Alemán', 'Portugués', 'Italiano'];
+        @endphp
+        @foreach($opciones as $idioma)
+            <label class="flex items-center space-x-2">
+                <input type="checkbox" wire:model="idiomas" value="{{ $idioma }}" class="text-blue-600">
+                <span class="text-gray-800 dark:text-gray-300">{{ $idioma }}</span>
+            </label>
+        @endforeach
+    </div>
+    @error('idiomas') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+</div>
 
         <!-- Experiencia laboral -->
         <div>
@@ -164,10 +167,10 @@
         <strong class="block">❌ Por favor corrige los siguientes errores:</strong>
         <ul class="list-disc list-inside text-sm">
             @if ($errors->has('nombre'))
-                <li>El campo <strong>Nombre</strong> es obligatorio y debe tener máximo 255 caracteres.</li>
+                <li>El campo <strong>Nombre</strong> es obligatorio y debe tener máximo 100 caracteres.</li>
             @endif
             @if ($errors->has('apellido'))
-                <li>El campo <strong>Apellido</strong> es obligatorio y debe tener máximo 255 caracteres.</li>
+                <li>El campo <strong>Apellido</strong> es obligatorio y debe tener máximo 100 caracteres.</li>
             @endif
             @if ($errors->has('perfil'))
                 <li>El campo <strong>Perfil Profesional</strong> es obligatorio y debe tener máximo 1000 caracteres.</li>
@@ -240,14 +243,13 @@
 </div>
 
 
-        <!-- Confirmación -->
-        <div x-data="{ show: false }"
-             x-show="show"
-             x-transition
-             x-init="@this.on('cvSaved', () => { show = true; setTimeout(() => show = false, 4000); })"
-             class="mt-4 p-3 bg-green-500 text-white font-semibold text-sm text-center rounded-md shadow">
-            ✅ CV guardado correctamente.
-        </div>
+       <!-- Confirmación -->
+@if ($cvGuardado)
+    <div class="mt-4 p-3 bg-green-500 text-white font-semibold text-sm text-center rounded-md shadow">
+        ✅ CV guardado correctamente.
+    </div>
+@endif
+
 
         <!-- Cargando -->
         <div wire:loading wire:target="save" class="mt-4 text-blue-500 font-semibold flex items-center">

@@ -32,8 +32,8 @@ class CvForm extends Component
     public $modo = 'crear'; // 'crear' o 'editar'
 
     protected $rules = [
-        'nombre' => 'required|string|max:255',
-        'apellido' => 'required|string|max:255',
+        'nombre' => 'required|string|max:100',
+        'apellido' => 'required|string|max:100',
         'titulo' => 'nullable|string|max:255',
         'perfil' => 'required|string|max:1000',
         'imagen' => 'nullable|image|max:2048',
@@ -43,7 +43,7 @@ class CvForm extends Component
         'pais' => 'nullable|string|max:100',
         'ciudad' => 'nullable|string|max:100',
         'habilidades' => 'nullable|array',
-        'habilidades.*' => 'required|string|max:100',
+        'habilidades.*' => 'required|string|max:50',
         'idiomas' => 'nullable|array',
         'idiomas.*' => 'required|string|max:100',
         'experiencia' => 'nullable|array',
@@ -91,7 +91,7 @@ class CvForm extends Component
     public function save()
     {
         $this->validate();
-    
+        $this->cvGuardado = true;
         $imagenPath = $this->imagen ? $this->imagen->store('imagenes_perfil', 'public') : null;
     
         $data = [
@@ -128,6 +128,7 @@ class CvForm extends Component
             $cv->update($data);
             return redirect()->route('cv.index')->with('message', '✅ CV actualizado correctamente.');
         }
+        
     }
     
 
@@ -154,9 +155,10 @@ class CvForm extends Component
     }
 
     public function updatedImagen()
-    {
-        $this->dispatch('imagenSubida');
-    }
+{
+    $this->imagenSubida = true;
+}
+
 
     public function render()
     {
@@ -171,6 +173,10 @@ public function removeSkill($index)
     unset($this->habilidades[$index]);
     $this->habilidades = array_values($this->habilidades);
 }
+public bool $cvGuardado = false;
+public bool $imagenSubida = false;
+
+
 }
 
 

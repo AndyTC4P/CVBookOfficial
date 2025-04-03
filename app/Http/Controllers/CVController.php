@@ -36,8 +36,8 @@ class CVController extends Controller
         $cv = CV::where('slug', $slug)->where('user_id', auth()->id())->firstOrFail();
 
         $request->validate([
-            'nombre' => 'required|string|max:255',
-            'apellido' => 'required|string|max:255',
+            'nombre' => 'required|string|max:100',
+            'apellido' => 'required|string|max:100',
             'experiencia' => 'nullable|string',
         ]);
 
