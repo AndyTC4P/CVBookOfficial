@@ -4,7 +4,7 @@ Este archivo documenta los cambios realizados por versión en el proyecto [CV Bo
 
 ---
 
-## [v1.1.3] - 2025-03-27
+## [v1.1.2.1] - 2025-03-27
 ✨ Nuevas funcionalidades
 Se implementó un sistema de slugs únicos legibles por humanos para reemplazar el uso de IDs en las URLs de los CVs.
 

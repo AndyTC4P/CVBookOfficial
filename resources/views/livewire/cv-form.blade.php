@@ -3,22 +3,33 @@
     <div x-data="{ show: false }" x-show="show" x-transition
          x-init="@this.on('cvSaved', () => { show = true; setTimeout(() => show = false, 3000); })"
          class="p-4 mb-4 text-green-800 bg-green-200 rounded-lg flex items-center">
-        ✅ CV creado exitosamente.
+        ✅ CV creado exitosamente. Asegurate que los campos Nombre,Apellido,Perfil sean obligatorios
     </div>
 
     <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">✍️ Crear mi CV</h2>
 
+    <!-- Scroll automático al primer error -->
+    <script>
+    document.addEventListener('livewire:message.processed', function () {
+        const firstError = document.querySelector('.text-red-500');
+        if (firstError) {
+            const el = firstError.closest('div');
+            el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    });
+    </script>
+
     <form wire:submit.prevent="save" class="space-y-4">
         <!-- Nombre -->
         <div>
-            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Nombre</label>
+            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Nombre <span class="text-red-500">*</span></label>
             <input type="text" wire:model="nombre" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
             @error('nombre') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 
         <!-- Apellido -->
         <div>
-            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Apellido</label>
+            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Apellido <span class="text-red-500">*</span></label>
             <input type="text" wire:model="apellido" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
             @error('apellido') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
@@ -32,7 +43,7 @@
 
         <!-- Perfil -->
         <div>
-            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Perfil Profesional</label>
+            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Perfil Profesional <span class="text-red-500">*</span></label>
             <textarea wire:model="perfil" rows="4" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm"></textarea>
             @error('perfil') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
@@ -183,6 +194,7 @@
         </div>
     </form>
 </div>
+
 
 
 
