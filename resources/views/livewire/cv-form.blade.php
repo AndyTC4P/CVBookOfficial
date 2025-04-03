@@ -8,18 +8,8 @@
 
     <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">✍️ Crear mi CV</h2>
 
-    <!-- Scroll automático al primer error -->
-    <script>
-    document.addEventListener('livewire:message.processed', function () {
-        const firstError = document.querySelector('.text-red-500');
-        if (firstError) {
-            const el = firstError.closest('div');
-            el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-    });
-    </script>
+<form wire:submit.prevent="save" class="space-y-4">
 
-    <form wire:submit.prevent="save" class="space-y-4">
         <!-- Nombre -->
         <div>
             <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Nombre <span class="text-red-500">*</span></label>
@@ -163,21 +153,92 @@
             <button type="button" wire:click="addEducation" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">+ Agregar Estudio</button>
         </div>
 
-        <!-- Público -->
-        <div class="flex items-center">
-            <input type="checkbox" wire:model="publico" class="text-blue-600">
-            <label class="ml-2 text-gray-700 dark:text-gray-300">Hacer CV público</label>
-        </div>
+      <!-- Público -->
+<div class="flex items-center">
+    <input type="checkbox" wire:model="publico" class="text-blue-600">
+    <label class="ml-2 text-gray-700 dark:text-gray-300">Hacer CV público</label>
+</div>
 
-        <!-- Botón Guardar -->
-        <div class="flex justify-end">
-            <button type="submit"
-                    class="bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white px-6 py-2 rounded-md font-semibold shadow-md flex items-center justify-center"
-                    wire:target="save"
-                    wire:loading.attr="disabled">
-                🚀 Guardar CV
-            </button>
-        </div>
+@if ($errors->any())
+    <div class="p-4 mb-4 text-red-800 bg-red-200 rounded-lg rounded-md space-y-2">
+        <strong class="block">❌ Por favor corrige los siguientes errores:</strong>
+        <ul class="list-disc list-inside text-sm">
+            @if ($errors->has('nombre'))
+                <li>El campo <strong>Nombre</strong> es obligatorio y debe tener máximo 255 caracteres.</li>
+            @endif
+            @if ($errors->has('apellido'))
+                <li>El campo <strong>Apellido</strong> es obligatorio y debe tener máximo 255 caracteres.</li>
+            @endif
+            @if ($errors->has('perfil'))
+                <li>El campo <strong>Perfil Profesional</strong> es obligatorio y debe tener máximo 1000 caracteres.</li>
+            @endif
+            @if ($errors->has('titulo'))
+                <li>El campo <strong>Título o Profesión</strong> debe ser texto y tener máximo 255 caracteres.</li>
+            @endif
+            @if ($errors->has('imagen'))
+                <li>La <strong>Imagen de Perfil</strong> debe ser un archivo de imagen y no debe superar los 2MB.</li>
+            @endif
+            @if ($errors->has('correo'))
+                <li>El campo <strong>Correo Electrónico</strong> debe contener una dirección válida y tener máximo 255 caracteres.</li>
+            @endif
+            @if ($errors->has('telefono'))
+                <li>El campo <strong>Número de Contacto</strong> debe ser texto y tener máximo 20 caracteres.</li>
+            @endif
+            @if ($errors->has('direccion'))
+                <li>El campo <strong>Dirección</strong> debe tener máximo 255 caracteres.</li>
+            @endif
+            @if ($errors->has('pais'))
+                <li>El campo <strong>País</strong> debe tener máximo 100 caracteres.</li>
+            @endif
+            @if ($errors->has('ciudad'))
+                <li>El campo <strong>Ciudad</strong> debe tener máximo 100 caracteres.</li>
+            @endif
+            @if ($errors->has('habilidades.*'))
+                <li>Cada <strong>Habilidad</strong> es obligatoria y debe tener máximo 100 caracteres.</li>
+            @endif
+            @if ($errors->has('idiomas.*'))
+                <li>Cada <strong>Idioma</strong> es obligatorio y debe tener máximo 100 caracteres.</li>
+            @endif
+            @if ($errors->has('experiencia.*.empresa'))
+                <li>El campo <strong>Empresa</strong> en la sección de experiencia es obligatorio y debe tener máximo 255 caracteres.</li>
+            @endif
+            @if ($errors->has('experiencia.*.puesto'))
+                <li>El campo <strong>Puesto</strong> en la sección de experiencia es obligatorio y debe tener máximo 255 caracteres.</li>
+            @endif
+            @if ($errors->has('experiencia.*.inicio'))
+                <li>El campo <strong>Fecha de Inicio</strong> en experiencia laboral es obligatorio y debe ser una fecha válida.</li>
+            @endif
+            @if ($errors->has('experiencia.*.fin'))
+                <li>La <strong>Fecha de Fin</strong> en experiencia laboral debe ser posterior o igual a la fecha de inicio.</li>
+            @endif
+            @if ($errors->has('educacion.*.universidad'))
+                <li>El campo <strong>Universidad</strong> en la sección de estudios es obligatorio y debe tener máximo 255 caracteres.</li>
+            @endif
+            @if ($errors->has('educacion.*.carrera'))
+                <li>El campo <strong>Carrera</strong> en la sección de estudios es obligatorio y debe tener máximo 255 caracteres.</li>
+            @endif
+            @if ($errors->has('educacion.*.inicio'))
+                <li>El campo <strong>Fecha de Inicio</strong> en estudios es obligatorio y debe ser una fecha válida.</li>
+            @endif
+            @if ($errors->has('educacion.*.fin'))
+                <li>La <strong>Fecha de Fin</strong> en estudios debe ser posterior o igual a la fecha de inicio.</li>
+            @endif
+        </ul>
+    </div>
+@endif
+
+
+
+<!-- Botón Guardar -->
+<div class="flex justify-end">
+    <button type="submit"
+            class="bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white px-6 py-2 rounded-md font-semibold shadow-md flex items-center justify-center"
+            wire:target="save"
+            wire:loading.attr="disabled">
+        🚀 Guardar CV
+    </button>
+</div>
+
 
         <!-- Confirmación -->
         <div x-data="{ show: false }"

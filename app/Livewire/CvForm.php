@@ -35,7 +35,7 @@ class CvForm extends Component
         'nombre' => 'required|string|max:255',
         'apellido' => 'required|string|max:255',
         'titulo' => 'nullable|string|max:255',
-        'perfil' => 'nullable|string',
+        'perfil' => 'required|string|max:1000',
         'imagen' => 'nullable|image|max:2048',
         'correo' => 'nullable|email|max:255',
         'telefono' => 'nullable|string|max:20',
