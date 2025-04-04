@@ -42,7 +42,7 @@
                                class="flex justify-center items-center w-36 px-3 py-1.5 bg-blue-500 hover:bg-blue-400 text-white text-sm rounded-md shadow-sm">
                                 👀 Ver CV
                             </a>
-
+                           
                             <!-- Copiar enlace -->
                             @if($cv->publico)
                                 <div x-data="{ show: false }" class="relative w-36">

@@ -5,13 +5,16 @@
             <h1 class="text-4xl font-bold mb-4">🚀 Impulsa tu carrera con un CV profesional</h1>
             <p class="text-lg text-gray-300">Crea y comparte tu CV en segundos.</p>
             
-            <!-- Botón de Registro -->
-            <div class="mt-6">
-                <a href="{{ route('register') }}" class="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition-all">
-                    📝 Crear mi CV
-                </a>
-            </div>
-        </div>
+           <!-- Botones de Registro e Inicio de Sesión -->
+<div class="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
+    <a href="{{ route('register') }}" class="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition-all text-center">
+        ✨ Crear cuenta
+    </a>
+    <a href="{{ route('login') }}" class="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition-all text-center">
+        🔑 Iniciar sesión
+    </a>
+</div>
+
 
         <!-- Sección de Beneficios -->
         <div class="mt-16 max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">

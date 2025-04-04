@@ -78,19 +78,17 @@
             <input type="text" wire:model="direccion" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
             @error('direccion') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
-
+ <!-- Ciudad -->
+ <div>
+            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Ciudad</label>
+            <input type="text" wire:model="ciudad" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+            @error('ciudad') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+        </div>
         <!-- País -->
         <div>
             <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">País</label>
             <input type="text" wire:model="pais" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
             @error('pais') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-        </div>
-
-        <!-- Ciudad -->
-        <div>
-            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Ciudad</label>
-            <input type="text" wire:model="ciudad" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
-            @error('ciudad') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 
         <!-- Habilidades -->
@@ -127,17 +125,41 @@
         <div>
             <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Experiencia Laboral</label>
             @foreach($experiencia as $index => $exp)
-                <div class="mt-2 flex flex-col gap-2">
-                    <div class="flex flex-wrap gap-2">
-                        <input type="text" wire:model="experiencia.{{ $index }}.empresa" placeholder="Empresa" class="w-full md:w-1/4">
-                        <input type="text" wire:model="experiencia.{{ $index }}.puesto" placeholder="Puesto" class="w-full md:w-1/4">
-                        <input type="date" wire:model="experiencia.{{ $index }}.inicio" class="w-full md:w-1/5">
-                        <input type="date" wire:model="experiencia.{{ $index }}.fin" class="w-full md:w-1/5">
-                        <button type="button" wire:click="removeExperience({{ $index }})" class="text-red-500">🗑</button>
-                    </div>
-                    <textarea wire:model="experiencia.{{ $index }}.tareas" placeholder="Tareas, responsabilidades y logros (máx. 500 caracteres)" maxlength="500" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm" rows="3"></textarea>
-                </div>
-            @endforeach
+    <div class="mt-2 flex flex-col gap-2">
+        <div class="flex flex-wrap items-center gap-2">
+            <input type="text"
+                   wire:model="experiencia.{{ $index }}.empresa"
+                   placeholder="Empresa"
+                   class="w-full md:w-1/4 dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+
+            <input type="text"
+                   wire:model="experiencia.{{ $index }}.puesto"
+                   placeholder="Puesto"
+                   class="w-full md:w-1/4 dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+
+            <input type="date"
+                   wire:model="experiencia.{{ $index }}.inicio"
+                   class="w-full md:w-1/5 dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+
+            <input type="date"
+                   wire:model="experiencia.{{ $index }}.fin"
+                   class="w-full md:w-1/5 dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+
+            <button type="button"
+                    wire:click="removeExperience({{ $index }})"
+                    class="text-red-500 text-xl hover:text-red-700">
+                🗑
+            </button>
+        </div>
+
+        <textarea wire:model="experiencia.{{ $index }}.tareas"
+                  placeholder="Tareas, responsabilidades y logros (máx. 500 caracteres)"
+                  maxlength="500"
+                  class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm"
+                  rows="3"></textarea>
+    </div>
+@endforeach
+
             <button type="button" wire:click="addExperience" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">+ Agregar Experiencia</button>
         </div>
 

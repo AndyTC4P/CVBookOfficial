@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CVController;
 use Illuminate\Support\Facades\Auth;
+use App\Livewire\Faq;
 
 // Página de bienvenida
 Route::view('/', 'welcome');
@@ -58,3 +59,5 @@ Route::post('/logout', function () {
     request()->session()->regenerateToken();
     return redirect('/');
 })->name('logout');
+
+Route::view('/faq', 'faq')->name('faq');
