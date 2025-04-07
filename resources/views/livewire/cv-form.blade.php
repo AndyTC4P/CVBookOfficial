@@ -7,7 +7,7 @@
 @endif
 
 
-    <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">✍️ Crear mi CV</h2>
+    <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">✍️ CV</h2>
 
 <form wire:submit.prevent="save" class="space-y-4">
 
