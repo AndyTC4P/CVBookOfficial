@@ -103,14 +103,15 @@
             <button type="button" wire:click="addSkill" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">+ Agregar Habilidad</button>
         </div>
 
-   <!-- Idiomas -->
 <!-- Idiomas -->
 <div>
     <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Idiomas</label>
+
     <div class="flex flex-wrap gap-4 mt-2">
         @php
             $opciones = ['Español', 'Inglés', 'Francés', 'Alemán', 'Portugués', 'Italiano'];
         @endphp
+
         @foreach($opciones as $idioma)
             <label class="flex items-center space-x-2">
                 <input type="checkbox" wire:model="idiomas" value="{{ $idioma }}" class="text-blue-600">
@@ -118,8 +119,16 @@
             </label>
         @endforeach
     </div>
+
+    <div class="mt-4">
+        <label for="idioma_otro" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Otros idiomas</label>
+        <input type="text" id="idioma_otro" wire:model="idioma_otro" class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:ring focus:ring-indigo-200 dark:bg-gray-800 dark:text-white" placeholder="Ejemplo: Japonés, Árabe, etc.">
+        @error('idioma_otro') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+    </div>
+
     @error('idiomas') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 </div>
+
 
         <!-- Experiencia laboral -->
         <div>

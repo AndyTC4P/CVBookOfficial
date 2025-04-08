@@ -8,7 +8,6 @@ use App\Models\CV;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
-
 class CvForm extends Component
 {
     use WithFileUploads;
@@ -28,8 +27,12 @@ class CvForm extends Component
     public $educacion = [];
     public $habilidades = [];
     public $idiomas = [];
+    public $idioma_otro = ''; // <--- NUEVO
     public $publico = false;
-    public $modo = 'crear'; // 'crear' o 'editar'
+    public $modo = 'crear';
+
+    public bool $cvGuardado = false;
+    public bool $imagenSubida = false;
 
     protected $rules = [
         'nombre' => 'required|string|max:100',
@@ -46,6 +49,7 @@ class CvForm extends Component
         'habilidades.*' => 'required|string|max:50',
         'idiomas' => 'nullable|array',
         'idiomas.*' => 'required|string|max:100',
+        'idioma_otro' => 'nullable|string|max:100', // <--- NUEVO
         'experiencia' => 'nullable|array',
         'experiencia.*.empresa' => 'required|string|max:255',
         'experiencia.*.puesto' => 'required|string|max:255',
@@ -73,7 +77,13 @@ class CvForm extends Component
             $this->pais = $cv->pais;
             $this->ciudad = $cv->ciudad;
             $this->habilidades = is_array($cv->habilidades) ? $cv->habilidades : json_decode($cv->habilidades, true) ?? [];
-            $this->idiomas = is_array($cv->idiomas) ? $cv->idiomas : json_decode($cv->idiomas, true) ?? [];
+
+            $idiomasCargados = is_array($cv->idiomas) ? $cv->idiomas : json_decode($cv->idiomas, true) ?? [];
+            $idiomasPredefinidos = ['Español', 'Inglés', 'Francés', 'Alemán', 'Portugués', 'Italiano'];
+
+            $this->idiomas = array_filter($idiomasCargados, fn($i) => in_array($i, $idiomasPredefinidos));
+            $this->idioma_otro = collect($idiomasCargados)->diff($idiomasPredefinidos)->first() ?? '';
+
             $this->publico = (bool) $cv->publico;
 
             $this->experiencia = is_array($cv->experiencia)
@@ -92,8 +102,15 @@ class CvForm extends Component
     {
         $this->validate();
         $this->cvGuardado = true;
+
         $imagenPath = $this->imagen ? $this->imagen->store('imagenes_perfil', 'public') : null;
-    
+
+        // Unir idiomas predefinidos + otro idioma personalizado
+        $idiomas = $this->idiomas;
+        if (!empty($this->idioma_otro)) {
+            $idiomas[] = $this->idioma_otro;
+        }
+
         $data = [
             'user_id' => Auth::id(),
             'nombre' => $this->nombre,
@@ -107,30 +124,28 @@ class CvForm extends Component
             'pais' => $this->pais,
             'ciudad' => $this->ciudad,
             'habilidades' => json_encode($this->habilidades),
-            'idiomas' => json_encode($this->idiomas),
+            'idiomas' => json_encode($idiomas),
             'experiencia' => json_encode($this->experiencia),
             'educacion' => json_encode($this->educacion),
             'publico' => $this->publico,
         ];
-    
+
         if ($this->modo === 'crear') {
             $slugBase = Str::slug($this->nombre . '-' . $this->apellido);
             $slug = $slugBase . '-' . Str::random(4);
             $data['slug'] = $slug;
-    
+
             $cv = CV::create($data);
             return redirect()->route('cv.show', ['slug' => $cv->slug]);
         } else {
             $cv = CV::findOrFail($this->cv_id);
             $data['imagen'] = $imagenPath ?? $cv->imagen;
-            $data['slug'] = $cv->slug; // mantener slug existente
-    
+            $data['slug'] = $cv->slug;
+
             $cv->update($data);
             return redirect()->route('cv.index')->with('message', '✅ CV actualizado correctamente.');
         }
-        
     }
-    
 
     public function addExperience()
     {
@@ -155,29 +170,27 @@ class CvForm extends Component
     }
 
     public function updatedImagen()
-{
-    $this->imagenSubida = true;
-}
+    {
+        $this->imagenSubida = true;
+    }
 
+    public function addSkill()
+    {
+        $this->habilidades[] = '';
+    }
+
+    public function removeSkill($index)
+    {
+        unset($this->habilidades[$index]);
+        $this->habilidades = array_values($this->habilidades);
+    }
 
     public function render()
     {
         return view('livewire.cv-form');
     }
-    public function addSkill()
-{
-    $this->habilidades[] = '';
 }
-public function removeSkill($index)
-{
-    unset($this->habilidades[$index]);
-    $this->habilidades = array_values($this->habilidades);
-}
-public bool $cvGuardado = false;
-public bool $imagenSubida = false;
 
-
-}
 
 
 
