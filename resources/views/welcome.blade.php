@@ -32,4 +32,14 @@
             </div>
         </div>
     </div>
+    {{-- Enlace a preguntas frecuentes --}}
+<div class="mt-6 text-center">
+    <p class="text-sm text-gray-400">
+        ¿Tienes preguntas? 
+        <a href="{{ route('faq') }}" class="text-blue-400 hover:text-blue-200 font-semibold underline">
+            Consulta nuestra página de Preguntas Frecuentes
+        </a>
+    </p>
+</div>
+
 </x-app-layout>

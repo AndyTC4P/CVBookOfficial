@@ -61,6 +61,10 @@
                                 {{ __('Iniciar Sesión') }}
                             </x-dropdown-link>
                         @endauth
+                        <x-dropdown-link :href="route('faq')" wire:navigate>
+    ❓ {{ __('Preguntas Frecuentes') }}
+</x-dropdown-link>
+
                     </x-slot>
                 </x-dropdown>
             </div>
@@ -119,6 +123,10 @@
                         {{ __('Iniciar Sesión') }}
                     </x-responsive-nav-link>
                 @endauth
+                <x-responsive-nav-link :href="route('faq')" wire:navigate>
+    ❓ {{ __('Preguntas Frecuentes') }}
+</x-responsive-nav-link>
+
             </div>
         </div>
     </div>
