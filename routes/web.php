@@ -61,3 +61,4 @@ Route::post('/logout', function () {
 })->name('logout');
 
 Route::view('/faq', 'faq')->name('faq');
+Route::view('/terminos', 'terms')->name('terms');

@@ -14,6 +14,7 @@ new #[Layout('layouts.guest')] class extends Component
     public string $email = '';
     public string $password = '';
     public string $password_confirmation = '';
+    public bool $terms = false; // ✅ Agregado
 
     /**
      * Handle an incoming registration request.
@@ -22,8 +23,9 @@ new #[Layout('layouts.guest')] class extends Component
     {
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+            'terms' => ['accepted'], // ✅ Agregado
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -34,7 +36,8 @@ new #[Layout('layouts.guest')] class extends Component
 
         $this->redirect(route('dashboard', absolute: false), navigate: true);
     }
-}; ?>
+};
+?>
 
 <div>
     <form wire:submit="register">
@@ -55,24 +58,30 @@ new #[Layout('layouts.guest')] class extends Component
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input wire:model="password" id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
+            <x-text-input wire:model="password" id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
         <!-- Confirm Password -->
         <div class="mt-4">
             <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
+            <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        </div>
+
+        <!-- ✅ Términos y Condiciones -->
+        <div class="mt-4">
+            <label class="flex items-center">
+                <input type="checkbox" wire:model="terms" name="terms"
+                       class="rounded text-indigo-600 shadow-sm border-gray-300 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">
+                    Acepto los 
+                    <a href="{{ route('terms') }}" class="underline text-blue-600 dark:text-blue-400 hover:text-blue-800" target="_blank">
+                        Términos y Condiciones
+                    </a>
+                </span>
+            </label>
+            <x-input-error :messages="$errors->get('terms')" class="mt-2" />
         </div>
 
         <div class="flex items-center justify-end mt-4">
@@ -86,3 +95,4 @@ new #[Layout('layouts.guest')] class extends Component
         </div>
     </form>
 </div>
+
