@@ -131,8 +131,7 @@ class CvForm extends Component
         ];
 
         if ($this->modo === 'crear') {
-            $slugBase = Str::slug($this->nombre . '-' . $this->apellido);
-            $slug = $slugBase . '-' . Str::random(4);
+            $slug = Str::random(16);
             $data['slug'] = $slug;
 
             $cv = CV::create($data);
