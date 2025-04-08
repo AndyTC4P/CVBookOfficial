@@ -130,78 +130,99 @@
 </div>
 
 
-        <!-- Experiencia laboral -->
-        <div>
-            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Experiencia Laboral</label>
-            @foreach($experiencia as $index => $exp)
-    <div class="mt-2 flex flex-col gap-2">
-        <div class="flex flex-wrap items-center gap-2">
-            <input type="text"
-                   wire:model="experiencia.{{ $index }}.empresa"
-                   placeholder="Empresa"
-                   class="w-full md:w-1/4 dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+       <!-- Experiencia laboral -->
+<div>
+    <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Experiencia Laboral</label>
+    @foreach($experiencia as $index => $exp)
+        <div class="mt-2 flex flex-col gap-2">
+            <div class="flex flex-wrap items-end gap-2">
+                <div class="flex flex-col md:w-1/4">
+                    <label class="text-sm text-gray-700 dark:text-gray-300 mb-1">Empresa</label>
+                    <input type="text"
+                           wire:model="experiencia.{{ $index }}.empresa"
+                           class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+                </div>
 
-            <input type="text"
-                   wire:model="experiencia.{{ $index }}.puesto"
-                   placeholder="Puesto"
-                   class="w-full md:w-1/4 dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+                <div class="flex flex-col md:w-1/4">
+                    <label class="text-sm text-gray-700 dark:text-gray-300 mb-1">Puesto</label>
+                    <input type="text"
+                           wire:model="experiencia.{{ $index }}.puesto"
+                           class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+                </div>
 
-            <input type="date"
-                   wire:model="experiencia.{{ $index }}.inicio"
-                   class="w-full md:w-1/5 dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+                <div class="flex flex-col md:w-1/5">
+                    <label class="text-sm text-gray-700 dark:text-gray-300 mb-1">Ingreso</label>
+                    <input type="date"
+                           wire:model="experiencia.{{ $index }}.inicio"
+                           class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+                </div>
 
-            <input type="date"
-                   wire:model="experiencia.{{ $index }}.fin"
-                   class="w-full md:w-1/5 dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+                <div class="flex flex-col md:w-1/5">
+                    <label class="text-sm text-gray-700 dark:text-gray-300 mb-1">Egreso</label>
+                    <input type="date"
+                           wire:model="experiencia.{{ $index }}.fin"
+                           class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+                </div>
 
-            <button type="button"
-                    wire:click="removeExperience({{ $index }})"
-                    class="text-red-500 text-xl hover:text-red-700">
-                🗑
-            </button>
+                <button type="button"
+                        wire:click="removeExperience({{ $index }})"
+                        class="text-red-500 text-xl hover:text-red-700">
+                    🗑
+                </button>
+            </div>
+
+            <textarea wire:model="experiencia.{{ $index }}.tareas"
+                      placeholder="Tareas, responsabilidades y logros (máx. 500 caracteres)"
+                      maxlength="500"
+                      class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm"
+                      rows="3"></textarea>
         </div>
+    @endforeach
 
-        <textarea wire:model="experiencia.{{ $index }}.tareas"
-                  placeholder="Tareas, responsabilidades y logros (máx. 500 caracteres)"
-                  maxlength="500"
-                  class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm"
-                  rows="3"></textarea>
-    </div>
-@endforeach
+    <button type="button" wire:click="addExperience" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">+ Agregar Experiencia</button>
+</div>
 
-            <button type="button" wire:click="addExperience" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">+ Agregar Experiencia</button>
+<!-- Educación -->
+<div class="mt-6">
+    <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Estudios Superiores</label>
+    @foreach($educacion as $index => $edu)
+        <div class="mt-2 flex flex-col gap-2">
+            <div class="flex flex-wrap items-end gap-2">
+                <div class="flex flex-col md:w-1/4">
+                    <label class="text-sm text-gray-700 dark:text-gray-300 mb-1">Universidad</label>
+                    <input type="text" wire:model="educacion.{{ $index }}.universidad"
+                           class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+                </div>
+
+                <div class="flex flex-col md:w-1/4">
+                    <label class="text-sm text-gray-700 dark:text-gray-300 mb-1">Carrera</label>
+                    <input type="text" wire:model="educacion.{{ $index }}.carrera"
+                           class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+                </div>
+
+                <div class="flex flex-col md:w-1/5">
+                    <label class="text-sm text-gray-700 dark:text-gray-300 mb-1">Ingreso</label>
+                    <input type="date" wire:model="educacion.{{ $index }}.inicio"
+                           class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+                </div>
+
+                <div class="flex flex-col md:w-1/5">
+                    <label class="text-sm text-gray-700 dark:text-gray-300 mb-1">Egreso</label>
+                    <input type="date" wire:model="educacion.{{ $index }}.fin"
+                           class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+                </div>
+
+                <button type="button" wire:click="removeEducation({{ $index }})"
+                        class="text-red-500 text-xl hover:text-red-700">
+                    🗑
+                </button>
+            </div>
         </div>
+    @endforeach
 
-        <!-- Educación -->
-        <div>
-            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Estudios Superiores</label>
-            @foreach($educacion as $index => $edu)
-    <div class="mt-2 flex flex-col gap-2">
-        <div class="flex flex-wrap gap-2">
-            <input type="text" wire:model="educacion.{{ $index }}.universidad"
-                   placeholder="Universidad"
-                   class="w-full md:w-1/4 dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+    <button type="button" wire:click="addEducation" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">+ Agregar Estudio</button>
+</div>
 
-            <input type="text" wire:model="educacion.{{ $index }}.carrera"
-                   placeholder="Carrera"
-                   class="w-full md:w-1/4 dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
-
-            <input type="date" wire:model="educacion.{{ $index }}.inicio"
-                   class="w-full md:w-1/5 dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
-
-            <input type="date" wire:model="educacion.{{ $index }}.fin"
-                   class="w-full md:w-1/5 dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
-
-            <button type="button" wire:click="removeEducation({{ $index }})"
-                    class="text-red-500 text-xl hover:text-red-700">
-                🗑
-            </button>
-        </div>
-    </div>
-@endforeach
-
-            <button type="button" wire:click="addEducation" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">+ Agregar Estudio</button>
-        </div>
 
       <!-- Público -->
 <div class="flex items-center">
