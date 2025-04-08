@@ -19,7 +19,7 @@ class CVController extends Controller
         $cv = CV::with('user')->where('slug', $slug)->firstOrFail();
 
         if (!$cv->publico && (!Auth::check() || Auth::id() !== $cv->user_id)) {
-            return view('cv.not-available');
+            return view('cv-no-disponible');
         }
 
         return view('cv.show', compact('cv'));
