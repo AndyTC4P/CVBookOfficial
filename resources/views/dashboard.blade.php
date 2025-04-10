@@ -5,9 +5,16 @@
         </h2>
     </x-slot>
 
-    <div class="py-12 max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
+    <!-- Banner ajustado -->
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
+        <div class="rounded-lg overflow-hidden">
+            <img src="{{ asset('images/bannercv.png') }}" alt="Banner CV"
+                 class="w-full object-cover" style="max-height: 160px;">
+        </div>
+    </div>
 
+    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
             <!-- Encabezado amigable -->
             <div class="mb-6">
                 <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Completa los datos para generar tu CV</h3>
@@ -18,9 +25,10 @@
 
             <!-- Componente Livewire -->
             @livewire('cv-form')
-
         </div>
     </div>
 </x-app-layout>
+
+
 
 

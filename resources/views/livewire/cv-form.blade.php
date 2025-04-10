@@ -144,7 +144,7 @@
                 </div>
 
                 <div class="flex flex-col md:w-1/4">
-                    <label class="text-sm text-gray-700 dark:text-gray-300 mb-1">Puesto</label>
+                    <label class="text-sm text-gray-700 dark:text-gray-300 mb-1">Puesto/Cargo</label>
                     <input type="text"
                            wire:model="experiencia.{{ $index }}.puesto"
                            class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
