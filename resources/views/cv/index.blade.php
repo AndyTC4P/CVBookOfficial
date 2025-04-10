@@ -1,30 +1,49 @@
 <x-app-layout>
+    <!-- Encabezado superior de la página -->
     <x-slot name="header">
         <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200">📄 Mis CVs</h2>
     </x-slot>
 
+    <!-- Contenedor principal que engloba todo -->
     <div class="py-12 max-w-7xl mx-auto sm:px-6 lg:px-8">
+
+        <!-- Banner -->
+        <div class="mb-6">
+            <img src="{{ asset('images/bannerlistcv.png') }}"
+                 alt="Banner de edición de CV"
+                 class="rounded-md object-cover w-full h-[140px] shadow" />
+        </div>
+
+        <!-- Tarjeta principal -->
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
+
+            <!-- Título de sección -->
             <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4">Lista de CVs</h3>
 
+            <!-- Mensajes de éxito -->
             @if(session('message'))
                 <div class="p-4 mb-4 bg-green-200 text-green-800 rounded-lg">
                     {{ session('message') }}
                 </div>
             @endif
 
+            <!-- Mensajes de error -->
             @if(session('error'))
                 <div class="p-4 mb-4 text-red-800 bg-red-200 rounded-lg">
                     {{ session('error') }}
                 </div>
             @endif
 
+            <!-- Estado: sin CVs -->
             @if($cvs->isEmpty())
                 <p class="text-gray-500 dark:text-gray-400">Aún no has creado ningún CV.</p>
             @else
+                <!-- Lista de CVs -->
                 <ul class="space-y-4">
                     @foreach($cvs as $cv)
                     <li class="p-4 bg-gray-100 dark:bg-gray-700 rounded-md shadow-sm flex flex-col sm:flex-row sm:justify-between sm:items-center">
+
+                        <!-- Información del CV -->
                         <div class="mb-4 sm:mb-0">
                             <h4 class="text-lg font-bold text-gray-900 dark:text-white mb-1">
                                 {{ $cv->nombre }} {{ $cv->apellido }}
@@ -36,14 +55,16 @@
                             </span>
                         </div>
 
+                        <!-- Botones de acción -->
                         <div class="grid grid-cols-2 gap-2 w-full sm:flex sm:flex-wrap sm:justify-start sm:w-auto">
-                            <!-- Ver CV -->
+
+                            <!-- Botón: Ver CV -->
                             <a href="{{ route('cv.show', ['slug' => $cv->slug]) }}"
                                class="flex justify-center items-center w-36 px-3 py-1.5 bg-blue-500 hover:bg-blue-400 text-white text-sm rounded-md shadow-sm">
                                 👀 Ver CV
                             </a>
-                           
-                            <!-- Copiar enlace -->
+
+                            <!-- Botón: Copiar enlace público -->
                             @if($cv->publico)
                                 <div x-data="{ show: false }" class="relative w-36">
                                     <button
@@ -67,13 +88,13 @@
                                 </div>
                             @endif
 
-                            <!-- Editar CV -->
+                            <!-- Botón: Editar -->
                             <a href="{{ route('cv.edit', ['slug' => $cv->slug]) }}"
                                class="flex justify-center items-center w-36 px-3 py-1.5 bg-yellow-500 hover:bg-yellow-400 text-white text-sm rounded-md shadow-sm">
                                 ✏️ Editar CV
                             </a>
 
-                            <!-- Eliminar con modal -->
+                            <!-- Botón: Eliminar con confirmación -->
                             <div x-data="{ showModal: false }" class="w-36" x-cloak>
                                 <button
                                     @click="showModal = true"
@@ -82,7 +103,7 @@
                                     🗑 Eliminar
                                 </button>
 
-                                <!-- Modal -->
+                                <!-- Modal de confirmación -->
                                 <div
                                     x-show="showModal"
                                     x-transition
@@ -112,6 +133,7 @@
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </li>
                     @endforeach
@@ -120,5 +142,4 @@
         </div>
     </div>
 </x-app-layout>
-
 
