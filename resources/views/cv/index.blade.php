@@ -9,7 +9,7 @@
 
         <!-- Banner -->
         <div class="mb-6">
-            <img src="{{ asset('images/bannerlistcv.png') }}"
+            <img src="{{ asset('images/bannerlistcv.webp') }}"
                  alt="Banner de edición de CV"
                  class="rounded-md object-cover w-full h-[140px] shadow" />
         </div>

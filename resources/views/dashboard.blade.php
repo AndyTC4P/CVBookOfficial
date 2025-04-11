@@ -8,7 +8,7 @@
     <!-- Banner ajustado -->
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
         <div class="rounded-lg overflow-hidden">
-            <img src="{{ asset('images/bannercv.png') }}" alt="Banner CV"
+            <img src="{{ asset('images/bannercv9.webp') }}" alt="Banner CV"
                  class="w-full object-cover" style="max-height: 160px;">
         </div>
     </div>
