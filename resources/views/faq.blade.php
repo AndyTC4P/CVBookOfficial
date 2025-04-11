@@ -4,7 +4,13 @@
             🚀 ¿Cómo funciona CV Book?
         </h2>
     </x-slot>
-
+  <!-- Banner ajustado -->
+  <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
+        <div class="rounded-lg overflow-hidden">
+            <img src="{{ asset('images/preguntascv.webp') }}" alt="Banner CV"
+                 class="w-full object-cover" style="max-height: 160px;">
+        </div>
+    </div>
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-900 shadow-md sm:rounded-lg p-8 text-gray-800 dark:text-gray-200 space-y-10">
