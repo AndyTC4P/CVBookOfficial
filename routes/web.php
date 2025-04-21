@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CVController;
 use Illuminate\Support\Facades\Auth;
 use App\Livewire\Faq;
+use App\Http\Controllers\PdfCvController;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 // Página de bienvenida
 Route::view('/', 'welcome');
@@ -62,3 +64,8 @@ Route::post('/logout', function () {
 
 Route::view('/faq', 'faq')->name('faq');
 Route::view('/terminos', 'terms')->name('terms');
+Route::get('/cv/demo/pdf', function () {
+    $pdf = Pdf::loadView('pdf.plantilla-demo');
+    return $pdf->stream('cv-demo.pdf');
+})->name('cv.demo.pdf');
+Route::get('/cv/{slug}/pdf', [PdfCvController::class, 'export'])->name('cv.pdf');
