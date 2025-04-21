@@ -16,7 +16,6 @@
             display: table;
             width: 100%;
             table-layout: fixed;
-            min-height: 1122px;
         }
 
         .cv-row {
@@ -42,8 +41,6 @@
 
         .photo-full {
             width: 100%;
-            max-height: 240px;
-            overflow: hidden;
             margin-bottom: 25px;
             background-color: #444;
             border: 2px solid #fff;
@@ -52,8 +49,8 @@
         .photo-full img {
             width: 100%;
             height: auto;
-            object-fit: contain;
             display: block;
+            object-fit: contain;
         }
 
         .section {
@@ -133,10 +130,15 @@
             <!-- Columna izquierda -->
             <div class="left-column">
                 <div class="photo-full">
-                    @if ($cv->foto && file_exists(public_path('storage/cv/' . $cv->foto)))
-                        <img src="{{ public_path('storage/cv/' . $cv->foto) }}" alt="Foto de Perfil">
+                    @php
+                        $ruta = public_path('storage/' . $cv->imagen);
+                    @endphp
+                    @if ($cv->imagen && file_exists($ruta))
+                        <img src="{{ $ruta }}" alt="Foto de Perfil">
                     @else
-                        <img src="https://via.placeholder.com/300x400" alt="Foto de Perfil">
+                        <div style="width:100%;aspect-ratio:3/4;background:#444;color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid #fff;">
+                            Foto de Perfil
+                        </div>
                     @endif
                 </div>
 
@@ -149,23 +151,29 @@
                     <h3>Contacto</h3>
                     <p>{{ $cv->correo }}</p>
                     <p>{{ $cv->telefono }}</p>
-                    <p>{{ \Illuminate\Support\Str::limit($cv->direccion, 100) }}, {{ $cv->ciudad }}, {{ $cv->pais }}</p>
+                    <p>{{ $cv->ciudad }}, {{ $cv->pais }}</p>
                 </div>
 
                 <div class="section">
                     <h3>Habilidades</h3>
+                    @php
+                        $habilidades = is_array($cv->habilidades) ? $cv->habilidades : json_decode($cv->habilidades, true) ?? [];
+                    @endphp
                     <ul>
-                        @foreach($cv->habilidades->take(5) as $habilidad)
-                            <li>{{ \Illuminate\Support\Str::limit($habilidad->nombre, 25) }}</li>
+                        @foreach($habilidades as $habilidad)
+                            <li>{{ \Illuminate\Support\Str::limit($habilidad, 25) }}</li>
                         @endforeach
                     </ul>
                 </div>
 
                 <div class="section">
                     <h3>Idiomas</h3>
+                    @php
+                        $idiomas = is_array($cv->idiomas) ? $cv->idiomas : json_decode($cv->idiomas, true) ?? [];
+                    @endphp
                     <ul>
-                        @foreach($cv->idiomas->take(5) as $idioma)
-                            <li>{{ $idioma->nombre }}</li>
+                        @foreach($idiomas as $idioma)
+                            <li>{{ $idioma }}</li>
                         @endforeach
                         @if ($cv->otro_idioma)
                             <li>{{ $cv->otro_idioma }}</li>
@@ -181,33 +189,33 @@
 
                 <div class="section">
                     <h3>Experiencia Laboral</h3>
-                    @foreach($cv->experiencias->take(3) as $exp)
+                    @php
+                        $experiencias = is_array($cv->experiencia) ? $cv->experiencia : json_decode($cv->experiencia, true) ?? [];
+                    @endphp
+                    @foreach($experiencias as $exp)
                         <div class="job-block">
-                            <h4>{{ $exp->empresa }} - {{ $exp->puesto }}</h4>
-                            <div class="date">{{ $exp->fecha_inicio }} - {{ $exp->fecha_fin }}</div>
-                            <p>{{ \Illuminate\Support\Str::limit($exp->descripcion, 300) }}</p>
+                            <h4>{{ $exp['empresa'] ?? '' }} - {{ $exp['puesto'] ?? '' }}</h4>
+                            <div class="date">{{ $exp['fecha_inicio'] ?? '' }} - {{ $exp['fecha_fin'] ?? '' }}</div>
+                            <p>{{ \Illuminate\Support\Str::limit($exp['descripcion'] ?? '', 300) }}</p>
                         </div>
                     @endforeach
                 </div>
 
                 <div class="section education-block">
                     <h3>Estudios Superiores</h3>
-                    @foreach($cv->estudios->take(2) as $edu)
+                    @php
+                        $educacion = is_array($cv->educacion) ? $cv->educacion : json_decode($cv->educacion, true) ?? [];
+                    @endphp
+                    @foreach($educacion as $edu)
                         <div>
-                            <h4>{{ $edu->centro }} - {{ $edu->carrera }}</h4>
-                            <div class="date">{{ $edu->anio_inicio }} - {{ $edu->anio_fin }}</div>
+                            <h4>{{ $edu['centro'] ?? '' }} - {{ $edu['carrera'] ?? '' }}</h4>
+                            <div class="date">{{ $edu['anio_inicio'] ?? '' }} - {{ $edu['anio_fin'] ?? '' }}</div>
                         </div>
                         <br>
                     @endforeach
                 </div>
-
-                <!-- Relleno visual -->
-                <div style="height: 396px;"></div>
             </div>
         </div>
     </div>
 </body>
 </html>
-
-
-
