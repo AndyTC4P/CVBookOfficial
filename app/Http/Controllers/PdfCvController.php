@@ -9,15 +9,17 @@ class PdfCvController extends Controller
 {
     public function export($slug)
     {
-        $cv = CV::where('slug', $slug)->firstOrFail(); // 👈 sin with()
+        $cv = CV::where('slug', $slug)->firstOrFail();
 
-        $pdf = Pdf::loadView('pdf.cv', compact('cv'))
+        // Usa la plantilla visual que tienes en resources/views/pdf/cv-template.blade.php
+        $pdf = Pdf::loadView('pdf.cv-template', compact('cv'))
                   ->setPaper('A4', 'portrait');
 
-                  return $pdf->stream('cv_'.$cv->nombre.'_'.$cv->apellido.'.pdf');
-
+        // Lo muestra directamente en el navegador
+        return $pdf->stream('cv_' . $cv->nombre . '_' . $cv->apellido . '.pdf');
     }
 }
+
 
 
 
