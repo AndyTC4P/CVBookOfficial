@@ -12,7 +12,7 @@ class PdfCvController extends Controller
         $cv = CV::where('slug', $slug)->firstOrFail();
 
         // Usa la plantilla visual que tienes en resources/views/pdf/cv-template.blade.php
-        $pdf = Pdf::loadView('pdf.plantilla-demo', compact('cv'))
+        $pdf = Pdf::loadView('pdf.cv', compact('cv'))
                   ->setPaper('A4', 'portrait');
 
         // Lo muestra directamente en el navegador
