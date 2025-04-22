@@ -137,7 +137,7 @@
 
                 <div class="section">
                     <h3>Perfil Profesional</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer non suscipit sapien.</p>
+                    <p>Lorem ipsum dolor essssit amet, consectetur adipiscing elit. Integer non suscipit sapien.</p>
                 </div>
 
                 <div class="section">
