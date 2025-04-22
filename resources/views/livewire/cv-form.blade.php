@@ -96,7 +96,7 @@
             <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Habilidades</label>
             @foreach($habilidades as $index => $habilidad)
                 <div class="flex gap-2 mt-2">
-                <input type="text" wire:model="habilidades.{{ $index }}" maxlength="50" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm" placeholder="Ej: Trabajo en equipo. Max 50 caracteres">
+                <input type="text" wire:model="habilidades.{{ $index }}" maxlength="35" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm" placeholder="Ej: Trabajo en equipo. Max 35 caracteres">
                     <button type="button" wire:click="removeSkill({{ $index }})" class="text-red-500">🗑</button>
                 </div>
             @endforeach
@@ -294,6 +294,9 @@
             @if ($errors->has('educacion.*.fin'))
                 <li>La <strong>Fecha de Fin</strong> en estudios debe ser posterior o igual a la fecha de inicio.</li>
             @endif
+            @if ($errors->has('habilidades'))
+    <li>Debe ingresar al menos <strong>5 habilidades</strong> para completar el CV.</li>
+@endif
         </ul>
     </div>
 @endif
