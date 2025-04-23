@@ -34,22 +34,24 @@ class CvForm extends Component
     public bool $cvGuardado = false;
     public bool $imagenSubida = false;
 
-    protected $rules = [
+    public function rules()
+{
+    return [
         'nombre' => 'required|string|max:100',
         'apellido' => 'required|string|max:100',
         'titulo' => 'nullable|string|max:255',
-        'perfil' => 'required|string|max:1000',
-        'imagen' => 'nullable|image|max:2048',
-        'correo' => 'nullable|email|max:255',
-        'telefono' => 'nullable|string|max:20',
-        'direccion' => 'nullable|string|max:255',
+        'perfil' => 'required|string|max:390',
+        'imagen' => $this->modo === 'crear' ? 'required|image|max:2048' : 'nullable|image|max:2048',
+        'correo' => 'required|email|max:255',
+        'telefono' => 'required|string|max:20',
+        'direccion' => 'required|string|max:255',
         'pais' => 'nullable|string|max:100',
         'ciudad' => 'nullable|string|max:100',
-        'habilidades' => 'nullable|array',
-        'habilidades.*' => 'required|string|max:50',
+        'habilidades' => 'nullable|array|min:5',
+        'habilidades.*' => 'required|string|max:35',
         'idiomas' => 'nullable|array',
         'idiomas.*' => 'required|string|max:100',
-        'idioma_otro' => 'nullable|string|max:100', // <--- NUEVO
+        'idioma_otro' => 'nullable|string|max:100',
         'experiencia' => 'nullable|array',
         'experiencia.*.empresa' => 'required|string|max:255',
         'experiencia.*.puesto' => 'required|string|max:255',
@@ -62,7 +64,19 @@ class CvForm extends Component
         'educacion.*.fin' => 'nullable|date|after_or_equal:educacion.*.inicio',
         'publico' => 'boolean',
     ];
+}
 
+    protected $messages = [
+        'correo.required' => 'El campo Correo Electrónico es obligatorio.',
+'telefono.required' => 'El campo Número de Contacto es obligatorio.',
+'direccion.required' => 'El campo Dirección es obligatorio.',
+'ciudad.required' => 'El campo Ciudad es obligatorio.',
+        'habilidades.min' => 'Debe ingresar al menos 5 habilidades.',
+        'perfil.max' => 'El campo Perfil Profesional no debe superar los 390 caracteres.',
+        'imagen.required' => 'Debe subir una imagen de perfil para continuar.',
+    'imagen.image' => 'El archivo debe ser una imagen válida.',
+    'imagen.max' => 'La imagen no debe superar los 2MB.',
+    ];
     public function mount($cv = null)
     {
         if ($cv) {

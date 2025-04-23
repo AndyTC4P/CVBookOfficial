@@ -247,8 +247,8 @@
                 <li>El campo <strong>Título o Profesión</strong> debe ser texto y tener máximo 255 caracteres.</li>
             @endif
             @if ($errors->has('imagen'))
-                <li>La <strong>Imagen de Perfil</strong> debe ser un archivo de imagen y no debe superar los 2MB.</li>
-            @endif
+    <li>La <strong>Imagen de Perfil</strong> debe ser un archivo de imagen y no debe superar los 2MB.</li>
+@endif
             @if ($errors->has('correo'))
                 <li>El campo <strong>Correo Electrónico</strong> debe contener una dirección válida y tener máximo 255 caracteres.</li>
             @endif
@@ -265,7 +265,7 @@
                 <li>El campo <strong>Ciudad</strong> debe tener máximo 100 caracteres.</li>
             @endif
             @if ($errors->has('habilidades.*'))
-                <li>Cada <strong>Habilidad</strong> es obligatoria y debe tener máximo 100 caracteres.</li>
+                <li>Cada <strong>Habilidad</strong> es obligatoria y debe tener máximo 35 caracteres.</li>
             @endif
             @if ($errors->has('idiomas.*'))
                 <li>Cada <strong>Idioma</strong> es obligatorio y debe tener máximo 100 caracteres.</li>
@@ -294,6 +294,10 @@
             @if ($errors->has('educacion.*.fin'))
                 <li>La <strong>Fecha de Fin</strong> en estudios debe ser posterior o igual a la fecha de inicio.</li>
             @endif
+            @if ($errors->has('habilidades'))
+    <li>Debe ingresar al menos <strong>5 habilidades</strong> para completar el CV.</li>
+@endif
+
         </ul>
     </div>
 @endif

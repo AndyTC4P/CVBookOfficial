@@ -63,6 +63,13 @@
                                class="flex justify-center items-center w-36 px-3 py-1.5 bg-blue-500 hover:bg-blue-400 text-white text-sm rounded-md shadow-sm">
                                 👀 Ver CV
                             </a>
+<!-- Botón: Descargar PDF -->
+<a href="{{ route('cv.pdf', ['slug' => $cv->slug]) }}"
+   target="_blank"
+   class="flex justify-center items-center w-36 px-3 py-1.5 text-white text-sm rounded-md shadow-sm"
+   style="background-color: #7c3aed;">
+   📄 PDF
+</a>
 
                             <!-- Botón: Copiar enlace público -->
                             @if($cv->publico)

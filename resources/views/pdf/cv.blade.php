@@ -144,7 +144,7 @@
 
                 <div class="section">
                     <h3>Perfil Profesional</h3>
-                    <p>{{ \Illuminate\Support\Str::limit($cv->perfil, 300) }}</p>
+                    <p>{{ \Illuminate\Support\Str::limit($cv->perfil, 390) }}</p>
                 </div>
 
                 <div class="section">
@@ -157,29 +157,28 @@
                 <div class="section">
                     <h3>Habilidades</h3>
                     @php
-                        $habilidades = is_array($cv->habilidades) ? $cv->habilidades : json_decode($cv->habilidades, true) ?? [];
-                    @endphp
-                    <ul>
-                        @foreach($habilidades as $habilidad)
-                            <li>{{ \Illuminate\Support\Str::limit($habilidad, 25) }}</li>
-                        @endforeach
-                    </ul>
+    $habilidades = is_array($cv->habilidades) ? $cv->habilidades : json_decode($cv->habilidades, true) ?? [];
+    $habilidadesLimitadas = array_slice($habilidades, 0, 5);
+@endphp
+<ul>
+    @foreach($habilidadesLimitadas as $habilidad)
+    <li style="white-space: normal;">{{ \Illuminate\Support\Str::limit($habilidad, 35) }}</li>
+    @endforeach
+</ul>
+
                 </div>
 
                 <div class="section">
-                    <h3>Idiomas</h3>
-                    @php
-                        $idiomas = is_array($cv->idiomas) ? $cv->idiomas : json_decode($cv->idiomas, true) ?? [];
-                    @endphp
-                    <ul>
-                        @foreach($idiomas as $idioma)
-                            <li>{{ $idioma }}</li>
-                        @endforeach
-                        @if ($cv->otro_idioma)
-                            <li>{{ $cv->otro_idioma }}</li>
-                        @endif
-                    </ul>
-                </div>
+    <h3>Idiomas</h3>
+    @php
+        $idiomas = is_array($cv->idiomas) ? $cv->idiomas : json_decode($cv->idiomas, true) ?? [];
+        if (!empty($cv->otro_idioma)) {
+            $idiomas[] = $cv->otro_idioma;
+        }
+    @endphp
+    <p>{{ implode(', ', array_filter($idiomas)) }}</p>
+</div>
+
             </div>
 
             <!-- Columna derecha -->
@@ -193,27 +192,32 @@
                         $experiencias = is_array($cv->experiencia) ? $cv->experiencia : json_decode($cv->experiencia, true) ?? [];
                     @endphp
                     @foreach($experiencias as $exp)
-                        <div class="job-block">
-                            <h4>{{ $exp['empresa'] ?? '' }} - {{ $exp['puesto'] ?? '' }}</h4>
-                            <div class="date">{{ $exp['fecha_inicio'] ?? '' }} - {{ $exp['fecha_fin'] ?? '' }}</div>
-                            <p>{{ \Illuminate\Support\Str::limit($exp['descripcion'] ?? '', 300) }}</p>
-                        </div>
-                    @endforeach
+    <div class="job-block">
+        <h4>{{ $exp['empresa'] ?? '' }} - {{ $exp['puesto'] ?? '' }}</h4>
+        <div class="date">
+            {{ $exp['inicio'] ?? 'Fecha no especificada' }} - {{ $exp['fin'] ?? 'Actual' }}
+        </div>
+        <p>{{ \Illuminate\Support\Str::limit($exp['tareas'] ?? '', 300) }}</p>
+    </div>
+@endforeach
                 </div>
 
                 <div class="section education-block">
-                    <h3>Estudios Superiores</h3>
-                    @php
-                        $educacion = is_array($cv->educacion) ? $cv->educacion : json_decode($cv->educacion, true) ?? [];
-                    @endphp
-                    @foreach($educacion as $edu)
-                        <div>
-                            <h4>{{ $edu['centro'] ?? '' }} - {{ $edu['carrera'] ?? '' }}</h4>
-                            <div class="date">{{ $edu['anio_inicio'] ?? '' }} - {{ $edu['anio_fin'] ?? '' }}</div>
-                        </div>
-                        <br>
-                    @endforeach
-                </div>
+    <h3>Estudios Superiores</h3>
+    @php
+        $educacion = is_array($cv->educacion) ? $cv->educacion : json_decode($cv->educacion, true) ?? [];
+    @endphp
+    @foreach($educacion as $edu)
+        <div>
+            <h4>{{ $edu['centro'] ?? '' }} - {{ $edu['carrera'] ?? '' }}</h4>
+            <div class="date">
+                {{ $edu['inicio'] ?? 'Fecha no especificada' }} - {{ $edu['fin'] ?? 'Actual' }}
+            </div>
+        </div>
+        <br>
+    @endforeach
+</div>
+
             </div>
         </div>
     </div>
