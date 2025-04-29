@@ -10,6 +10,8 @@ new class extends Component
 {
     public string $name = '';
     public string $email = '';
+    public string $genero = 'no_especificado';
+
 
     /**
      * Mount the component.
@@ -18,6 +20,8 @@ new class extends Component
     {
         $this->name = Auth::user()->name;
         $this->email = Auth::user()->email;
+        $this->genero = Auth::user()->genero ?? 'no_especificado';
+
     }
 
     /**
@@ -26,22 +30,24 @@ new class extends Component
     public function updateProfileInformation(): void
     {
         $user = Auth::user();
-
+    
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
+            'genero' => ['required', Rule::in(['masculino', 'femenino', 'no_especificado'])],
         ]);
-
+    
         $user->fill($validated);
-
+    
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
-
+    
         $user->save();
-
+    
         $this->dispatch('profile-updated', name: $user->name);
     }
+    
 
     /**
      * Send an email verification notification to the current user.
@@ -79,6 +85,15 @@ new class extends Component
             <x-text-input wire:model="name" id="name" name="name" type="text" class="mt-1 block w-full" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
+        <div>
+    <x-input-label for="genero" :value="__('Género')" />
+    <select wire:model="genero" id="genero" name="genero" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+        <option value="masculino">Masculino</option>
+        <option value="femenino">Femenino</option>
+        <option value="no_especificado">Prefiero no decirlo</option>
+    </select>
+    <x-input-error class="mt-2" :messages="$errors->get('genero')" />
+</div>
 
         <div>
             <x-input-label for="email" :value="__('Email')" />
