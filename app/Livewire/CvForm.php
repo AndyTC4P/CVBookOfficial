@@ -15,7 +15,10 @@ class CvForm extends Component
     public $cv_id;
     public $nombre;
     public $apellido;
-    public $titulo;
+    public string $categoria_profesion = '';
+    public string $titulo_profesion = '';
+    public string $titulo_manual = '';
+    public array $profesionesPorCategoria = [];
     public $perfil;
     public $imagen;
     public $correo;
@@ -27,7 +30,7 @@ class CvForm extends Component
     public $educacion = [];
     public $habilidades = [];
     public $idiomas = [];
-    public $idioma_otro = ''; // <--- NUEVO
+    public $idioma_otro = '';
     public $publico = false;
     public $modo = 'crear';
 
@@ -35,55 +38,86 @@ class CvForm extends Component
     public bool $imagenSubida = false;
 
     public function rules()
-{
-    return [
-        'nombre' => 'required|string|max:100',
-        'apellido' => 'required|string|max:100',
-        'titulo' => 'nullable|string|max:255',
-        'perfil' => 'required|string|max:390',
-        'imagen' => $this->modo === 'crear' ? 'required|image|max:2048' : 'nullable|image|max:2048',
-        'correo' => 'required|email|max:255',
-        'telefono' => 'required|string|max:20',
-        'direccion' => 'required|string|max:255',
-        'pais' => 'nullable|string|max:100',
-        'ciudad' => 'nullable|string|max:100',
-        'habilidades' => 'nullable|array|min:5',
-        'habilidades.*' => 'required|string|max:35',
-        'idiomas' => 'nullable|array',
-        'idiomas.*' => 'required|string|max:100',
-        'idioma_otro' => 'nullable|string|max:100',
-        'experiencia' => 'nullable|array',
-        'experiencia.*.empresa' => 'required|string|max:255',
-        'experiencia.*.puesto' => 'required|string|max:255',
-        'experiencia.*.inicio' => 'required|date',
-        'experiencia.*.fin' => 'nullable|date|after_or_equal:experiencia.*.inicio',
-        'educacion' => 'nullable|array',
-        'educacion.*.universidad' => 'required|string|max:255',
-        'educacion.*.carrera' => 'required|string|max:255',
-        'educacion.*.inicio' => 'required|date',
-        'educacion.*.fin' => 'nullable|date|after_or_equal:educacion.*.inicio',
-        'publico' => 'boolean',
-    ];
-}
+    {
+        $rules = [
+            'nombre' => 'required|string|max:100',
+            'apellido' => 'required|string|max:100',
+            'categoria_profesion' => 'required|string|max:255',
+            'titulo_manual' => 'nullable|string|max:255',
+            'perfil' => 'required|string|max:390',
+            'imagen' => $this->modo === 'crear' ? 'required|image|max:2048' : 'nullable|image|max:2048',
+            'correo' => 'required|email|max:255',
+            'telefono' => 'required|string|max:20',
+            'direccion' => 'required|string|max:255',
+            'pais' => 'nullable|string|max:100',
+            'ciudad' => 'nullable|string|max:100',
+            'habilidades' => 'nullable|array|min:5',
+            'habilidades.*' => 'required|string|max:35',
+            'idiomas' => 'nullable|array',
+            'idiomas.*' => 'required|string|max:100',
+            'idioma_otro' => 'nullable|string|max:100',
+            'experiencia' => 'nullable|array',
+            'experiencia.*.empresa' => 'required|string|max:255',
+            'experiencia.*.puesto' => 'required|string|max:255',
+            'experiencia.*.inicio' => 'required|date',
+            'experiencia.*.fin' => 'nullable|date|after_or_equal:experiencia.*.inicio',
+            'educacion' => 'nullable|array',
+            'educacion.*.universidad' => 'required|string|max:255',
+            'educacion.*.carrera' => 'required|string|max:255',
+            'educacion.*.inicio' => 'required|date',
+            'educacion.*.fin' => 'nullable|date|after_or_equal:educacion.*.inicio',
+            'publico' => 'boolean',
+        ];
+
+        if ($this->categoria_profesion === 'Otra' || $this->titulo_profesion === 'Otra') {
+            $rules['titulo_manual'] = 'required|string|max:255';
+        }
+
+        return $rules;
+    }
 
     protected $messages = [
         'correo.required' => 'El campo Correo Electrónico es obligatorio.',
-'telefono.required' => 'El campo Número de Contacto es obligatorio.',
-'direccion.required' => 'El campo Dirección es obligatorio.',
-'ciudad.required' => 'El campo Ciudad es obligatorio.',
+        'telefono.required' => 'El campo Número de Contacto es obligatorio.',
+        'direccion.required' => 'El campo Dirección es obligatorio.',
+        'ciudad.required' => 'El campo Ciudad es obligatorio.',
         'habilidades.min' => 'Debe ingresar al menos 5 habilidades.',
         'perfil.max' => 'El campo Perfil Profesional no debe superar los 390 caracteres.',
         'imagen.required' => 'Debe subir una imagen de perfil para continuar.',
-    'imagen.image' => 'El archivo debe ser una imagen válida.',
-    'imagen.max' => 'La imagen no debe superar los 2MB.',
+        'imagen.image' => 'El archivo debe ser una imagen válida.',
+        'imagen.max' => 'La imagen no debe superar los 2MB.',
     ];
+
     public function mount($cv = null)
     {
+        $this->profesionesPorCategoria = [
+            'Tecnología e Informática',
+            'Salud',
+            'Educación',
+            'Ingenierías',
+            'Administración y Negocios',
+            'Derecho y Ciencias Jurídicas',
+            'Ciencias Sociales',
+            'Marketing y Ventas',
+            'Arte y Creatividad',
+            'Deportes y Recreación',
+            'Comunicación y Medios',
+            'Construcción y Mantenimiento',
+            'Transporte y Logística',
+            'Servicios Personales',
+            'Agroindustria y Medio Ambiente',
+            'Estudiante',
+            'Otro'
+        ];
+        
+
         if ($cv) {
             $this->cv_id = $cv->id;
             $this->nombre = $cv->nombre;
             $this->apellido = $cv->apellido;
-            $this->titulo = $cv->titulo;
+            $this->categoria_profesion = $cv->categoria_profesion ?? '';
+            $this->titulo_profesion = in_array($cv->titulo, collect($this->profesionesPorCategoria)->flatten()->toArray()) ? $cv->titulo : 'Otra';
+            $this->titulo_manual = $this->titulo_profesion === 'Otra' ? $cv->titulo : '';
             $this->perfil = $cv->perfil;
             $this->correo = $cv->correo;
             $this->telefono = $cv->telefono;
@@ -119,7 +153,6 @@ class CvForm extends Component
 
         $imagenPath = $this->imagen ? $this->imagen->store('imagenes_perfil', 'public') : null;
 
-        // Unir idiomas predefinidos + otro idioma personalizado
         $idiomas = $this->idiomas;
         if (!empty($this->idioma_otro)) {
             $idiomas[] = $this->idioma_otro;
@@ -129,7 +162,8 @@ class CvForm extends Component
             'user_id' => Auth::id(),
             'nombre' => $this->nombre,
             'apellido' => $this->apellido,
-            'titulo' => $this->titulo,
+           'titulo' => $this->titulo_manual,
+'categoria_profesion' => $this->categoria_profesion,
             'perfil' => $this->perfil,
             'imagen' => $imagenPath,
             'correo' => $this->correo,
@@ -145,63 +179,27 @@ class CvForm extends Component
         ];
 
         if ($this->modo === 'crear') {
-            $slug = Str::random(16);
-            $data['slug'] = $slug;
-
+            $data['slug'] = Str::random(16);
             $cv = CV::create($data);
             return redirect()->route('cv.show', ['slug' => $cv->slug]);
         } else {
             $cv = CV::findOrFail($this->cv_id);
             $data['imagen'] = $imagenPath ?? $cv->imagen;
             $data['slug'] = $cv->slug;
-
             $cv->update($data);
             return redirect()->route('cv.index')->with('message', '✅ CV actualizado correctamente.');
         }
     }
 
-    public function addExperience()
-    {
-        $this->experiencia[] = ['empresa' => '', 'puesto' => '', 'inicio' => '', 'fin' => '', 'tareas' => ''];
-    }
+    public function addExperience() { $this->experiencia[] = ['empresa' => '', 'puesto' => '', 'inicio' => '', 'fin' => '', 'tareas' => '']; }
+    public function removeExperience($index) { unset($this->experiencia[$index]); $this->experiencia = array_values($this->experiencia); }
+    public function addEducation() { $this->educacion[] = ['universidad' => '', 'carrera' => '', 'inicio' => '', 'fin' => '']; }
+    public function removeEducation($index) { unset($this->educacion[$index]); $this->educacion = array_values($this->educacion); }
+    public function updatedImagen() { $this->imagenSubida = true; }
+    public function addSkill() { $this->habilidades[] = ''; }
+    public function removeSkill($index) { unset($this->habilidades[$index]); $this->habilidades = array_values($this->habilidades); }
 
-    public function removeExperience($index)
-    {
-        unset($this->experiencia[$index]);
-        $this->experiencia = array_values($this->experiencia);
-    }
-
-    public function addEducation()
-    {
-        $this->educacion[] = ['universidad' => '', 'carrera' => '', 'inicio' => '', 'fin' => ''];
-    }
-
-    public function removeEducation($index)
-    {
-        unset($this->educacion[$index]);
-        $this->educacion = array_values($this->educacion);
-    }
-
-    public function updatedImagen()
-    {
-        $this->imagenSubida = true;
-    }
-
-    public function addSkill()
-    {
-        $this->habilidades[] = '';
-    }
-
-    public function removeSkill($index)
-    {
-        unset($this->habilidades[$index]);
-        $this->habilidades = array_values($this->habilidades);
-    }
-
-    public function render()
-    {
-        return view('livewire.cv-form');
-    }
+    public function render() { return view('livewire.cv-form'); }
 }
 
 

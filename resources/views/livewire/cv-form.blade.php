@@ -25,12 +25,26 @@
             @error('apellido') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 
-        <!-- Título -->
-        <div>
-            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Título o Profesión</label>
-            <input type="text" wire:model="titulo" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
-            @error('titulo') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-        </div>
+       <!-- Categoría de Profesión -->
+<div>
+    <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Categoría Profesional <span class="text-red-500">*</span></label>
+    <select wire:model="categoria_profesion" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+        <option value="">Selecciona una categoría</option>
+        @foreach($profesionesPorCategoria as $categoria)
+            <option value="{{ $categoria }}">{{ $categoria }}</option>
+        @endforeach
+    </select>
+    @error('categoria_profesion') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+</div>
+
+<!-- Profesión libre -->
+<div class="mt-4">
+    <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Profesión o Título <span class="text-red-500">*</span></label>
+    <input type="text" wire:model="titulo_manual" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm" placeholder="Ejemplo: Abogado, Desarrollador, Diseñador UX...">
+    @error('titulo_manual') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+</div>
+
+
 
         <!-- Perfil -->
         <div>
