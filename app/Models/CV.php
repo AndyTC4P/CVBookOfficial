@@ -16,6 +16,7 @@ class CV extends Model
         'nombre',
         'apellido',
         'titulo',
+        'categoria_profesion', // ✅ <-- Agregado aquí
         'perfil',
         'imagen',
         'correo',
@@ -28,8 +29,9 @@ class CV extends Model
         'habilidades',
         'idiomas',
         'publico',
-        'slug', // 👈 Agrega esta línea
+        'slug',
     ];
+    
     
 
     protected $casts = [

@@ -16,7 +16,6 @@ class CvForm extends Component
     public $nombre;
     public $apellido;
     public string $categoria_profesion = '';
-    public string $titulo_profesion = '';
     public string $titulo_manual = '';
     public array $profesionesPorCategoria = [];
     public $perfil;
@@ -39,11 +38,11 @@ class CvForm extends Component
 
     public function rules()
     {
-        $rules = [
+        return [
             'nombre' => 'required|string|max:100',
             'apellido' => 'required|string|max:100',
             'categoria_profesion' => 'required|string|max:255',
-            'titulo_manual' => 'nullable|string|max:255',
+            'titulo_manual' => 'required|string|max:255',
             'perfil' => 'required|string|max:390',
             'imagen' => $this->modo === 'crear' ? 'required|image|max:2048' : 'nullable|image|max:2048',
             'correo' => 'required|email|max:255',
@@ -68,12 +67,6 @@ class CvForm extends Component
             'educacion.*.fin' => 'nullable|date|after_or_equal:educacion.*.inicio',
             'publico' => 'boolean',
         ];
-
-        if ($this->categoria_profesion === 'Otra' || $this->titulo_profesion === 'Otra') {
-            $rules['titulo_manual'] = 'required|string|max:255';
-        }
-
-        return $rules;
     }
 
     protected $messages = [
@@ -111,15 +104,13 @@ class CvForm extends Component
             'Estudiante',
             'Otro'
         ];
-        
 
         if ($cv) {
             $this->cv_id = $cv->id;
             $this->nombre = $cv->nombre;
             $this->apellido = $cv->apellido;
             $this->categoria_profesion = $cv->categoria_profesion ?? '';
-            $this->titulo_profesion = in_array($cv->titulo, collect($this->profesionesPorCategoria)->flatten()->toArray()) ? $cv->titulo : 'Otra';
-            $this->titulo_manual = $this->titulo_profesion === 'Otra' ? $cv->titulo : '';
+            $this->titulo_manual = $cv->titulo ?? '';
             $this->perfil = $cv->perfil;
             $this->correo = $cv->correo;
             $this->telefono = $cv->telefono;
@@ -146,6 +137,9 @@ class CvForm extends Component
 
             $this->modo = 'editar';
         }
+        
+        logger('📌 CATEGORÍA precargada:', [$this->categoria_profesion]);
+
     }
 
     public function save()
@@ -164,8 +158,8 @@ class CvForm extends Component
             'user_id' => Auth::id(),
             'nombre' => $this->nombre,
             'apellido' => $this->apellido,
-           'titulo' => $this->titulo_manual,
-'categoria_profesion' => $this->categoria_profesion,
+            'titulo' => $this->titulo_manual,
+            'categoria_profesion' => $this->categoria_profesion,
             'perfil' => $this->perfil,
             'imagen' => $imagenPath,
             'correo' => $this->correo,
@@ -203,6 +197,7 @@ class CvForm extends Component
 
     public function render() { return view('livewire.cv-form'); }
 }
+
 
 
 
