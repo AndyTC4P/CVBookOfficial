@@ -257,9 +257,14 @@
             @if ($errors->has('perfil'))
                 <li>El campo <strong>Perfil Profesional</strong> es obligatorio y debe tener máximo 1000 caracteres.</li>
             @endif
-            @if ($errors->has('titulo'))
-                <li>El campo <strong>Título o Profesión</strong> debe ser texto y tener máximo 255 caracteres.</li>
-            @endif
+            @if ($errors->has('categoria_profesion'))
+    <li>Debe seleccionar una <strong>categoría profesional</strong>.</li>
+@endif
+
+@if ($errors->has('titulo_manual'))
+    <li>Debe escribir su <strong>profesión o título</strong> para mostrar en el CV.</li>
+@endif
+
             @if ($errors->has('imagen'))
     <li>La <strong>Imagen de Perfil</strong> debe ser un archivo de imagen y no debe superar los 2MB.</li>
 @endif
