@@ -6,6 +6,20 @@ use Illuminate\Support\Facades\Auth;
 use App\Livewire\Faq;
 use App\Http\Controllers\PdfCvController;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Http\Controllers\AdminController;
+use App\Models\User;
+use App\Models\CV;
+
+Route::get('/admin/dashboard', function () {
+    if (auth()->check() && auth()->user()->role === 'admin') {
+        $users = User::all();
+        $cvs = CV::latest()->get();
+        return view('admin.dashboard', compact('users', 'cvs'));
+    }
+
+    abort(403, 'No autorizado');
+})->middleware('auth')->name('admin.dashboard');
+
 
 // Página de bienvenida
 Route::view('/', 'welcome');
@@ -69,3 +83,4 @@ Route::get('/cv/demo/pdf', function () {
     return $pdf->stream('cv-demo.pdf');
 })->name('cv.demo.pdf');
 Route::get('/cv/{slug}/pdf', [PdfCvController::class, 'export'])->name('cv.pdf');
+
