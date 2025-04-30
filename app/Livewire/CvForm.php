@@ -77,6 +77,8 @@ class CvForm extends Component
     }
 
     protected $messages = [
+        'categoria_profesion.required' => 'Debe seleccionar una categoría profesional.',
+        'titulo_manual.required' => 'Debe escribir su profesión o título.',
         'correo.required' => 'El campo Correo Electrónico es obligatorio.',
         'telefono.required' => 'El campo Número de Contacto es obligatorio.',
         'direccion.required' => 'El campo Dirección es obligatorio.',
