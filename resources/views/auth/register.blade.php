@@ -41,15 +41,26 @@
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
+        <!-- reCAPTCHA -->
+<div class="mt-4">
+    {!! NoCaptcha::renderJs() !!}
+    {!! NoCaptcha::display() !!}
+    @error('g-recaptcha-response')
+        <span class="text-red-500 text-sm">{{ $message }}</span>
+    @enderror
+</div>
 
-            <x-primary-button class="ml-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
+<!-- Botón de registro -->
+<div class="flex items-center justify-end mt-4">
+    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
+        {{ __('Already registered?') }}
+    </a>
+
+    <x-primary-button class="ml-4">
+        {{ __('Register') }}
+    </x-primary-button>
+</div>
+
     </form>
 </x-guest-layout>
 

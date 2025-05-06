@@ -26,5 +26,7 @@
                 {{ $slot }}
             </div>
         </div>
+        @stack('scripts') {{-- NECESARIO para el reCAPTCHA --}}
     </body>
 </html>
+
