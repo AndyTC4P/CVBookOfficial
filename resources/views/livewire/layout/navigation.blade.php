@@ -19,8 +19,13 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         ✍️ {{ __('Crear CV') }}
                     </x-nav-link>
+                    @if (Auth::user()->role === 'admin')
+        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" wire:navigate>
+            🛠️ {{ __('Admin') }}
+        </x-nav-link>
+    @endif
                 </div>
-                @endauth
+                @endauth  
             </div>
 
             <!-- Settings Dropdown (desktop only) -->
@@ -92,6 +97,10 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                 ✍️ {{ __('Crear CV') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" wire:navigate>
+    🛠️ {{ __('Admin Dashboard') }}
+</x-responsive-nav-link>
+
         </div>
         @endauth
 
