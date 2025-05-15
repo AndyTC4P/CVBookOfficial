@@ -23,6 +23,10 @@
         <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" wire:navigate>
             🛠️ {{ __('Admin') }}
         </x-nav-link>
+        <x-nav-link :href="route('admin.busqueda-cvs')" :active="request()->routeIs('admin.busqueda-cvs')">
+    🔍 {{ __('Buscar CVs') }}
+</x-nav-link>
+
     @endif
                 </div>
                 @endauth  

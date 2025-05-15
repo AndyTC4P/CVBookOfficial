@@ -83,4 +83,10 @@ Route::get('/cv/demo/pdf', function () {
     return $pdf->stream('cv-demo.pdf');
 })->name('cv.demo.pdf');
 Route::get('/cv/{slug}/pdf', [PdfCvController::class, 'export'])->name('cv.pdf');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/admin/busqueda-cvs', function () {
+        return view('admin.busqueda-cvs');
+    })->name('admin.busqueda-cvs');
+});
+
 
