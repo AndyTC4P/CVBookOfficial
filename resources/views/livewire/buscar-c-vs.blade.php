@@ -1,4 +1,25 @@
 <div class="space-y-6">
+    <!-- Banner ajustado -->
+  <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
+        <div class="rounded-lg overflow-hidden">
+            <img src="{{ asset('images/buscarcv.webp') }}" alt="Banner CV"
+                 class="w-full object-cover" style="max-height: 160px;">
+        </div>
+    </div>
+    <div class="bg-gray-900 border border-gray-700 rounded-lg p-6 shadow">
+    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+        🔍 Buscar Talento Profesional
+    </h2>
+    <p class="text-sm text-gray-300 mt-2">
+        Utiliza los filtros disponibles para explorar rápidamente los perfiles más relevantes. 
+        Encuentra candidatos según su <span class="font-semibold text-white">categoría profesional</span>, 
+        <span class="font-semibold text-white">habilidades</span> o <span class="font-semibold text-white">idiomas</span>.
+    </p>
+    <p class="text-sm text-gray-400 mt-1 italic">
+        Esta sección es exclusiva para cuentas de empresa o reclutadores.
+    </p>
+</div>
+
     <!-- Filtros -->
     <div class="bg-gray-800 p-6 rounded-lg shadow space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -14,7 +35,6 @@
             </div>
         </div>
     </div>
-
     <!-- Contenedor general de resultados de búsqueda -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
