@@ -20,13 +20,17 @@
     </p>
 </div>
 <!-- Filtros -->
-<div class="bg-gray-800 p-6 rounded-lg shadow space-y-4">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-gray-800 p-6 rounded-lg shadow space-y-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Filtro: Categoría Profesional -->
         <div>
             <label class="block text-sm font-medium text-white">Categoría Profesional</label>
+            <p class="text-xs text-gray-300 mb-1 leading-relaxed">
+                Este filtro te permite acotar la búsqueda según el sector profesional del candidato.
+                Selecciona una categoría y accede únicamente a los CVs relevantes para tu vacante.
+            </p>
             <select wire:model="categoria_profesion" wire:change="$refresh"
-        class="w-full mt-1 rounded border-gray-600 bg-gray-900 text-white">
+                    class="w-full rounded border-gray-600 bg-gray-900 text-white">
                 <option value="">Seleccione una categoría</option>
                 @foreach($categorias as $categoria)
                     <option value="{{ $categoria }}">{{ $categoria }}</option>
@@ -36,12 +40,16 @@
 
         <!-- Filtro: Habilidades -->
         <div>
-            <label class="block text-sm font-medium text-white">Filtrar por Habilidades</label>
+            <label class="block text-sm font-medium text-white">Filtrar por Habilidad</label>
+            <p class="text-xs text-gray-300 mb-1 leading-relaxed">
+                Encuentra al candidato ideal filtrando por habilidades específicas.
+                Puedes seleccionar una o varias habilidades que el candidato debe tener.
+            </p>
             <select wire:model="habilidades_seleccionadas"
-        wire:change="$refresh"
-        multiple
-        size="6"
-        class="w-full mt-1 rounded border-gray-600 bg-gray-900 text-white">
+                    wire:change="$refresh"
+                    multiple
+                    size="6"
+                    class="w-full rounded border-gray-600 bg-gray-900 text-white">
                 @foreach($habilidades_disponibles as $hab)
                     <option value="{{ $hab }}">{{ $hab }}</option>
                 @endforeach
@@ -52,6 +60,7 @@
         </div>
     </div>
 </div>
+
 
 
     <!-- Contenedor general de resultados de búsqueda -->
@@ -83,7 +92,7 @@
 
                     {{-- Decodificamos las habilidades (JSON) y mostramos un máximo de 3 --}}
                     <ul class="flex flex-wrap gap-2">
-                        @foreach (array_slice(json_decode($cv->habilidades, true) ?? [], 0, 3) as $hab)
+                        @foreach (array_slice(json_decode($cv->habilidades, true) ?? [], 0, 5) as $hab)
                             <li class="px-2 py-1 bg-blue-600 text-white text-xs rounded-full">
                                 {{ $hab }}
                             </li>
