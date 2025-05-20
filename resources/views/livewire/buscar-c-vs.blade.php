@@ -19,22 +19,41 @@
         Esta sección es exclusiva para cuentas de empresa o reclutadores.
     </p>
 </div>
+<!-- Filtros -->
+<div class="bg-gray-800 p-6 rounded-lg shadow space-y-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Filtro: Categoría Profesional -->
+        <div>
+            <label class="block text-sm font-medium text-white">Categoría Profesional</label>
+            <select wire:model="categoria_profesion" wire:change="$refresh"
+        class="w-full mt-1 rounded border-gray-600 bg-gray-900 text-white">
+                <option value="">Seleccione una categoría</option>
+                @foreach($categorias as $categoria)
+                    <option value="{{ $categoria }}">{{ $categoria }}</option>
+                @endforeach
+            </select>
+        </div>
 
-    <!-- Filtros -->
-    <div class="bg-gray-800 p-6 rounded-lg shadow space-y-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <label class="block text-sm font-medium text-white">Categoría Profesional</label>
-                <select wire:model="categoria_profesion" class="w-full mt-1 rounded border-gray-600 bg-gray-900 text-white">
-                    <p class="text-white text-xs mt-2">Seleccionado: <span wire:poll.500ms>{{ $categoria_profesion }}</span></p>
-                    <option value="">Seleccione una categoría</option>
-                    @foreach($this->categorias as $categoria)
-                        <option value="{{ $categoria }}">{{ $categoria }}</option>
-                    @endforeach
-                </select>
-            </div>
+        <!-- Filtro: Habilidades -->
+        <div>
+            <label class="block text-sm font-medium text-white">Filtrar por Habilidades</label>
+            <select wire:model="habilidades_seleccionadas"
+        wire:change="$refresh"
+        multiple
+        size="6"
+        class="w-full mt-1 rounded border-gray-600 bg-gray-900 text-white">
+                @foreach($habilidades_disponibles as $hab)
+                    <option value="{{ $hab }}">{{ $hab }}</option>
+                @endforeach
+            </select>
+            <p class="text-xs text-gray-400 mt-1 italic">
+                Consejo: mantén presionado <kbd>Ctrl</kbd> (Windows) o <kbd>Cmd</kbd> (Mac) para seleccionar múltiples habilidades.
+            </p>
         </div>
     </div>
+</div>
+
+
     <!-- Contenedor general de resultados de búsqueda -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
