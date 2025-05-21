@@ -10,27 +10,37 @@
                     </a>
                 </div>
 
-                <!-- Desktop Navigation Links -->
-                @auth
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('cv.index')" :active="request()->routeIs('cv.index')" wire:navigate>
-                        📄 {{ __('Mis CVs') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-                        ✍️ {{ __('Crear CV') }}
-                    </x-nav-link>
-                    @if (Auth::user()->role === 'admin')
+              <!-- Desktop Navigation Links -->
+@auth
+<div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+    @if (Auth::user()->isEmpresa())
+        <x-nav-link :href="route('admin.busqueda-cvs')" :active="request()->routeIs('admin.busqueda-cvs')">
+            🔍 {{ __('Buscar CVs') }}
+        </x-nav-link>
+    @elseif (Auth::user()->isUsuario())
+        <x-nav-link :href="route('cv.index')" :active="request()->routeIs('cv.index')" wire:navigate>
+            📄 {{ __('Mis CVs') }}
+        </x-nav-link>
+        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+            ✍️ {{ __('Crear CV') }}
+        </x-nav-link>
+    @elseif (Auth::user()->isAdmin())
+        <x-nav-link :href="route('cv.index')" :active="request()->routeIs('cv.index')" wire:navigate>
+            📄 {{ __('Mis CVs') }}
+        </x-nav-link>
+        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+            ✍️ {{ __('Crear CV') }}
+        </x-nav-link>
         <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" wire:navigate>
             🛠️ {{ __('Admin') }}
         </x-nav-link>
         <x-nav-link :href="route('admin.busqueda-cvs')" :active="request()->routeIs('admin.busqueda-cvs')">
-    🔍 {{ __('Buscar CVs') }}
-</x-nav-link>
-
+            🔍 {{ __('Buscar CVs') }}
+        </x-nav-link>
     @endif
-                </div>
-                @endauth  
-            </div>
+</div>
+@endauth
+
 
             <!-- Settings Dropdown (desktop only) -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">

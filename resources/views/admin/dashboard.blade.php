@@ -12,17 +12,46 @@
                 👥 Usuarios Registrados ({{ count($users) }})
             </h3>
 
+            {{-- Alerta de éxito --}}
+            @if(session('success'))
+                <div class="bg-green-600 text-white px-4 py-2 rounded mb-4">
+                    {{ session('success') }}
+                </div>
+            @endif
+
             <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 @foreach ($users as $user)
-                    <div class="p-4 bg-gray-800 rounded-lg shadow text-white">
+                    <div class="p-4 bg-gray-800 rounded-lg shadow text-white space-y-2">
                         <h4 class="font-semibold text-lg">
                             {{ $user->name }}
                         </h4>
-                        <p class="text-sm text-gray-300 mb-2">{{ $user->email }}</p>
+                        <p class="text-sm text-gray-300">{{ $user->email }}</p>
+
+                        {{-- Etiqueta de rol actual --}}
                         <span class="inline-block px-3 py-1 rounded-full text-xs font-medium 
-                            {{ $user->role === 'admin' ? 'bg-red-600 text-white' : 'bg-blue-600 text-white' }}">
+                            {{ $user->role === 'admin' ? 'bg-red-600' : ($user->role === 'empresa' ? 'bg-yellow-500' : 'bg-blue-600') }}">
                             {{ ucfirst($user->role) }}
                         </span>
+
+                        {{-- Formulario de cambio de rol (no se permite cambiarse a uno mismo si es admin) --}}
+                       @if(auth()->id() !== $user->id)
+    <form method="POST" action="{{ route('admin.cambiarRol', $user->id) }}" class="mt-2">
+        @csrf
+        <div class="flex items-center gap-2">
+            <select name="nuevo_rol" class="bg-gray-900 border border-gray-600 text-white text-sm rounded px-2 py-1">
+                <option value="usuario" @selected($user->role === 'usuario')>Usuario</option>
+                <option value="empresa" @selected($user->role === 'empresa')>Empresa</option>
+                <option value="admin" @selected($user->role === 'admin')>Admin</option>
+            </select>
+            <button type="submit" class="px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 rounded text-white">
+                Cambiar
+            </button>
+        </div>
+    </form>
+@else
+    <p class="text-xs text-gray-400 italic mt-2">No puedes editar tu propio rol</p>
+@endif
+
                     </div>
                 @endforeach
             </div>
@@ -76,17 +105,8 @@
                 @endforeach
             </div>
         </div>
-
-        {{-- BÚSQUEDA FILTRADA DE CVS --}}
-        <div class="mt-16">
-            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
-                🔍 Buscar CVs por filtros
-            </h3>
-
-            @livewire('buscar-c-vs')
-        </div>
-    </div>
 </x-app-layout>
+
 
 
 

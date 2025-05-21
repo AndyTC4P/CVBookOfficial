@@ -9,6 +9,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\AdminController;
 use App\Models\User;
 use App\Models\CV;
+use Illuminate\Http\Request;
 
 Route::get('/admin/dashboard', function () {
     if (auth()->check() && auth()->user()->role === 'admin') {
@@ -88,5 +89,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('admin.busqueda-cvs');
     })->name('admin.busqueda-cvs');
 });
+Route::post('/admin/cambiar-rol/{user}', function (Request $request, User $user) {
+    if (!auth()->check() || auth()->user()->role !== 'admin') {
+        abort(403, 'No autorizado');
+    }
+
+    $request->validate([
+        'nuevo_rol' => 'required|in:usuario,empresa,admin',
+    ]);
+
+    $user->role = $request->input('nuevo_rol');
+    $user->save();
+
+    return redirect()->route('admin.dashboard')->with('success', 'Rol actualizado correctamente.');
+})->middleware('auth')->name('admin.cambiarRol');
+
+
 
 

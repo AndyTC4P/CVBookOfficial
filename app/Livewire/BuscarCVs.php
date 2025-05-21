@@ -58,7 +58,7 @@ class BuscarCVs extends Component
 
     // Filtro para empresas: solo CVs públicos
     if (Auth::user()->role === 'empresa') {
-        $query->where('publicado', true);
+        $query->where('publico', true);
     }
 
     // Obtener los CVs base
