@@ -104,6 +104,9 @@ Route::post('/admin/cambiar-rol/{user}', function (Request $request, User $user)
     return redirect()->route('admin.dashboard')->with('success', 'Rol actualizado correctamente.');
 })->middleware('auth')->name('admin.cambiarRol');
 
+Route::get('/empresa/chat-demo', function () {
+    return view('empresa.chat-demo');
+});
 
 
 
