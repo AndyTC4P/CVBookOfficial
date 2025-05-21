@@ -15,7 +15,7 @@ Route::get('/cvs/buscar', function (Request $request) {
         $habilidades = explode(',', $request->habilidades);
         $query->where(function ($q) use ($habilidades) {
             foreach ($habilidades as $habilidad) {
-                $q->orWhere('habilidades', 'like', '%' . trim($habilidad) . '%');
+               $q->orWhereRaw('LOWER(habilidades) LIKE ?', ['%' . strtolower(trim($habilidad)) . '%']);
             }
         });
     }
