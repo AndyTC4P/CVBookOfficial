@@ -107,6 +107,7 @@ Route::post('/admin/cambiar-rol/{user}', function (Request $request, User $user)
 Route::get('/empresa/chat-demo', function () {
     return view('empresa.chat-demo');
 });
+Route::view('/privacidad-sivi', 'privacy-sivi')->name('privacidad.sivi');
 
 
 
