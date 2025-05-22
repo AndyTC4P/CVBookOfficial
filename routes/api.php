@@ -7,7 +7,7 @@ use App\Models\CV;
 Route::get('/cvs/buscar', function (Request $request) {
     // 🔐 Validar clave secreta
     $claveSivi = $request->header('x-sivi-key');
-    if ($claveSivi !== env('SIVI_SECRET_KEY')) {
+    if ($claveSivi !== config('sivi.secret')) {
         return response()->json(['error' => 'No autorizado'], 403);
     }
 
