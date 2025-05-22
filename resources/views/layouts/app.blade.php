@@ -41,6 +41,7 @@
 
         <!-- Scripts de Livewire -->
         @livewireScripts
+
     </body>
 </html>
 

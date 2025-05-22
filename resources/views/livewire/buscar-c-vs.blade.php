@@ -138,7 +138,15 @@
     @empty
         <p class="text-white">No se encontraron CVs con los filtros aplicados.</p>
     @endforelse
+    
 </div>
+<!-- Botón flotante de Sivi -->
+<a href="https://chat.openai.com/g/g-682e161092d08191bef1a1f6f879ae6f-sivi-asistente-cvbook"
+   target="_blank"
+   style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; background: #4f46e5; color: white; padding: 12px 18px; border-radius: 9999px; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.25); text-decoration: none;">
+    🧠 Habla con Sivi
+</a>
+
 
 
 
