@@ -16,6 +16,9 @@ class BuscarCVs extends Component
     public $favoritos_ids = [];
     public $mensaje = null;
     public $solo_favoritos = false;
+    public $idiomas_disponibles = [];
+public $idiomas_seleccionados = [];
+
 
 
     public function mount()
@@ -45,6 +48,18 @@ class BuscarCVs extends Component
             ->unique()
             ->values()
             ->toArray();
+
+            // Cargar idiomas disponibles desde los CVs
+$this->idiomas_disponibles = CV::whereNotNull('idiomas')->get()
+    ->flatMap(function ($cv) {
+        $idiomas = json_decode($cv->idiomas ?? '[]', true);
+        return is_array($idiomas) ? $idiomas : [];
+    })
+    ->map(fn($i) => trim($i))
+    ->unique()
+    ->values()
+    ->toArray();
+
     }
 
     public function render()
@@ -94,6 +109,29 @@ if ($this->solo_favoritos && count($this->favoritos_ids)) {
                 return false;
             })->values();
         }
+        // Filtro por idiomas en PHP
+if (!empty($this->idiomas_seleccionados)) {
+    $cvs = $cvs->filter(function ($cv) {
+        $idiomasCV = json_decode($cv->idiomas ?? '[]', true);
+
+        if (!is_array($idiomasCV)) {
+            return false;
+        }
+
+        $idiomasCVNormalizados = array_map(fn($i) => trim(strtolower($i)), $idiomasCV);
+
+        // Retornar solo si TODOS los idiomas seleccionados están en el CV
+        foreach ($this->idiomas_seleccionados as $idiomaBuscado) {
+            if (!in_array(trim(strtolower($idiomaBuscado)), $idiomasCVNormalizados)) {
+                return false; // Si falta uno, no pasa el filtro
+            }
+        }
+
+        return true; // Todos los idiomas están presentes
+    })->values();
+}
+
+
 
         return view('livewire.buscar-c-vs', [
             'cvs' => $cvs,

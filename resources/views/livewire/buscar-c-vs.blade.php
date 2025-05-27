@@ -19,18 +19,18 @@
         Esta sección es exclusiva para cuentas de empresa o reclutadores.
     </p>
 </div>
-<!-- Filtros -->
+<!-- Filtros (mejorados visualmente) -->
 <div class="bg-gray-800 p-6 rounded-lg shadow space-y-6">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
         <!-- Filtro: Categoría Profesional -->
-        <div>
-            <label class="block text-sm font-medium text-white">Categoría Profesional</label>
-            <p class="text-xs text-gray-300 mb-1 leading-relaxed">
-                Este filtro te permite acotar la búsqueda según el sector profesional del candidato.
-                Selecciona una categoría y accede únicamente a los CVs relevantes para tu vacante.
+        <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
+            <label class="block text-sm font-semibold text-white mb-1">Categoría Profesional</label>
+            <p class="text-xs text-gray-400 mb-2">
+                Filtra por sector profesional del candidato.
             </p>
             <select wire:model="categoria_profesion" wire:change="$refresh"
-                    class="w-full rounded border-gray-600 bg-gray-900 text-white">
+                    class="w-full rounded border-gray-600 bg-gray-800 text-white px-3 py-2">
                 <option value="">Seleccione una categoría</option>
                 @foreach($categorias as $categoria)
                     <option value="{{ $categoria }}">{{ $categoria }}</option>
@@ -39,35 +39,56 @@
         </div>
 
         <!-- Filtro: Habilidades -->
-        <div>
-            <label class="block text-sm font-medium text-white">Filtrar por Habilidad</label>
-            <p class="text-xs text-gray-300 mb-1 leading-relaxed">
-                Encuentra al candidato ideal filtrando por habilidades específicas.
-                Puedes seleccionar una o varias habilidades que el candidato debe tener.
+        <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
+            <label class="block text-sm font-semibold text-white mb-1">Habilidades</label>
+            <p class="text-xs text-gray-400 mb-2">
+                Selecciona una o varias habilidades específicas.
             </p>
             <select wire:model="habilidades_seleccionadas"
                     wire:change="$refresh"
                     multiple
                     size="6"
-                    class="w-full rounded border-gray-600 bg-gray-900 text-white">
+                    class="w-full rounded border-gray-600 bg-gray-800 text-white px-3 py-2">
                 @foreach($habilidades_disponibles as $hab)
                     <option value="{{ $hab }}">{{ $hab }}</option>
                 @endforeach
             </select>
-            <p class="text-xs text-gray-400 mt-1 italic">
-                Consejo: mantén presionado <kbd>Ctrl</kbd> (Windows) o <kbd>Cmd</kbd> (Mac) para seleccionar múltiples habilidades.
+            <p class="text-xs text-gray-500 mt-2 italic">
+                Usa <kbd>Ctrl</kbd> o <kbd>Cmd</kbd> para selección múltiple.
             </p>
         </div>
-        <!-- Filtro: Solo favoritos -->
-<div class="mt-4">
-    <label class="inline-flex items-center text-white">
-        <input type="checkbox" wire:model="solo_favoritos" wire:change="$refresh" class="form-checkbox text-blue-500 bg-gray-800 border-gray-600 rounded">
-        <span class="ml-2 text-sm">Mostrar solo favoritos</span>
-    </label>
-</div>
+
+        <!-- Filtro: Idiomas -->
+        <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
+            <label class="block text-sm font-semibold text-white mb-1">Idiomas</label>
+            <p class="text-xs text-gray-400 mb-2">
+                Selecciona uno o varios idiomas que debe manejar el candidato.
+            </p>
+            <select wire:model="idiomas_seleccionados"
+                    wire:change="$refresh"
+                    multiple
+                    size="6"
+                    class="w-full rounded border-gray-600 bg-gray-800 text-white px-3 py-2">
+                @foreach($idiomas_disponibles as $idioma)
+                    <option value="{{ $idioma }}">{{ $idioma }}</option>
+                @endforeach
+            </select>
+            <p class="text-xs text-gray-500 mt-2 italic">
+                Usa <kbd>Ctrl</kbd> o <kbd>Cmd</kbd> para selección múltiple.
+            </p>
+        </div>
 
     </div>
+
+    <!-- Filtro: Solo favoritos -->
+    <div class="mt-4">
+        <label class="inline-flex items-center text-white">
+            <input type="checkbox" wire:model="solo_favoritos" wire:change="$refresh" class="form-checkbox text-blue-500 bg-gray-800 border-gray-600 rounded">
+            <span class="ml-2 text-sm">Mostrar solo favoritos</span>
+        </label>
+    </div>
 </div>
+
 
 @if ($mensaje)
     <div 

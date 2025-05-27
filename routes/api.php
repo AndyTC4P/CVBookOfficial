@@ -14,9 +14,33 @@ Route::get('/cvs/buscar', function (Request $request) {
 
     $query = CV::query()->where('publico', 1);
 
-    // 🔎 Filtro por categoría
+    // ✅ Lista oficial de categorías permitidas
+    $categorias_validas = [
+        'Tecnología e Informática',
+        'Salud',
+        'Educación',
+        'Ingenierías',
+        'Administración y Negocios',
+        'Derecho y Ciencias Jurídicas',
+        'Ciencias Sociales',
+        'Marketing y Ventas',
+        'Arte y Creatividad',
+        'Deportes y Recreación',
+        'Comunicación y Medios',
+        'Construcción y Mantenimiento',
+        'Transporte y Logística',
+        'Servicios Personales',
+        'Agroindustria y Medio Ambiente',
+        'Estudiante',
+        'Otro',
+    ];
+
+    // 🔎 Filtro por categoría (con validación exacta)
     if ($request->filled('categoria')) {
-        $query->whereRaw('LOWER(categoria_profesion) = ?', [strtolower(trim($request->categoria))]);
+        $categoria = trim($request->categoria);
+        if (in_array($categoria, $categorias_validas)) {
+            $query->where('categoria_profesion', $categoria);
+        }
     }
 
     // 🔎 Filtro por habilidades (mejorado)
@@ -41,6 +65,7 @@ Route::get('/cvs/buscar', function (Request $request) {
 
     return response()->json($query->limit(10)->get());
 });
+
 
 
 
