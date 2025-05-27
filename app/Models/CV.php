@@ -46,6 +46,12 @@ class CV extends Model
     {
         return $this->belongsTo(User::class);
     }
+ public function guardadoPor()
+{
+    return $this->belongsToMany(User::class, 'cv_favoritos', 'cv_id', 'user_id')->withTimestamps();
+}
+
+
 }
 
 

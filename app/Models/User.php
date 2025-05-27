@@ -62,5 +62,11 @@ public function isUsuario(): bool
 {
     return $this->role === 'usuario';
 }
+public function favoritos()
+{
+    return $this->belongsToMany(CV::class, 'cv_favoritos', 'user_id', 'cv_id')->withTimestamps();
+}
+
+
 
 }

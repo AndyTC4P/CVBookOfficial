@@ -58,18 +58,36 @@
                 Consejo: mantén presionado <kbd>Ctrl</kbd> (Windows) o <kbd>Cmd</kbd> (Mac) para seleccionar múltiples habilidades.
             </p>
         </div>
+        <!-- Filtro: Solo favoritos -->
+<div class="mt-4">
+    <label class="inline-flex items-center text-white">
+        <input type="checkbox" wire:model="solo_favoritos" wire:change="$refresh" class="form-checkbox text-blue-500 bg-gray-800 border-gray-600 rounded">
+        <span class="ml-2 text-sm">Mostrar solo favoritos</span>
+    </label>
+</div>
+
     </div>
 </div>
 
+@if ($mensaje)
+    <div 
+        x-data="{ show: true }"
+        x-init="setTimeout(() => show = false, 3000)"
+        x-show="show"
+        x-transition
+        class="bg-green-600 text-white px-4 py-2 rounded shadow text-sm mb-4"
+    >
+        {{ $mensaje }}
+    </div>
+@endif
 
-
-    <!-- Contenedor general de resultados de búsqueda -->
+ <!-- Contenedor general de resultados de búsqueda -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
     {{-- Recorremos los CVs obtenidos según el filtro aplicado --}}
     @forelse($cvs as $cv)
 
-        <!-- Tarjeta individual del CV -->
+       <!-- Tarjeta individual del CV -->
         <div class="bg-gray-800 text-white rounded-lg p-4 shadow-md hover:shadow-lg transition space-y-2">
 
             {{-- Título o profesión principal del CV --}}
@@ -89,8 +107,6 @@
             @if($cv->habilidades)
                 <div class="mt-2">
                     <p class="text-xs text-gray-400 font-semibold mb-1">Habilidades:</p>
-
-                    {{-- Decodificamos las habilidades (JSON) y mostramos un máximo de 3 --}}
                     <ul class="flex flex-wrap gap-2">
                         @foreach (array_slice(json_decode($cv->habilidades, true) ?? [], 0, 5) as $hab)
                             <li class="px-2 py-1 bg-blue-600 text-white text-xs rounded-full">
@@ -100,46 +116,59 @@
                     </ul>
                 </div>
             @endif
-{{-- Idiomas (combinados: predefinidos + texto libre) --}}
-@if($cv->idiomas && is_string($cv->idiomas))
-    @php
-        $idiomas = json_decode($cv->idiomas, true);
-    @endphp
 
-    @if(is_array($idiomas) && count($idiomas))
-        <div class="mt-2">
-            <p class="text-xs text-gray-400 font-semibold mb-1">Idiomas:</p>
+            {{-- Idiomas --}}
+            @if($cv->idiomas && is_string($cv->idiomas))
+                @php
+                    $idiomas = json_decode($cv->idiomas, true);
+                @endphp
+                @if(is_array($idiomas) && count($idiomas))
+                    <div class="mt-2">
+                        <p class="text-xs text-gray-400 font-semibold mb-1">Idiomas:</p>
+                        <ul class="flex flex-wrap gap-2">
+                            @foreach ($idiomas as $idioma)
+                                <li class="px-2 py-1 bg-green-600 text-white text-xs rounded-full">
+                                    {{ $idioma }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+            @endif
 
-            {{-- Mostramos todos los idiomas como etiquetas (chips) --}}
-            <ul class="flex flex-wrap gap-2">
-                @foreach ($idiomas as $idioma)
-                    <li class="px-2 py-1 bg-green-600 text-white text-xs rounded-full">
-                        {{ $idioma }}
-                    </li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-@endif
-
-            {{-- Breve descripción del perfil profesional (limitada a 100 caracteres) --}}
+            {{-- Breve descripción del perfil profesional --}}
             <p class="text-sm mt-2 text-gray-300">
                 {{ \Illuminate\Support\Str::limit($cv->descripcion, 100) }}
             </p>
 
-            {{-- Enlace para ver el CV completo --}}
-            <a href="{{ route('cv.show', ['slug' => $cv->slug]) }}"
-               class="text-blue-400 hover:underline text-sm mt-3 inline-block">
-                👁️ Ver CV
-            </a>
+           <div class="flex justify-between items-center mt-4">
+    <a href="{{ route('cv.show', ['slug' => $cv->slug]) }}"
+       class="text-blue-400 hover:underline text-sm inline-flex items-center gap-1">
+        👁️ Ver CV
+    </a>
+
+    @if(in_array(auth()->user()->role, ['empresa', 'admin']))
+        <button wire:click="toggleFavorito({{ $cv->id }})"
+                class="flex items-center gap-1 px-2 py-1 text-yellow-400 text-base bg-gray-700 hover:bg-yellow-500 hover:text-white transition rounded-full"
+                title="{{ in_array($cv->id, $favoritos_ids) ? 'Quitar de favoritos' : 'Agregar a favoritos' }}">
+            <span class="text-xl">
+                {{ in_array($cv->id, $favoritos_ids) ? '★' : '☆' }}
+            </span>
+            <span class="text-sm hidden sm:inline">
+                {{ in_array($cv->id, $favoritos_ids) ? 'Guardado' : 'Favorito' }}
+            </span>
+        </button>
+    @endif
+</div>
+
         </div>
 
     {{-- Si no hay resultados con los filtros actuales --}}
     @empty
         <p class="text-white">No se encontraron CVs con los filtros aplicados.</p>
     @endforelse
-    
 </div>
+
 <!-- Botón flotante de Sivi -->
 <a href="https://chat.openai.com/g/g-682e161092d08191bef1a1f6f879ae6f-sivi-asistente-cvbook"
    target="_blank"

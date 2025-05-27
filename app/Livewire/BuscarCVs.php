@@ -13,6 +13,10 @@ class BuscarCVs extends Component
     public $categorias = [];
     public $habilidades_seleccionadas = [];
     public $habilidades_disponibles = [];
+    public $favoritos_ids = [];
+    public $mensaje = null;
+    public $solo_favoritos = false;
+
 
     public function mount()
     {
@@ -20,9 +24,10 @@ class BuscarCVs extends Component
             abort(403);
         }
 
+        $this->favoritos_ids = auth()->user()->favoritos->pluck('id')->toArray();
         $this->categoria_profesion = '';
 
-        // Cargar categorías profesionales disponibles
+        // Cargar categorías profesionales
         $this->categorias = DB::table('cvs')
             ->select('categoria_profesion')
             ->distinct()
@@ -30,7 +35,7 @@ class BuscarCVs extends Component
             ->pluck('categoria_profesion')
             ->toArray();
 
-        // Cargar habilidades disponibles desde los CVs
+        // Cargar habilidades únicas
         $this->habilidades_disponibles = CV::whereNotNull('habilidades')->get()
             ->flatMap(function ($cv) {
                 $habilidades = json_decode($cv->habilidades ?? '[]', true);
@@ -42,55 +47,75 @@ class BuscarCVs extends Component
             ->toArray();
     }
 
-   public function render()
-{
-    logger('🎯 Filtros activos:', [
-        'categoria_profesion' => $this->categoria_profesion,
-        'habilidades_seleccionadas' => $this->habilidades_seleccionadas,
-    ]);
+    public function render()
+    {
+        logger('🎯 Filtros activos:', [
+            'categoria_profesion' => $this->categoria_profesion,
+            'habilidades_seleccionadas' => $this->habilidades_seleccionadas,
+        ]);
 
-    $query = CV::query();
+        $query = CV::query();
 
-    // Filtro por categoría profesional
-    if (!empty($this->categoria_profesion)) {
-        $query->whereRaw('LOWER(TRIM(categoria_profesion)) = ?', [trim(strtolower($this->categoria_profesion))]);
-    }
+        // Filtro por categoría
+        if (!empty($this->categoria_profesion)) {
+            $query->whereRaw('LOWER(TRIM(categoria_profesion)) = ?', [trim(strtolower($this->categoria_profesion))]);
+        }
 
-    // Filtro para empresas: solo CVs públicos
-    if (Auth::user()->role === 'empresa') {
-        $query->where('publico', true);
-    }
+        // Solo públicos para empresa
+        if (Auth::user()->role === 'empresa') {
+            $query->where('publico', true);
+        }
 
-    // Obtener los CVs base
-    $cvs = $query->get();
+       $cvs = $query->get();
 
-    // Filtro por habilidades en PHP
-    if (!empty($this->habilidades_seleccionadas)) {
-        $cvs = $cvs->filter(function ($cv) {
-            $habilidadesCV = json_decode($cv->habilidades ?? '[]', true);
+// Si está activo "solo favoritos", filtrar los que estén en favoritos_ids
+if ($this->solo_favoritos && count($this->favoritos_ids)) {
+    $cvs = $cvs->filter(fn($cv) => in_array($cv->id, $this->favoritos_ids))->values();
+}
 
-            if (!is_array($habilidadesCV)) {
-                return false;
-            }
 
-            foreach ($this->habilidades_seleccionadas as $habBuscada) {
-                foreach ($habilidadesCV as $habCV) {
-                    if (trim(strtolower($habBuscada)) === trim(strtolower($habCV))) {
-                        return true;
+        // Filtro por habilidades
+        if (!empty($this->habilidades_seleccionadas)) {
+            $cvs = $cvs->filter(function ($cv) {
+                $habilidadesCV = json_decode($cv->habilidades ?? '[]', true);
+
+                if (!is_array($habilidadesCV)) {
+                    return false;
+                }
+
+                foreach ($this->habilidades_seleccionadas as $habBuscada) {
+                    foreach ($habilidadesCV as $habCV) {
+                        if (trim(strtolower($habBuscada)) === trim(strtolower($habCV))) {
+                            return true;
+                        }
                     }
                 }
-            }
 
-            return false;
-        })->values(); // importante para resetear índices
+                return false;
+            })->values();
+        }
+
+        return view('livewire.buscar-c-vs', [
+            'cvs' => $cvs,
+        ]);
     }
 
-    return view('livewire.buscar-c-vs', [
-        'cvs' => $cvs,
-    ]);
+    public function toggleFavorito($cvId)
+    {
+        $user = auth()->user();
+
+        if (in_array($cvId, $this->favoritos_ids)) {
+            $user->favoritos()->detach($cvId);
+            $this->favoritos_ids = array_diff($this->favoritos_ids, [$cvId]);
+            $this->mensaje = 'CV eliminado de favoritos.';
+        } else {
+            $user->favoritos()->attach($cvId);
+            $this->favoritos_ids[] = $cvId;
+            $this->mensaje = 'CV guardado como favorito.';
+        }
+    }
 }
 
-}
 
 
 
