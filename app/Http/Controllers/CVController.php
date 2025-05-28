@@ -63,4 +63,21 @@ class CVController extends Controller
     {
         return view('cv.create');
     }
+    public function toggleFavorito(CV $cv)
+{
+    $user = auth()->user();
+
+    if ($user->id === $cv->user_id) {
+        return back(); // no permitir al dueño marcar su propio CV
+    }
+
+    if ($user->favoritos->contains($cv->id)) {
+        $user->favoritos()->detach($cv->id);
+    } else {
+        $user->favoritos()->attach($cv->id);
+    }
+
+    return back();
+}
+
 }

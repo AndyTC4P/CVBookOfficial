@@ -108,6 +108,8 @@ Route::get('/empresa/chat-demo', function () {
     return view('empresa.chat-demo');
 });
 Route::view('/privacidad-sivi', 'privacy-sivi')->name('privacidad.sivi');
+Route::post('/cv/{cv}/favorito-toggle', [CVController::class, 'toggleFavorito'])->name('cv.favorito.toggle');
+
 
 
 

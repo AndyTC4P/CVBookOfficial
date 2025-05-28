@@ -40,6 +40,24 @@
                         {{ $cv->publico ? 'bg-green-500 text-white' : 'bg-red-500 text-white' }} rounded-md">
                         {{ $cv->publico ? 'CV Público' : 'CV Privado' }}
                     </span>
+                     {{-- ⭐ Botón para marcar como favorito (solo para empresa/admin que no sean el dueño) --}}
+                    @auth
+                        @if(in_array(auth()->user()->role, ['admin', 'empresa']) && auth()->id() !== $cv->user_id)
+                            <form method="POST" action="{{ route('cv.favorito.toggle', $cv->id) }}" class="mt-4">
+                                @csrf
+                              <button type="submit"
+    class="inline-flex items-center gap-2 px-4 py-1.5 text-sm font-semibold rounded-md shadow transition
+        {{ auth()->user()->favoritos->contains($cv->id) 
+            ? 'bg-yellow-500 text-white hover:bg-yellow-600' 
+            : 'bg-yellow-200 text-yellow-900 hover:bg-yellow-300 dark:bg-yellow-300 dark:text-yellow-900 dark:hover:bg-yellow-400' }}">
+    {{ auth()->user()->favoritos->contains($cv->id) ? '★ Guardado' : '☆ Marcar como favorito' }}
+</button>
+
+
+
+                            </form>
+                        @endif
+                    @endauth
                 </div>
             </div>
 
