@@ -6,19 +6,50 @@
                  class="w-full object-cover" style="max-height: 160px;">
         </div>
     </div>
-    <div class="bg-gray-900 border border-gray-700 rounded-lg p-6 shadow">
-    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-        🔍 Buscar Talento Profesional
-    </h2>
-    <p class="text-sm text-gray-300 mt-2">
-        Utiliza los filtros disponibles para explorar rápidamente los perfiles más relevantes. 
-        Encuentra candidatos según su <span class="font-semibold text-white">categoría profesional</span>, 
-        <span class="font-semibold text-white">habilidades</span> o <span class="font-semibold text-white">idiomas</span>.
-    </p>
-    <p class="text-sm text-gray-400 mt-1 italic">
-        Esta sección es exclusiva para cuentas de empresa o reclutadores.
-    </p>
+  <!-- Bloque general estilo filtros -->
+<div class="bg-gray-800 p-6 rounded-lg shadow space-y-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- Cuadro 1: Introducción -->
+        <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
+            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                🔍 Buscar Talento Profesional
+            </h2>
+            <p class="text-sm text-gray-300 mt-2">
+                Utiliza los filtros disponibles para explorar rápidamente los perfiles más relevantes. 
+                Encuentra candidatos según su <span class="font-semibold text-white">categoría profesional</span>, 
+                <span class="font-semibold text-white">habilidades</span> o <span class="font-semibold text-white">idiomas</span>.
+            </p>
+            <p class="text-sm text-gray-400 mt-2 italic">
+                Esta sección es exclusiva para cuentas de empresa o reclutadores.
+            </p>
+        </div>
+
+        <!-- Cuadro 2: Asistente Sivi -->
+        <div class="bg-gray-900 p-4 rounded-lg border border-gray-700 flex flex-col items-center text-center">
+            <img src="{{ asset('images/sivigif.gif') }}"
+                 alt="Sivi saludando"
+                 class="w-20 h-20 rounded-full object-contain mb-3">
+            <p class="text-sm text-gray-300 mb-2">
+                ¿Necesitas ayuda para encontrar el perfil ideal?
+            </p>
+            <a href="https://chat.openai.com/g/g-682e161092d08191bef1a1f6f879ae6f-sivi-asistente-cvbook"
+               target="_blank"
+               class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-1.5 rounded-md shadow transition">
+                💬 Habla con Sivi
+            </a>
+        </div>
+
+    </div>
 </div>
+
+
+
+
+
+
+
+
 <!-- Filtros (mejorados visualmente) -->
 <div class="bg-gray-800 p-6 rounded-lg shadow space-y-6">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -185,14 +216,26 @@
     @empty
         <p class="text-white">No se encontraron CVs con los filtros aplicados.</p>
     @endforelse
+    
+
+</div>
+<div class="flex items-center gap-3 bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 mb-4 shadow w-fit">
+    <img src="{{ asset('images/sivigif.gif') }}" alt="Sivi icono" class="w-10 h-10 rounded-full">
+    <p class="text-sm text-gray-300 m-0">
+        ¿Necesitas ayuda para encontrar el perfil ideal?
+        <a href="https://chat.openai.com/g/g-682e161092d08191bef1a1f6f879ae6f-sivi-asistente-cvbook"
+           target="_blank"
+           class="text-indigo-400 font-semibold hover:underline">
+           Habla con Sivi, nuestra asistente virtual.
+        </a>
+    </p>
 </div>
 
-<!-- Botón flotante de Sivi -->
-<a href="https://chat.openai.com/g/g-682e161092d08191bef1a1f6f879ae6f-sivi-asistente-cvbook"
-   target="_blank"
-   style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; background: #4f46e5; color: white; padding: 12px 18px; border-radius: 9999px; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.25); text-decoration: none;">
-    🧠 Habla con Sivi
-</a>
+
+
+
+
+
 
 
 
