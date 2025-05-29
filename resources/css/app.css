@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* Forzar estilo oscuro en el contenido del editor Trix */
+trix-editor {
+    background-color: #1f2937 !important; /* Tailwind: bg-gray-800 */
+    color: #f9fafb !important;            /* Tailwind: text-white */
+    border: 1px solid #4b5563 !important; /* Tailwind: border-gray-600 */
+    padding: 0.75rem !important;
+    min-height: 8rem;
+}
+
+/* Ajustes visuales para Trix editor */
+trix-toolbar {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #d1d5db;
+    border-bottom: none;
+}
+
+trix-toolbar .trix-button {
+    filter: invert(0%) !important;
+}
+
+trix-toolbar .trix-button-group {
+    border-color: #ccc !important;
+}
+
+
+

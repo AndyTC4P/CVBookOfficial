@@ -144,6 +144,7 @@ class CvForm extends Component
 
     public function save()
     {
+    
         $this->validate();
         $this->cvGuardado = true;
 
@@ -196,6 +197,16 @@ class CvForm extends Component
     public function removeSkill($index) { unset($this->habilidades[$index]); $this->habilidades = array_values($this->habilidades); }
 
     public function render() { return view('livewire.cv-form'); }
+
+   protected $listeners = ['actualizarTareas'];
+
+public function actualizarTareas($index, $contenido)
+{
+    $this->experiencia[$index]['tareas'] = $contenido;
+}
+
+
+
 }
 
 

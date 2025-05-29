@@ -17,6 +17,12 @@
         <!-- Estilos de Livewire  -->
         @livewireStyles
 
+       <!-- Trix Editor -->
+<link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@1.3.1/dist/trix.css">
+<script type="text/javascript" src="https://unpkg.com/trix@1.3.1/dist/trix.js"></script>
+
+
+
       
     </head>
     <body class="font-sans antialiased">
@@ -41,6 +47,7 @@
 
         <!-- Scripts de Livewire -->
         @livewireScripts
+@stack('scripts')
 
     </body>
 </html>

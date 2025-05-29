@@ -143,9 +143,12 @@
                 </div>
 
                 <div class="section">
-                    <h3>Perfil Profesional</h3>
-                    <p>{{ \Illuminate\Support\Str::limit($cv->perfil, 390) }}</p>
-                </div>
+    <h3>Perfil Profesional</h3>
+    <div style="font-size: 11px; line-height: 1.6; word-break: break-word; white-space: pre-line;">
+        {!! nl2br(e($cv->perfil)) !!}
+    </div>
+</div>
+
 
                 <div class="section">
                     <h3>Contacto</h3>
@@ -197,7 +200,7 @@
         <div class="date">
             {{ $exp['inicio'] ?? 'Fecha no especificada' }} - {{ $exp['fin'] ?? 'Actual' }}
         </div>
-        <p>{{ \Illuminate\Support\Str::limit($exp['tareas'] ?? '', 300) }}</p>
+        <div>{!! $exp['tareas'] ?? '' !!}</div>
     </div>
 @endforeach
                 </div>

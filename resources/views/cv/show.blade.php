@@ -82,11 +82,12 @@
                                     {{ $exp['inicio'] }} al {{ $exp['fin'] ?? 'Actualidad' }}
                                 </small>
                                 @if(!empty($exp['tareas']))
-                                    <p class="mt-1 text-sm">
-                                        <span class="font-medium">Tareas, Responsabilidades y Logros:</span>
-                                        {{ $exp['tareas'] }}
-                                    </p>
-                                @endif
+    <div class="mt-1 text-sm prose prose-sm dark:prose-invert max-w-none">
+        <span class="font-medium block">Tareas, Responsabilidades y Logros:</span>
+        {!! $exp['tareas'] !!}
+    </div>
+@endif
+
                             </li>
                         @endforeach
                     </ul>
