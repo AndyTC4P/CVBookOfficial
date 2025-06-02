@@ -20,7 +20,7 @@ new #[Layout('layouts.guest')] class extends Component
 
         Session::regenerate();
 
-        $this->redirectIntended(default: '/cv', navigate: true);
+        $this->redirectIntended(default: '/dashboard', navigate: true);
 
     }
 }; ?>
