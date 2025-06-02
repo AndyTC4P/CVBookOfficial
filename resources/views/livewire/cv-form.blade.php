@@ -25,17 +25,29 @@
             @error('apellido') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 
-       <!-- Categoría de Profesión -->
+     <!-- Categoría de Profesión -->
 <div>
-    <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Categoría Profesional <span class="text-red-500">*</span></label>
+    <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">
+        Categoría Profesional <span class="text-red-500">*</span>
+    </label>
+    
     <select wire:model="categoria_profesion" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
         <option value="">Selecciona una categoría</option>
         @foreach($profesionesPorCategoria as $categoria)
             <option value="{{ $categoria }}">{{ $categoria }}</option>
         @endforeach
     </select>
-    @error('categoria_profesion') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+
+    <!-- Texto informativo -->
+    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+        📌 Esto ayudará a que las empresas y reclutadores encuentren tu CV. Asegúrate de seleccionar la más apropiada.
+    </p>
+
+    @error('categoria_profesion') 
+        <span class="text-red-500 text-sm">{{ $message }}</span> 
+    @enderror
 </div>
+
 
 <!-- Profesión libre -->
 <div class="mt-4">

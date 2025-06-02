@@ -21,16 +21,17 @@
         <x-nav-link :href="route('cv.index')" :active="request()->routeIs('cv.index')" wire:navigate>
             📄 {{ __('Mis CVs') }}
         </x-nav-link>
-        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-            ✍️ {{ __('Crear CV') }}
-        </x-nav-link>
+        <x-nav-link :href="route('cv.create')" :active="request()->routeIs('cv.create')" wire:navigate>
+    ✍️ {{ __('Crear CV') }}
+</x-nav-link>
+
     @elseif (Auth::user()->isAdmin())
         <x-nav-link :href="route('cv.index')" :active="request()->routeIs('cv.index')" wire:navigate>
             📄 {{ __('Mis CVs') }}
         </x-nav-link>
-        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-            ✍️ {{ __('Crear CV') }}
-        </x-nav-link>
+        <x-nav-link :href="route('cv.create')" :active="request()->routeIs('cv.create')" wire:navigate>
+    ✍️ {{ __('Crear CV') }}
+</x-nav-link>
         <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" wire:navigate>
             🛠️ {{ __('Admin') }}
         </x-nav-link>
@@ -108,9 +109,9 @@
                 📄 {{ __('Mis CVs') }}
             </x-responsive-nav-link>
 
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-                ✍️ {{ __('Crear CV') }}
-            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('cv.create')" :active="request()->routeIs('cv.create')" wire:navigate>
+    ✍️ {{ __('Crear CV') }}
+</x-responsive-nav-link>
             <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" wire:navigate>
     🛠️ {{ __('Admin Dashboard') }}
 </x-responsive-nav-link>
