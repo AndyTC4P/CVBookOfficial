@@ -1,60 +1,54 @@
 <x-app-layout>
-    <div class="relative bg-gray-900 text-white min-h-screen flex flex-col items-center justify-center">
-        <!-- Sección Principal -->
-        <div class="text-center px-6">
-            <h1 class="text-4xl font-bold mb-4">🚀 Impulsa tu carrera con un CV profesional</h1>
-            <p class="text-lg text-gray-300">Crea y comparte tu CV en segundos.</p>
-
-            <!-- Orientación para nuevos usuarios -->
-            <div class="mt-8 max-w-2xl mx-auto space-y-4">
-                <h2 class="text-2xl font-semibold">¿Cómo deseas usar CV Book?</h2>
-                <div class="grid gap-6 md:grid-cols-2 text-gray-800">
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <h3 class="text-xl font-bold mb-2">Crear CV</h3>
-                        <p class="text-gray-600">Regístrate como usuario para diseñar tu currículum, actualizarlo cuando quieras y compartirlo fácilmente.</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <h3 class="text-xl font-bold mb-2">Registrarme como reclutador</h3>
-                        <p class="text-gray-600">Las cuentas de empresa te permiten buscar CVs de candidatos, guardarlos y contactarlos.</p>
-                    </div>
-                </div>
-            </div>
-            
-           <!-- Botones de Registro e Inicio de Sesión -->
-<div class="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
-    <a href="{{ route('register') }}" class="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition-all text-center">
-        ✨ Crear cuenta
-    </a>
-    <a href="{{ route('login') }}" class="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition-all text-center">
-        🔑 Iniciar sesión
-    </a>
-</div>
-
-
-        <!-- Sección de Beneficios -->
-        <div class="mt-16 max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md text-center">
-                <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">🌍 Comparte con un enlace</h3>
-                <p class="text-gray-600 dark:text-gray-300 mt-2">Tu CV está disponible en línea para que lo compartas fácilmente con empresas.</p>
-            </div>
-            <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md text-center">
-                <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">🛠️ Fácil de actualizar</h3>
-                <p class="text-gray-600 dark:text-gray-300 mt-2">Modifica tu información en cualquier momento, sin necesidad de enviar documentos.</p>
-            </div>
-            <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md text-center">
-                <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">🔒 Control de privacidad</h3>
-                <p class="text-gray-600 dark:text-gray-300 mt-2">Decide si tu CV es público o privado con un solo clic.</p>
+    <!-- Hero Section with Video Background -->
+    <div class="relative h-screen overflow-hidden bg-gray-800 text-white flex items-center justify-center">
+        <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-70 dark:opacity-40">
+            <source src="{{ asset('videos/bg-cvbook.mp4') }}" type="video/mp4">
+        </video>
+        <div class="relative z-10 text-center px-4">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4">Impulsa tu carrera con CV Book</h1>
+            <p class="text-lg md:text-xl text-gray-100 max-w-2xl mx-auto mb-8">Construye un currículum atractivo, compártelo al instante y abre la puerta a nuevas oportunidades.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{{ route('register') }}" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold shadow-md">Crear cuenta</a>
+                <a href="{{ route('login') }}" class="px-6 py-3 bg-gray-700 hover:bg-gray-800 rounded-lg font-semibold shadow-md">Iniciar sesión</a>
             </div>
         </div>
     </div>
-    {{-- Enlace a preguntas frecuentes --}}
-<div class="mt-6 text-center">
-    <p class="text-sm text-gray-400">
-        ¿Tienes preguntas? 
-        <a href="{{ route('faq') }}" class="text-blue-400 hover:text-blue-200 font-semibold underline">
-            Consulta nuestra página de Preguntas Frecuentes
-        </a>
-    </p>
-</div>
 
+    <!-- Getting Started Section -->
+    <section class="py-16 bg-white dark:bg-gray-900">
+        <div class="max-w-5xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold mb-10">¿No sabes por dónde empezar?</h2>
+            <div class="grid gap-8 md:grid-cols-2">
+                <div class="p-6 bg-gray-50 dark:bg-gray-800 rounded-lg shadow">
+                    <h3 class="text-xl font-semibold mb-2">Soy candidato</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Regístrate para crear, actualizar y compartir tu CV desde cualquier lugar.</p>
+                </div>
+                <div class="p-6 bg-gray-50 dark:bg-gray-800 rounded-lg shadow">
+                    <h3 class="text-xl font-semibold mb-2">Soy empresa</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Busca candidatos, administra tus favoritos y contacta al talento ideal.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="py-16 bg-gray-50 dark:bg-gray-800">
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-8">Beneficios de usar CV Book</h2>
+            <ul class="space-y-4 text-lg">
+                <li class="flex items-start"><span class="text-green-500 mr-2">✔️</span><span class="text-gray-700 dark:text-gray-300">Accede a tu CV desde cualquier dispositivo.</span></li>
+                <li class="flex items-start"><span class="text-green-500 mr-2">✔️</span><span class="text-gray-700 dark:text-gray-300">Comparte tu perfil con un enlace único.</span></li>
+                <li class="flex items-start"><span class="text-green-500 mr-2">✔️</span><span class="text-gray-700 dark:text-gray-300">Actualiza tu información en tiempo real.</span></li>
+                <li class="flex items-start"><span class="text-green-500 mr-2">✔️</span><span class="text-gray-700 dark:text-gray-300">Controla quién puede ver tu CV.</span></li>
+                <li class="flex items-start"><span class="text-green-500 mr-2">✔️</span><span class="text-gray-700 dark:text-gray-300">Recibe notificaciones de interés laboral.</span></li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Final Call to Action -->
+    <section class="py-16 bg-white dark:bg-gray-900 text-center">
+        <h2 class="text-3xl font-bold mb-6">Da el siguiente paso en tu carrera</h2>
+        <a href="{{ route('register') }}" class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-lg font-semibold shadow-lg">¡Inicia ya!</a>
+    </section>
 </x-app-layout>
+
