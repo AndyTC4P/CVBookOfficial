@@ -4,6 +4,21 @@
         <div class="text-center px-6">
             <h1 class="text-4xl font-bold mb-4">🚀 Impulsa tu carrera con un CV profesional</h1>
             <p class="text-lg text-gray-300">Crea y comparte tu CV en segundos.</p>
+
+            <!-- Orientación para nuevos usuarios -->
+            <div class="mt-8 max-w-2xl mx-auto space-y-4">
+                <h2 class="text-2xl font-semibold">¿Cómo deseas usar CV Book?</h2>
+                <div class="grid gap-6 md:grid-cols-2 text-gray-800">
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-bold mb-2">Crear CV</h3>
+                        <p class="text-gray-600">Regístrate como usuario para diseñar tu currículum, actualizarlo cuando quieras y compartirlo fácilmente.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-bold mb-2">Registrarme como reclutador</h3>
+                        <p class="text-gray-600">Las cuentas de empresa te permiten buscar CVs de candidatos, guardarlos y contactarlos.</p>
+                    </div>
+                </div>
+            </div>
             
            <!-- Botones de Registro e Inicio de Sesión -->
 <div class="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
