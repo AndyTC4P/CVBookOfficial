@@ -109,7 +109,9 @@ Route::get('/empresa/chat-demo', function () {
 });
 Route::view('/privacidad-sivi', 'privacy-sivi')->name('privacidad.sivi');
 Route::post('/cv/{cv}/favorito-toggle', [CVController::class, 'toggleFavorito'])->name('cv.favorito.toggle');
-
+Route::get('/', function () {
+    return redirect()->away('https://www.grupofazit.com/cvbook');
+});
 
 
 
