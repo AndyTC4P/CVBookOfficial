@@ -60,6 +60,8 @@ class CvForm extends Component
             'experiencia.*.puesto' => 'required|string|max:255',
             'experiencia.*.inicio' => 'required|date',
             'experiencia.*.fin' => 'nullable|date|after_or_equal:experiencia.*.inicio',
+            'experiencia.*.tareas' => 'nullable|array',
+            'experiencia.*.tareas.*' => 'nullable|string|max:250',
             'educacion' => 'nullable|array',
             'educacion.*.universidad' => 'required|string|max:255',
             'educacion.*.carrera' => 'required|string|max:255',
@@ -137,14 +139,12 @@ class CvForm extends Component
 
             $this->modo = 'editar';
         }
-        
-        logger('📌 CATEGORÍA precargada:', [$this->categoria_profesion]);
 
+        logger('📌 CATEGORÍA precargada:', [$this->categoria_profesion]);
     }
 
     public function save()
     {
-    
         $this->validate();
         $this->cvGuardado = true;
 
@@ -188,26 +188,86 @@ class CvForm extends Component
         }
     }
 
-    public function addExperience() { $this->experiencia[] = ['empresa' => '', 'puesto' => '', 'inicio' => '', 'fin' => '', 'tareas' => '']; }
-    public function removeExperience($index) { unset($this->experiencia[$index]); $this->experiencia = array_values($this->experiencia); }
-    public function addEducation() { $this->educacion[] = ['universidad' => '', 'carrera' => '', 'inicio' => '', 'fin' => '']; }
-    public function removeEducation($index) { unset($this->educacion[$index]); $this->educacion = array_values($this->educacion); }
-    public function updatedImagen() { $this->imagenSubida = true; }
-    public function addSkill() { $this->habilidades[] = ''; }
-    public function removeSkill($index) { unset($this->habilidades[$index]); $this->habilidades = array_values($this->habilidades); }
+    public function addExperience()
+    {
+        $this->experiencia[] = [
+            'empresa' => '',
+            'puesto' => '',
+            'inicio' => '',
+            'fin' => '',
+            'tareas' => [''],
+        ];
+    }
 
-    public function render() { return view('livewire.cv-form'); }
+    public function removeExperience($index)
+    {
+        unset($this->experiencia[$index]);
+        $this->experiencia = array_values($this->experiencia);
+    }
 
-   protected $listeners = ['actualizarTareas'];
-
-public function actualizarTareas($index, $contenido)
+    public function agregarTarea($expIndex)
 {
-    $this->experiencia[$index]['tareas'] = $contenido;
+    // Asegura que 'tareas' sea un array antes de usar []
+    if (!isset($this->experiencia[$expIndex]['tareas']) || !is_array($this->experiencia[$expIndex]['tareas'])) {
+        $valorActual = $this->experiencia[$expIndex]['tareas'] ?? '';
+
+        // Si había un string, lo convertimos en el primer elemento del array
+        $this->experiencia[$expIndex]['tareas'] = $valorActual !== ''
+            ? [$valorActual]
+            : [];
+    }
+
+    // Ahora que es array, agregamos una nueva tarea
+    $this->experiencia[$expIndex]['tareas'][] = '';
 }
 
 
+    public function eliminarTarea($expIndex, $tareaIndex)
+    {
+        unset($this->experiencia[$expIndex]['tareas'][$tareaIndex]);
+        $this->experiencia[$expIndex]['tareas'] = array_values($this->experiencia[$expIndex]['tareas']);
+    }
 
+    public function addEducation()
+    {
+        $this->educacion[] = ['universidad' => '', 'carrera' => '', 'inicio' => '', 'fin' => ''];
+    }
+
+    public function removeEducation($index)
+    {
+        unset($this->educacion[$index]);
+        $this->educacion = array_values($this->educacion);
+    }
+
+    public function updatedImagen()
+    {
+        $this->imagenSubida = true;
+    }
+
+    public function addSkill()
+    {
+        $this->habilidades[] = '';
+    }
+
+    public function removeSkill($index)
+    {
+        unset($this->habilidades[$index]);
+        $this->habilidades = array_values($this->habilidades);
+    }
+
+    public function render()
+    {
+        return view('livewire.cv-form');
+    }
+
+    protected $listeners = ['actualizarTareas'];
+
+    public function actualizarTareas($index, $contenido)
+    {
+        $this->experiencia[$index]['tareas'] = $contenido;
+    }
 }
+
 
 
 

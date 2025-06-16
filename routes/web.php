@@ -10,6 +10,7 @@ use App\Http\Controllers\AdminController;
 use App\Models\User;
 use App\Models\CV;
 use Illuminate\Http\Request;
+use App\Http\Controllers\WordCvController;
 
 Route::get('/admin/dashboard', function () {
     if (auth()->check() && auth()->user()->role === 'admin') {
@@ -112,6 +113,7 @@ Route::post('/cv/{cv}/favorito-toggle', [CVController::class, 'toggleFavorito'])
 Route::get('/', function () {
     return redirect()->away('https://www.grupofazit.com/cvbook');
 });
-
+Route::get('/cv/{slug}/word', [WordCvController::class, 'export'])->name('cv.word');
+Route::view('/privacidad', 'politica')->name('politica.privacidad');
 
 

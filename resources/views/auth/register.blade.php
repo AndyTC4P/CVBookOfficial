@@ -40,6 +40,19 @@
             <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
+     <!-- Política de privacidad -->
+<div class="mt-6">
+    <label class="flex items-start gap-2">
+        <input type="checkbox" name="politica_privacidad" required class="mt-1 rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
+        <span class="text-sm text-gray-800 dark:text-white leading-snug">
+            Al registrarte, aceptas nuestra <a href="{{ route('politica.privacidad') }}" target="_blank" class="text-blue-600 underline hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-500">Política de Privacidad</a>.
+        </span>
+    </label>
+    @error('politica_privacidad')
+        <span class="text-sm text-red-500 mt-1 block">{{ $message }}</span>
+    @enderror
+</div>
+
 
         <!-- reCAPTCHA -->
 <div class="mt-4">

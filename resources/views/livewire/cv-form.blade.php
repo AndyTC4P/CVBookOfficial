@@ -156,7 +156,7 @@
 </div>
 
 
-       <!-- Experiencia laboral -->
+   <!-- Experiencia laboral -->
 <div>
     <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Experiencia Laboral</label>
     @foreach($experiencia as $index => $exp)
@@ -197,16 +197,41 @@
                 </button>
             </div>
 
-            <textarea wire:model="experiencia.{{ $index }}.tareas"
-                      placeholder="Tareas, responsabilidades y logros (máx. 500 caracteres)"
-                      maxlength="500"
-                      class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm"
-                      rows="3"></textarea>
+            {{-- Tareas dinámicas --}}
+            <div class="mt-2">
+                <label class="text-sm text-gray-700 dark:text-gray-300">Tareas, responsabilidades y logros</label>
+                
+   @if (is_array($experiencia[$index]['tareas']))
+    @foreach ($experiencia[$index]['tareas'] as $tIndex => $tarea)
+        <div class="flex items-center gap-2 mt-1">
+            <input type="text"
+                   wire:model="experiencia.{{ $index }}.tareas.{{ $tIndex }}"
+                   class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm"
+                   maxlength="200"
+                   placeholder="Ej. Desarrollo de sitios web">
+            <button type="button"
+                    wire:click="eliminarTarea({{ $index }}, {{ $tIndex }})"
+                    class="text-red-500 hover:text-red-700 text-lg font-bold">
+                🗑️
+            </button>
+        </div>
+    @endforeach
+@endif
+
+x
+
+                <button type="button"
+                        wire:click="agregarTarea({{ $index }})"
+                        class="mt-2 px-3 py-1 text-sm font-semibold bg-green-500 text-white rounded-md hover:bg-green-600">
+                    + Agregar tarea
+                </button>
+            </div>
         </div>
     @endforeach
 
-    <button type="button" wire:click="addExperience" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">+ Agregar Experiencia</button>
+    <button type="button" wire:click="addExperience" class="mt-4 px-4 py-2 bg-green-500 text-white rounded">+ Agregar Experiencia</button>
 </div>
+
 
 <!-- Educación -->
 <div class="mt-6">
