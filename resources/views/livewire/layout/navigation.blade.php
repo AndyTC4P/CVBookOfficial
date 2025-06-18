@@ -84,6 +84,11 @@
                         <x-dropdown-link :href="route('faq')" wire:navigate>
     ❓ {{ __('Preguntas Frecuentes') }}
 </x-dropdown-link>
+<x-dropdown-link :href="route('politica.privacidad')" wire:navigate>
+    📄 {{ __('Política de Privacidad') }}
+</x-dropdown-link>
+
+
 
                     </x-slot>
                 </x-dropdown>
@@ -150,7 +155,9 @@
                 <x-responsive-nav-link :href="route('faq')" wire:navigate>
     ❓ {{ __('Preguntas Frecuentes') }}
 </x-responsive-nav-link>
-
+<x-responsive-nav-link :href="route('politica.privacidad')" wire:navigate>
+    📄 {{ __('Política de Privacidad') }}
+</x-responsive-nav-link>
             </div>
         </div>
     </div>

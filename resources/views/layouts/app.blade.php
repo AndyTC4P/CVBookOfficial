@@ -14,16 +14,12 @@
         <!-- Estilos de Vite -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        <!-- Estilos de Livewire  -->
+        <!-- Estilos de Livewire -->
         @livewireStyles
 
-       <!-- Trix Editor -->
-<link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@1.3.1/dist/trix.css">
-<script type="text/javascript" src="https://unpkg.com/trix@1.3.1/dist/trix.js"></script>
-
-
-
-      
+        <!-- Trix Editor -->
+        <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@1.3.1/dist/trix.css">
+        <script type="text/javascript" src="https://unpkg.com/trix@1.3.1/dist/trix.js"></script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -43,12 +39,18 @@
             <main>
                 {{ $slot }}
             </main>
+
+            <!-- Footer -->
+            <footer class="bg-gray-100 dark:bg-gray-900 text-center py-4 mt-16 border-t border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300">
+                © {{ date('Y') }} CVBook. Todos los derechos reservados. <br>
+                Lomas de San Francisco, Calles 2, Pje. 6, #64<br>
+                San Salvador, El Salvador, Central America
+            </footer>
         </div>
 
         <!-- Scripts de Livewire -->
         @livewireScripts
-@stack('scripts')
-
+        @stack('scripts')
     </body>
 </html>
 

@@ -111,13 +111,19 @@
 
     </div>
 
-    <!-- Filtro: Solo favoritos -->
-    <div class="mt-4">
-        <label class="inline-flex items-center text-white">
-            <input type="checkbox" wire:model="solo_favoritos" wire:change="$refresh" class="form-checkbox text-blue-500 bg-gray-800 border-gray-600 rounded">
-            <span class="ml-2 text-sm">Mostrar solo favoritos</span>
-        </label>
-    </div>
+   
+    <!-- Botón: Mostrar solo favoritos -->
+<div class="mt-4">
+    <button
+        wire:click="$toggle('solo_favoritos')"
+        class="px-4 py-2 rounded-md font-semibold shadow transition text-sm
+               {{ $solo_favoritos 
+                    ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-500 ring-1 ring-yellow-300' 
+                    : 'bg-gray-700 text-white hover:bg-gray-600' }}">
+        {{ $solo_favoritos ? '✓ Mostrando solo favoritos' : 'Mostrar solo favoritos' }}
+    </button>
+</div>
+
 </div>
 
 
