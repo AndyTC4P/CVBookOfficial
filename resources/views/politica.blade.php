@@ -1,11 +1,11 @@
-<x-app-layout>
+<x-app-layout>  
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            🔐 Política de Privacidad 
+            🔐 Política de Privacidad – CVBook
         </h2>
     </x-slot>
 
-    <!-- Banner ajustado -->
+    <!-- Banner -->
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
         <div class="rounded-lg overflow-hidden">
             <img src="{{ asset('images/preguntascv.webp') }}" alt="Banner Privacidad"
@@ -17,66 +17,72 @@
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-900 shadow-md sm:rounded-lg p-8 text-gray-800 dark:text-gray-200 space-y-6">
 
-                <p><strong>Fecha de última actualización:</strong> 16 de junio de 2025</p>
+                <p class="text-lg text-center leading-relaxed">
+                    Esta política de privacidad describe cómo CVBook recopila, utiliza y protege la información de los usuarios que utilizan la plataforma <span class="font-semibold text-blue-600 dark:text-blue-400">cvbook.online</span>.
+                </p>
 
-                <p>En <strong>CVBook</strong> nos tomamos tu privacidad muy en serio. Esta Política de Privacidad explica cómo recopilamos, usamos y protegemos tus datos personales cuando usas nuestra plataforma para crear y gestionar tu currículum.</p>
+                <div class="space-y-5">
 
-                <h3 class="text-lg font-semibold">1. Datos que recopilamos</h3>
-                <ul class="list-disc list-inside space-y-1">
-                    <li>Datos de registro: nombre, correo electrónico, contraseña.</li>
-                    <li>Información ingresada en tu CV: experiencia laboral, formación, habilidades, idiomas, contacto, etc.</li>
-                    <li>Foto de perfil (si decides subirla).</li>
-                    <li>Datos técnicos: dirección IP, tipo de dispositivo, navegador, sistema operativo, cookies.</li>
-                </ul>
+                    <!-- Datos recopilados -->
+                    <div>
+                        <h3 class="font-semibold text-lg">📌 Qué datos recopilamos</h3>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Información personal como nombre, correo, teléfono y país.</li>
+                            <li>Datos profesionales ingresados voluntariamente en el CV (experiencia, educación, habilidades, etc.).</li>
+                            <li>Preferencias de visibilidad del CV (público o privado).</li>
+                        </ul>
+                    </div>
 
-                <h3 class="text-lg font-semibold">2. Finalidad del uso de los datos</h3>
-                <ul class="list-disc list-inside space-y-1">
-                    <li>Permitirte crear, editar y compartir tu currículum profesional.</li>
-                    <li>Generar versiones PDF de tu CV con diseño profesional.</li>
-                    <li>Brindarte acceso a funciones personalizadas según tu rol (usuario, empresa o administrador).</li>
-                    <li>Mejorar el funcionamiento y seguridad de la plataforma.</li>
-                </ul>
+                    <!-- Uso responsable y advertencias -->
+                    <div>
+                        <h3 class="font-semibold text-lg">⚠️ Responsabilidad del usuario</h3>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>No debes compartir tu contraseña con nadie. Es tu responsabilidad proteger el acceso a tu cuenta.</li>
+                            <li>Todos los datos que ingreses en tu CV serán visibles públicamente si marcas tu perfil como "CV público".</li>
+                            <li>CVBook no recomienda incluir datos sensibles como números de documentos, cuentas bancarias o contraseñas.</li>
+                            <li>Recuerda compartir solo la información que estés de acuerdo en hacer pública.</li>
+                        </ul>
+                    </div>
 
-                <h3 class="text-lg font-semibold">3. Compartición de información</h3>
-                <p>No vendemos tus datos personales a terceros. Tus datos podrán compartirse únicamente con:</p>
-                <ul class="list-disc list-inside space-y-1">
-                    <li>Empresas reclutadoras cuando tú hagas público tu CV.</li>
-                    <li>Servicios de alojamiento web y herramientas necesarias para operar el sitio.</li>
-                </ul>
+                    <!-- Protección de la información -->
+                    <div>
+                        <h3 class="font-semibold text-lg">🔐 Cómo protegemos tu información</h3>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Usamos sistemas de autenticación, validación y almacenamiento seguro.</li>
+                            <li>Los CVs marcados como privados solo son accesibles por su autor o el equipo administrativo.</li>
+                            <li>No compartimos información personal con terceros sin tu consentimiento.</li>
+                        </ul>
+                    </div>
 
-                <h3 class="text-lg font-semibold">4. Visibilidad de tu CV</h3>
-                <p>Tu currículum puede ser <strong>público o privado</strong>. Si decides hacerlo público, será visible mediante un enlace directo que puedes compartir con empresas, reclutadores o contactos. Tú decides si deseas mostrarlo y puedes cambiar esta configuración en cualquier momento.</p>
+                    <!-- Limitación de responsabilidad -->
+                    <div>
+                        <h3 class="font-semibold text-lg">❗ Limitación de responsabilidad</h3>
+                        <p>
+                            CVBook implementa medidas de seguridad, sin embargo, no se hace responsable por accesos no autorizados, ataques externos, hackeos u otras pérdidas de información provocadas por eventos fuera de nuestro control.
+                        </p>
+                        <p class="mt-2">
+                            El usuario es responsable de verificar qué información decide publicar. Si tu perfil es público, cualquier persona o empresa registrada puede acceder a esa información.
+                        </p>
+                    </div>
 
-                <h3 class="text-lg font-semibold">5. Conservación de datos</h3>
-                <p>Los datos personales se almacenan mientras mantengas tu cuenta activa. Puedes eliminarlos en cualquier momento desde tu perfil. Una vez eliminados, no podrán recuperarse.</p>
+                    <!-- Contacto -->
+                    <div>
+                        <h3 class="font-semibold text-lg">📧 Contacto</h3>
+                        <p>
+                            Para dudas o solicitudes relacionadas con tus datos personales o esta política, puedes escribirnos a:  
+                            <a href="mailto:tic@grupofazit.com" class="text-blue-500 hover:underline font-medium">tic@grupofazit.com</a>
+                        </p>
+                    </div>
+                </div>
 
-                <h3 class="text-lg font-semibold">6. Seguridad</h3>
-                <p>Aplicamos medidas técnicas y organizativas para proteger tus datos frente a accesos no autorizados, pérdida o divulgación, incluyendo cifrado, firewalls y monitoreo de actividad anómala.</p>
-
-                <h3 class="text-lg font-semibold">7. Tus derechos</h3>
-                <p>Tienes derecho a:</p>
-                <ul class="list-disc list-inside space-y-1">
-                    <li>Acceder, corregir o eliminar tus datos personales.</li>
-                    <li>Solicitar la eliminación de tu cuenta y todos los datos asociados.</li>
-                    <li>Contactarnos si tienes preguntas o inquietudes sobre el uso de tus datos.</li>
-                </ul>
-
-                <h3 class="text-lg font-semibold">8. Cookies</h3>
-                <p>Usamos cookies para mejorar tu experiencia en el sitio. Algunas son esenciales para el funcionamiento, y otras nos ayudan a analizar el uso de la plataforma. Puedes gestionar tus preferencias desde tu navegador.</p>
-
-                <h3 class="text-lg font-semibold">9. Menores de edad</h3>
-                <p>Nuestra plataforma está destinada a personas mayores de 16 años. Si detectamos el uso por parte de un menor, su cuenta podrá ser eliminada.</p>
-
-                <h3 class="text-lg font-semibold">10. Cambios a esta política</h3>
-                <p>Nos reservamos el derecho de modificar esta política cuando sea necesario. Cualquier cambio será notificado en el sitio web con una fecha de actualización visible.</p>
-
-                <h3 class="text-lg font-semibold">11. Contacto</h3>
-                <p>Si tienes dudas o deseas ejercer tus derechos, puedes escribirnos a:</p>
-                <p><strong>Correo:</strong> tic@grupofazit.com</p>
+                <div class="text-sm text-gray-500 dark:text-gray-400 text-center mt-10">
+                    Última actualización: {{ now()->format('d/m/Y') }}
+                </div>
 
             </div>
         </div>
     </div>
 </x-app-layout>
+
 
 
