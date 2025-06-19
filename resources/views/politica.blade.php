@@ -39,7 +39,7 @@
                         <ul class="list-disc list-inside space-y-1">
                             <li>No debes compartir tu contraseña con nadie. Es tu responsabilidad proteger el acceso a tu cuenta.</li>
                             <li>Todos los datos que ingreses en tu CV serán visibles públicamente si marcas tu perfil como "CV público".</li>
-                            <li>CVBook no recomienda incluir datos sensibles como números de documentos, cuentas bancarias o contraseñas.</li>
+                            <li>CVBook no recomienda incluir datos sensibles o que no deseas compartir, como números de documentos, teléfonos, cuentas bancarias o contraseñas.</li>
                             <li>Recuerda compartir solo la información que estés de acuerdo en hacer pública.</li>
                         </ul>
                     </div>

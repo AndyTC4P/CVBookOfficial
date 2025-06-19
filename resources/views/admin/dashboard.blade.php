@@ -6,6 +6,36 @@
     </x-slot>
 
     <div class="py-12 px-4 sm:px-6 lg:px-8 space-y-10">
+        {{-- EMPRESAS PENDIENTES --}}
+@if($empresasPendientes->count())
+    <div>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+            🕓 Empresas Pendientes ({{ $empresasPendientes->count() }})
+        </h3>
+
+        <div class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            @foreach ($empresasPendientes as $empresa)
+                <div class="p-4 bg-yellow-900 rounded-lg shadow text-white space-y-2 border border-yellow-700">
+                    <h4 class="font-semibold text-lg">{{ $empresa->name }}</h4>
+                    <p class="text-sm text-gray-300">{{ $empresa->email }}</p>
+                    <span class="text-xs font-medium text-yellow-400 uppercase">Estado: {{ $empresa->status }}</span>
+
+                    <div class="flex gap-2 mt-2">
+                        <form method="POST" action="{{ route('admin.empresas.aprobar', $empresa->id) }}">
+                            @csrf
+                            <button class="bg-green-600 hover:bg-green-700 px-3 py-1 text-sm rounded">Aprobar</button>
+                        </form>
+                        <form method="POST" action="{{ route('admin.empresas.rechazar', $empresa->id) }}">
+                            @csrf
+                            <button class="bg-red-600 hover:bg-red-700 px-3 py-1 text-sm rounded">Rechazar</button>
+                        </form>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+@endif
+
         {{-- USUARIOS --}}
         <div>
             <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">

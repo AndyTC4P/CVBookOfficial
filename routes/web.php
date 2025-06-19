@@ -11,12 +11,20 @@ use App\Models\User;
 use App\Models\CV;
 use Illuminate\Http\Request;
 use App\Http\Controllers\WordCvController;
+use App\Http\Controllers\Auth\EmpresaRegisterController;
+use App\Http\Middleware\EmpresaAprobada;
+use App\Http\Controllers\Admin\EmpresaController;
+
+
 
 Route::get('/admin/dashboard', function () {
     if (auth()->check() && auth()->user()->role === 'admin') {
-        $users = User::all();
-        $cvs = CV::latest()->get();
-        return view('admin.dashboard', compact('users', 'cvs'));
+       $users = User::all();
+$cvs = CV::latest()->get();
+$empresasPendientes = User::where('role', 'empresa')->where('status', 'pendiente')->get();
+
+return view('admin.dashboard', compact('users', 'cvs', 'empresasPendientes'));
+
     }
 
     abort(403, 'No autorizado');
@@ -115,5 +123,20 @@ Route::get('/', function () {
 });
 Route::get('/cv/{slug}/word', [WordCvController::class, 'export'])->name('cv.word');
 Route::view('/privacidad', 'politica')->name('politica.privacidad');
+Route::get('/registro-empresa', [EmpresaRegisterController::class, 'create'])->name('empresa.registro');
+Route::post('/registro-empresa', [EmpresaRegisterController::class, 'store'])->name('empresa.registrar');
+Route::middleware(['auth', EmpresaAprobada::class])->group(function () {
+    Route::get('/admin/busqueda-cvs', function () {
+        return view('admin.busqueda-cvs');
+    })->name('admin.busqueda-cvs');
+});
+// Aprobación de empresas por el admin
+Route::middleware('auth')->group(function () {
+    Route::post('/admin/empresas/{user}/aprobar', [EmpresaController::class, 'aprobar'])->name('admin.empresas.aprobar');
+    Route::post('/admin/empresas/{user}/rechazar', [EmpresaController::class, 'rechazar'])->name('admin.empresas.rechazar');
+});
+Route::get('/empresa/esperando-aprobacion', function () {
+    return view('empresa.esperando-aprobacion');
+})->middleware('auth')->name('empresa.esperando');
 
 
