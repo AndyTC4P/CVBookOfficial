@@ -58,12 +58,30 @@
 
 
 
-        <!-- Perfil -->
-        <div>
-            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Perfil Profesional <span class="text-red-500">*</span></label>
-            <textarea wire:model="perfil" rows="4" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm"></textarea>
-            @error('perfil') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-        </div>
+      <!-- Perfil Profesional -->
+<div x-data="{ count: 0 }" x-init="count = $refs.perfil.value.length">
+    <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">
+        Perfil Profesional <span class="text-red-500">*</span>
+    </label>
+
+    <textarea
+        x-ref="perfil"
+        wire:model="perfil"
+        x-on:input="count = $refs.perfil.value.length"
+        rows="4"
+        maxlength="390"
+        class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm"
+    ></textarea>
+
+    <div class="text-sm mt-1 text-right text-gray-500 dark:text-gray-400">
+        <span x-text="count"></span> / 390 caracteres
+    </div>
+
+    @error('perfil')
+        <span class="text-red-500 text-sm">{{ $message }}</span>
+    @enderror
+</div>
+
 
 <!-- Imagen -->
 <div>

@@ -46,7 +46,7 @@ class CvForm extends Component
             'apellido' => 'required|string|max:100',
             'categoria_profesion' => 'required|string|max:255',
             'titulo_manual' => 'required|string|max:255',
-            'perfil' => 'required|string|max:390',
+            'perfil' => 'required|string|min:50|max:390',
             'imagen' => $this->modo === 'crear'
     ? 'required|image|max:6144'
     : 'nullable|image|max:6144',
@@ -88,6 +88,8 @@ class CvForm extends Component
         'imagen.required' => 'Debe subir una imagen de perfil para continuar.',
         'imagen.image' => 'El archivo debe ser una imagen válida.',
         'imagen.max' => 'La imagen no debe superar los 6MB.',
+        'perfil.min' => 'El campo Perfil Profesional debe tener al menos 50 caracteres.',
+
     ];
 
     public function mount($cv = null)
