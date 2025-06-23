@@ -17,9 +17,8 @@ class BuscarCVs extends Component
     public $mensaje = null;
     public $solo_favoritos = false;
     public $idiomas_disponibles = [];
-public $idiomas_seleccionados = [];
-
-
+    public $idiomas_seleccionados = [];
+    public $mostrarResultados = false; // NUEVO
 
     public function mount()
     {
@@ -30,7 +29,6 @@ public $idiomas_seleccionados = [];
         $this->favoritos_ids = auth()->user()->favoritos->pluck('id')->toArray();
         $this->categoria_profesion = '';
 
-        // Cargar categorías profesionales
         $this->categorias = DB::table('cvs')
             ->select('categoria_profesion')
             ->distinct()
@@ -38,7 +36,6 @@ public $idiomas_seleccionados = [];
             ->pluck('categoria_profesion')
             ->toArray();
 
-        // Cargar habilidades únicas
         $this->habilidades_disponibles = CV::whereNotNull('habilidades')->get()
             ->flatMap(function ($cv) {
                 $habilidades = json_decode($cv->habilidades ?? '[]', true);
@@ -49,17 +46,20 @@ public $idiomas_seleccionados = [];
             ->values()
             ->toArray();
 
-            // Cargar idiomas disponibles desde los CVs
-$this->idiomas_disponibles = CV::whereNotNull('idiomas')->get()
-    ->flatMap(function ($cv) {
-        $idiomas = json_decode($cv->idiomas ?? '[]', true);
-        return is_array($idiomas) ? $idiomas : [];
-    })
-    ->map(fn($i) => trim($i))
-    ->unique()
-    ->values()
-    ->toArray();
+        $this->idiomas_disponibles = CV::whereNotNull('idiomas')->get()
+            ->flatMap(function ($cv) {
+                $idiomas = json_decode($cv->idiomas ?? '[]', true);
+                return is_array($idiomas) ? $idiomas : [];
+            })
+            ->map(fn($i) => trim($i))
+            ->unique()
+            ->values()
+            ->toArray();
+    }
 
+    public function aplicarFiltros() // NUEVO
+    {
+        $this->mostrarResultados = true;
     }
 
     public function render()
@@ -71,32 +71,24 @@ $this->idiomas_disponibles = CV::whereNotNull('idiomas')->get()
 
         $query = CV::query();
 
-        // Filtro por categoría
         if (!empty($this->categoria_profesion)) {
             $query->whereRaw('LOWER(TRIM(categoria_profesion)) = ?', [trim(strtolower($this->categoria_profesion))]);
         }
 
-        // Solo públicos para empresa
         if (Auth::user()->role === 'empresa') {
             $query->where('publico', true);
         }
 
-       $cvs = $query->get();
+        $cvs = $query->get();
 
-// Si está activo "solo favoritos", filtrar los que estén en favoritos_ids
-if ($this->solo_favoritos && count($this->favoritos_ids)) {
-    $cvs = $cvs->filter(fn($cv) => in_array($cv->id, $this->favoritos_ids))->values();
-}
+        if ($this->solo_favoritos && count($this->favoritos_ids)) {
+            $cvs = $cvs->filter(fn($cv) => in_array($cv->id, $this->favoritos_ids))->values();
+        }
 
-
-        // Filtro por habilidades
         if (!empty($this->habilidades_seleccionadas)) {
             $cvs = $cvs->filter(function ($cv) {
                 $habilidadesCV = json_decode($cv->habilidades ?? '[]', true);
-
-                if (!is_array($habilidadesCV)) {
-                    return false;
-                }
+                if (!is_array($habilidadesCV)) return false;
 
                 foreach ($this->habilidades_seleccionadas as $habBuscada) {
                     foreach ($habilidadesCV as $habCV) {
@@ -105,36 +97,27 @@ if ($this->solo_favoritos && count($this->favoritos_ids)) {
                         }
                     }
                 }
-
                 return false;
             })->values();
         }
-        // Filtro por idiomas en PHP
-if (!empty($this->idiomas_seleccionados)) {
-    $cvs = $cvs->filter(function ($cv) {
-        $idiomasCV = json_decode($cv->idiomas ?? '[]', true);
 
-        if (!is_array($idiomasCV)) {
-            return false;
+        if (!empty($this->idiomas_seleccionados)) {
+            $cvs = $cvs->filter(function ($cv) {
+                $idiomasCV = json_decode($cv->idiomas ?? '[]', true);
+                if (!is_array($idiomasCV)) return false;
+
+                $idiomasCVNormalizados = array_map(fn($i) => trim(strtolower($i)), $idiomasCV);
+                foreach ($this->idiomas_seleccionados as $idiomaBuscado) {
+                    if (!in_array(trim(strtolower($idiomaBuscado)), $idiomasCVNormalizados)) {
+                        return false;
+                    }
+                }
+                return true;
+            })->values();
         }
-
-        $idiomasCVNormalizados = array_map(fn($i) => trim(strtolower($i)), $idiomasCV);
-
-        // Retornar solo si TODOS los idiomas seleccionados están en el CV
-        foreach ($this->idiomas_seleccionados as $idiomaBuscado) {
-            if (!in_array(trim(strtolower($idiomaBuscado)), $idiomasCVNormalizados)) {
-                return false; // Si falta uno, no pasa el filtro
-            }
-        }
-
-        return true; // Todos los idiomas están presentes
-    })->values();
-}
-
-
 
         return view('livewire.buscar-c-vs', [
-            'cvs' => $cvs,
+            'cvs' => ($this->mostrarResultados || $this->solo_favoritos) ? $cvs : collect(), // CONTROL DE RESULTADOS
         ]);
     }
 
