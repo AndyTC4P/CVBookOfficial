@@ -145,16 +145,19 @@
                 </div>
             @endif
 
-            {{-- Botón volver --}}
-            @auth
+{{-- Botón volver --}}
+@auth
     <div class="mt-8">
-        <a href="{{ route('cv.index') }}"
+        <a href="{{ url()->previous() !== url()->current()
+                    ? url()->previous()
+                    : (auth()->user()->role === 'empresa'
+                        ? route('admin.busqueda-cvs')
+                        : route('cv.index')) }}"
            class="px-4 py-2 bg-gray-500 text-white rounded-md shadow hover:bg-gray-600">
             🔙 Volver
         </a>
     </div>
 @endauth
-
         </div>
     </div>
 </x-app-layout>
