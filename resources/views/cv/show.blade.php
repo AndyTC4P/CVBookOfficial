@@ -7,14 +7,15 @@
         <div class="bg-white text-black overflow-hidden shadow-md rounded-lg p-6">
             {{-- Imagen y nombre --}}
             <div class="flex flex-col sm:flex-row items-center gap-6">
-                @if ($cv->imagen)
-                    <img src="{{ asset('storage/' . $cv->imagen) }}" alt="Foto de perfil"
-                         class="w-40 h-52 object-cover rounded-md shadow-md border border-gray-300">
-                @else
-                    <div class="w-40 h-52 bg-gray-200 rounded-md flex items-center justify-center text-gray-500">
-                        Sin imagen
-                    </div>
-                @endif
+               @php
+    $imagenPerfil = $cv->imagen && file_exists(public_path('storage/' . $cv->imagen))
+        ? asset('storage/' . $cv->imagen)
+        : asset('images/avatar.png');
+@endphp
+
+<img src="{{ $imagenPerfil }}" alt="Foto de perfil"
+     class="w-40 h-52 object-cover rounded-md shadow-md border border-gray-300">
+
 
                 <div>
                     <h1 class="text-3xl font-bold text-gray-900">

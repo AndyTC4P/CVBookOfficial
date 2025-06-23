@@ -7,6 +7,9 @@ use Livewire\WithFileUploads;
 use App\Models\CV;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver as GdDriver;
+
 
 class CvForm extends Component
 {
@@ -44,7 +47,9 @@ class CvForm extends Component
             'categoria_profesion' => 'required|string|max:255',
             'titulo_manual' => 'required|string|max:255',
             'perfil' => 'required|string|max:390',
-            'imagen' => $this->modo === 'crear' ? 'required|image|max:2048' : 'nullable|image|max:2048',
+            'imagen' => $this->modo === 'crear'
+    ? 'required|image|max:6144'
+    : 'nullable|image|max:6144',
             'correo' => 'required|email|max:255',
             'telefono' => 'required|string|max:20',
             'direccion' => 'required|string|max:255',
@@ -82,30 +87,56 @@ class CvForm extends Component
         'perfil.max' => 'El campo Perfil Profesional no debe superar los 390 caracteres.',
         'imagen.required' => 'Debe subir una imagen de perfil para continuar.',
         'imagen.image' => 'El archivo debe ser una imagen válida.',
-        'imagen.max' => 'La imagen no debe superar los 2MB.',
+        'imagen.max' => 'La imagen no debe superar los 6MB.',
     ];
 
     public function mount($cv = null)
     {
         $this->profesionesPorCategoria = [
-            'Tecnología e Informática',
-            'Salud',
-            'Educación',
-            'Ingenierías',
-            'Administración y Negocios',
-            'Derecho y Ciencias Jurídicas',
-            'Ciencias Sociales',
-            'Marketing y Ventas',
-            'Arte y Creatividad',
-            'Deportes y Recreación',
-            'Comunicación y Medios',
-            'Construcción y Mantenimiento',
-            'Transporte y Logística',
-            'Servicios Personales',
-            'Agroindustria y Medio Ambiente',
-            'Estudiante',
-            'Otro'
-        ];
+    'Administración y Finanzas',
+    'Agroindustria y Veterinaria',
+    'Artes Escénicas y Visuales',
+    'Ciencia de Datos e Inteligencia Artificial',
+    'Ciencias Ambientales',
+    'Ciencias Sociales y Humanidades',
+    'Cocina y Preparación de Alimentos',
+    'Comunicaciones y Medios',
+    'Construcción y Obras Civiles',
+    'Contabilidad y Auditoría',
+    'Derecho y Asistencia Legal',
+    'Diseño Gráfico y Multimedios',
+    'Diseño UX/UI',
+    'Docencia Técnica y Capacitación',
+    'Educación Inicial y Básica',
+    'Educación Media y Universitaria',
+    'Electricidad y Electrónica',
+    'Estudiantes y Primer Empleo',
+    'Fotografía y Producción Audiovisual',
+    'Freelancers y Servicios Independientes',
+    'Hospitalidad y Turismo',
+    'Ingeniería',
+    'Ingeniería en Sistemas',
+    'Logística y Distribución',
+    'Mantenimiento Industrial y Mecánica',
+    'Marketing Digital',
+    'Operaciones y Call Center',
+    'Personas con Discapacidad o Reincorporación',
+    'Producción y Manufactura',
+    'Publicidad y Comunicación Visual',
+    'Recursos Humanos',
+    'Salud - Enfermería',
+    'Salud - Medicina General',
+    'Salud - Odontología',
+    'Salud - Psicología',
+    'Seguridad y Vigilancia',
+    'Servicios Personales',
+    'Soporte Técnico y Redes',
+    'Tecnología y Desarrollo Web',
+    'Transporte y Conducción',
+    'Ventas y Atención al Cliente',
+    'Otro',
+];
+
 
         if ($cv) {
             $this->cv_id = $cv->id;
@@ -148,7 +179,33 @@ class CvForm extends Component
         $this->validate();
         $this->cvGuardado = true;
 
-        $imagenPath = $this->imagen ? $this->imagen->store('imagenes_perfil', 'public') : null;
+       $imagenPath = null;
+
+$imagenPath = null;
+
+if ($this->imagen) {
+    $imageName = Str::uuid() . '.' . $this->imagen->getClientOriginalExtension();
+
+    // ✅ Inicializar correctamente con el driver GD
+    $manager = new ImageManager(new GdDriver());
+
+    $image = $manager->read($this->imagen->getRealPath())
+        ->cover(300, 400)          // recorte centrado sin deformar
+        ->toJpeg(80);              // exportar como JPEG a 80% calidad
+
+    $rutaFinal = 'imagenes_perfil/' . $imageName;
+    \Storage::disk('public')->put($rutaFinal, (string) $image);
+    $imagenPath = $rutaFinal;
+
+    if ($this->modo === 'editar') {
+        $cv = CV::find($this->cv_id);
+        if ($cv && $cv->imagen && \Storage::disk('public')->exists($cv->imagen)) {
+            \Storage::disk('public')->delete($cv->imagen);
+        }
+    }
+}
+
+
 
         $idiomas = $this->idiomas;
         if (!empty($this->idioma_otro)) {

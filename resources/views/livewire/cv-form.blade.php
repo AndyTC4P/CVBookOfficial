@@ -65,24 +65,38 @@
             @error('perfil') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 
-        <!-- Imagen -->
-        <div>
-            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Imagen de Perfil</label>
-            <div class="flex items-center gap-3">
-                <label for="imagen" class="cursor-pointer px-4 py-2 bg-green-500 text-white rounded-md shadow hover:bg-green-600">
-                    📷 Seleccionar Imagen
-                </label>
-                <input type="file" id="imagen" wire:model="imagen" class="hidden">
-            </div>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">📌 Recomendación: 400x400 px, JPEG o PNG, máx 2MB.</p>
-            @if ($imagenSubida)
-    <div class="mt-2 text-green-600 dark:text-green-400 text-sm">
-        ✅ Imagen subida correctamente.
+<!-- Imagen -->
+<div>
+    <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Imagen de Perfil</label>
+    <div class="flex items-center gap-3">
+        <label for="imagen" class="cursor-pointer px-4 py-2 bg-green-500 text-white rounded-md shadow hover:bg-green-600">
+            📷 Seleccionar Imagen
+        </label>
+        <input type="file" id="imagen" wire:model="imagen" class="hidden">
     </div>
-@endif
+    <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">📌 Recomendación: 300x400 px, JPEG o PNG. 
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+    📌 La imagen se ajustará automáticamente a 300x400 px. Formato JPEG o PNG, máx. 1MB.
+</p>
+</p>
 
-            @error('imagen') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+    @if ($imagenSubida)
+        <div class="mt-2 text-green-600 dark:text-green-400 text-sm">
+            ✅ Imagen subida correctamente.
         </div>
+
+        {{-- Preview --}}
+        <div class="mt-2">
+            <img src="{{ $imagen->temporaryUrl() }}" alt="Vista previa"
+                 class="w-40 h-52 object-cover rounded-md border border-gray-300 shadow-sm">
+        </div>
+    @endif
+
+    @error('imagen') 
+        <span class="text-red-500 text-sm">{{ $message }}</span> 
+    @enderror
+</div>
+
 
         <!-- Correo -->
         <div>

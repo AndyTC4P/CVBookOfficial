@@ -5,6 +5,7 @@
     <title>CV - {{ $cv->nombre }} {{ $cv->apellido }}</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; }
 
         body {
             font-family: Arial, sans-serif;
@@ -18,9 +19,7 @@
             table-layout: fixed;
         }
 
-        .cv-row {
-            display: table-row;
-        }
+        .cv-row { display: table-row; }
 
         .left-column {
             display: table-cell;
@@ -41,6 +40,8 @@
 
         .photo-full {
             width: 100%;
+            max-height: 300px;
+            overflow: hidden;
             margin-bottom: 25px;
             background-color: #444;
             border: 2px solid #fff;
@@ -48,21 +49,21 @@
 
         .photo-full img {
             width: 100%;
+            max-height: 280px;
             height: auto;
             display: block;
-            object-fit: contain;
+            object-fit: cover;
         }
 
-        .section {
-            margin-bottom: 30px;
-        }
+        .section { margin-bottom: 35px; }
 
         .section h3 {
             font-size: 14px;
             text-transform: uppercase;
             margin-bottom: 12px;
-            border-bottom: 1px solid #444;
+            border-bottom: 1px solid #666;
             padding-bottom: 6px;
+            color: #fff;
         }
 
         .section p, .section li {
@@ -82,7 +83,7 @@
         .name {
             font-size: 26px;
             font-weight: bold;
-            margin-bottom: 4px;
+            margin-bottom: 8px;
             color: #111;
         }
 
@@ -105,11 +106,6 @@
             font-size: 12px;
             color: #999;
             margin-bottom: 5px;
-        }
-
-        .job-block p {
-            font-size: 14px;
-            line-height: 1.6;
         }
 
         .education-block h4 {
@@ -143,84 +139,108 @@
                 </div>
 
                 <div class="section">
-    <h3>Perfil Profesional</h3>
-    <div style="font-size: 11px; line-height: 1.6; word-break: break-word; white-space: pre-line;">
-        {!! nl2br(e($cv->perfil)) !!}
-    </div>
-</div>
-
+                    <h3>Perfil Profesional</h3>
+                    <div style="font-size: 11px; line-height: 1.6; word-break: break-word; white-space: pre-line;">
+                        {!! nl2br(e($cv->perfil)) !!}
+                    </div>
+                </div>
 
                 <div class="section">
                     <h3>Contacto</h3>
-                    <p>{{ $cv->correo }}</p>
-                    <p>{{ $cv->telefono }}</p>
+                    <p style="font-weight: bold; font-size: 12px; margin-bottom: 2px;">Correo:</p>
+                    <p style="margin-bottom: 10px;">{{ $cv->correo }}</p>
+
+                    <p style="font-weight: bold; font-size: 12px; margin-bottom: 2px;">Teléfono:</p>
+                    <p style="margin-bottom: 10px;">{{ $cv->telefono }}</p>
+
+                    <p style="font-weight: bold; font-size: 12px; margin-bottom: 2px;">Ubicación:</p>
                     <p>{{ $cv->ciudad }}, {{ $cv->pais }}</p>
                 </div>
 
                 <div class="section">
                     <h3>Habilidades</h3>
                     @php
-    $habilidades = is_array($cv->habilidades) ? $cv->habilidades : json_decode($cv->habilidades, true) ?? [];
-    $habilidadesLimitadas = array_slice($habilidades, 0, 5);
-@endphp
-<ul>
-    @foreach($habilidadesLimitadas as $habilidad)
-    <li style="white-space: normal;">{{ \Illuminate\Support\Str::limit($habilidad, 35) }}</li>
-    @endforeach
-</ul>
-
+                        $habilidades = is_array($cv->habilidades) ? $cv->habilidades : json_decode($cv->habilidades, true) ?? [];
+                        $habilidadesLimitadas = array_slice($habilidades, 0, 5);
+                    @endphp
+                    <ul>
+                        @foreach($habilidadesLimitadas as $habilidad)
+                            <li style="white-space: normal;">{{ \Illuminate\Support\Str::limit($habilidad, 35) }}</li>
+                        @endforeach
+                    </ul>
                 </div>
 
                 <div class="section">
-    <h3>Idiomas</h3>
-    @php
-        $idiomas = is_array($cv->idiomas) ? $cv->idiomas : json_decode($cv->idiomas, true) ?? [];
-        if (!empty($cv->otro_idioma)) {
-            $idiomas[] = $cv->otro_idioma;
-        }
-    @endphp
-    <p>{{ implode(', ', array_filter($idiomas)) }}</p>
-</div>
-
+                    <h3>Idiomas</h3>
+                    @php
+                        $idiomas = is_array($cv->idiomas) ? $cv->idiomas : json_decode($cv->idiomas, true) ?? [];
+                        if (!empty($cv->otro_idioma)) {
+                            $idiomas[] = $cv->otro_idioma;
+                        }
+                    @endphp
+                    <p>{{ implode(', ', array_filter($idiomas)) }}</p>
+                </div>
             </div>
 
             <!-- Columna derecha -->
             <div class="right-column">
+                @php use Carbon\Carbon; @endphp
+
                 <div class="name">{{ $cv->nombre }} {{ $cv->apellido }}</div>
                 <div class="position">{{ $cv->titulo }}</div>
 
                 <div class="section">
-                    <h3>Experiencia Laboral</h3>
+                    <h3 style="color: #111;">Experiencia Laboral</h3>
                     @php
                         $experiencias = is_array($cv->experiencia) ? $cv->experiencia : json_decode($cv->experiencia, true) ?? [];
                     @endphp
-                    @foreach($experiencias as $exp)
-    <div class="job-block">
-        <h4>{{ $exp['empresa'] ?? '' }} - {{ $exp['puesto'] ?? '' }}</h4>
-        <div class="date">
-            {{ $exp['inicio'] ?? 'Fecha no especificada' }} - {{ $exp['fin'] ?? 'Actual' }}
-        </div>
-        <div>{!! $exp['tareas'] ?? '' !!}</div>
-    </div>
-@endforeach
+                    @foreach(array_slice($experiencias, 0, 4) as $exp)
+                        <div class="job-block">
+                            <h4>{{ $exp['empresa'] ?? '' }} - {{ $exp['puesto'] ?? '' }}</h4>
+                            <div class="date">
+                                @php
+                                    $inicio = !empty($exp['inicio']) ? ucfirst(Carbon::parse($exp['inicio'])->translatedFormat('F, Y')) : 'Fecha no especificada';
+                                    $fin = !empty($exp['fin']) ? ucfirst(Carbon::parse($exp['fin'])->translatedFormat('F, Y')) : 'Actual';
+                                @endphp
+                                {{ $inicio }} - {{ $fin }}
+                            </div>
+
+                            @if(!empty($exp['tareas']))
+                                @php
+                                    $tareas = is_array($exp['tareas']) ? $exp['tareas'] : json_decode($exp['tareas'], true);
+                                    $tareas = array_slice($tareas ?? [], 0, 3);
+                                @endphp
+                                <ul style="padding-left: 18px; margin-top: 5px; list-style-type: disc;">
+                                    @foreach($tareas as $tarea)
+                                        <li style="margin-bottom: 4px; font-size: 13px; line-height: 1.5;">
+                                            {{ $tarea }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                        </div>
+                    @endforeach
                 </div>
 
                 <div class="section education-block">
-    <h3>Estudios Superiores</h3>
-    @php
-        $educacion = is_array($cv->educacion) ? $cv->educacion : json_decode($cv->educacion, true) ?? [];
-    @endphp
-    @foreach($educacion as $edu)
-        <div>
-            <h4>{{ $edu['centro'] ?? '' }} - {{ $edu['carrera'] ?? '' }}</h4>
-            <div class="date">
-                {{ $edu['inicio'] ?? 'Fecha no especificada' }} - {{ $edu['fin'] ?? 'Actual' }}
-            </div>
-        </div>
-        <br>
-    @endforeach
-</div>
-
+                    <h3 style="color: #111;">Estudios Superiores</h3>
+                    @php
+                        $educacion = is_array($cv->educacion) ? $cv->educacion : json_decode($cv->educacion, true) ?? [];
+                    @endphp
+                    @foreach($educacion as $edu)
+                        <div>
+                            <h4>{{ $edu['centro'] ?? '' }} - {{ $edu['carrera'] ?? '' }}</h4>
+                            <div class="date">
+                                @php
+                                    $eduInicio = !empty($edu['inicio']) ? ucfirst(Carbon::parse($edu['inicio'])->translatedFormat('F, Y')) : 'Fecha no especificada';
+                                    $eduFin = !empty($edu['fin']) ? ucfirst(Carbon::parse($edu['fin'])->translatedFormat('F, Y')) : 'Actual';
+                                @endphp
+                                {{ $eduInicio }} - {{ $eduFin }}
+                            </div>
+                        </div>
+                        <br>
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>
