@@ -51,53 +51,136 @@
                 </select>
             </div>
 
-            <!-- Habilidades -->
-            <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
-                <label class="block text-sm font-semibold text-white mb-1">Habilidades</label>
-                <p class="text-xs text-gray-400 mb-2">Selecciona una o varias habilidades específicas.</p>
-                <select wire:model="habilidades_seleccionadas" multiple size="6" class="w-full rounded border-gray-600 bg-gray-800 text-white px-3 py-2">
-                    @foreach($habilidades_disponibles as $hab)
-                        <option value="{{ $hab }}">{{ $hab }}</option>
-                    @endforeach
-                </select>
-                <p class="text-xs text-gray-500 mt-2 italic">Usa <kbd>Ctrl</kbd> o <kbd>Cmd</kbd> para selección múltiple.</p>
-            </div>
+          <!-- Filtro: Habilidades -->
+<div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
+    <label class="block text-sm font-semibold text-white mb-1">
+        Habilidades
+        <span class="text-gray-400 font-normal text-xs">(Puedes escribir y/o seleccionar de la lista de habilidades. Usa Ctrl (en Windows) o Cmd (en Mac) para selección múltiple.)</span>
+    </label>
 
-            <!-- Idiomas -->
-            <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
-                <label class="block text-sm font-semibold text-white mb-1">Idiomas</label>
-                <p class="text-xs text-gray-400 mb-2">Selecciona uno o varios idiomas que debe manejar el candidato.</p>
-                <select wire:model="idiomas_seleccionados" multiple size="6" class="w-full rounded border-gray-600 bg-gray-800 text-white px-3 py-2">
-                    @foreach($idiomas_disponibles as $idioma)
-                        <option value="{{ $idioma }}">{{ $idioma }}</option>
-                    @endforeach
-                </select>
-                <p class="text-xs text-gray-500 mt-2 italic">Usa <kbd>Ctrl</kbd> o <kbd>Cmd</kbd> para selección múltiple.</p>
-            </div>
+    <div 
+        x-data="{
+            texto: '',
+            sugerencias: @entangle('habilidades_disponibles'),
+            seleccionadas: @entangle('habilidades_seleccionadas'),
+            get filtradas() {
+                return this.texto.length > 0 
+                    ? this.sugerencias.filter(h => h.toLowerCase().includes(this.texto.toLowerCase()) && !this.seleccionadas.includes(h)) 
+                    : [];
+            },
+            agregar(hab) {
+                if (!this.seleccionadas.includes(hab)) {
+                    this.seleccionadas.push(hab);
+                }
+                this.texto = '';
+            },
+            eliminar(hab) {
+                this.seleccionadas = this.seleccionadas.filter(h => h !== hab);
+            }
+        }" class="relative">
+
+        <!-- Input con autocompletado -->
+        <input type="text"
+               x-model="texto"
+               placeholder="Escribe una habilidad..."
+               class="w-full rounded border border-gray-600 bg-gray-800 text-white px-3 py-2 mb-2"
+               @keydown.enter.prevent="if (filtradas.length) agregar(filtradas[0])">
+
+        <!-- Lista de sugerencias -->
+        <ul x-show="filtradas.length" class="absolute bg-gray-700 z-10 w-full rounded shadow max-h-40 overflow-auto border border-gray-600">
+            <template x-for="hab in filtradas" :key="hab">
+                <li @click="agregar(hab)" class="px-4 py-2 hover:bg-gray-600 text-sm text-white cursor-pointer" x-text="hab"></li>
+            </template>
+        </ul>
+
+        <!-- Select múltiple clásico -->
+        <select multiple
+                size="5"
+                wire:model="habilidades_seleccionadas"
+                class="w-full mt-2 rounded border-gray-600 bg-gray-800 text-white px-3 py-2">
+            @foreach($habilidades_disponibles as $hab)
+                <option value="{{ $hab }}">{{ $hab }}</option>
+            @endforeach
+        </select>
+
+        <!-- Etiquetas visuales -->
+        <div class="flex flex-wrap gap-2 mt-3">
+            <template x-for="hab in seleccionadas" :key="hab">
+                <span class="bg-blue-600 text-white px-2 py-1 text-xs rounded-full flex items-center gap-1">
+                    <span x-text="hab"></span>
+                    <button @click="eliminar(hab)" class="hover:text-red-400 text-white">×</button>
+                </span>
+            </template>
         </div>
-@if ($mostrarResultados || $solo_favoritos)
-    @php
-        $hayFiltros = $categoria_profesion || count($habilidades_seleccionadas) || count($idiomas_seleccionados);
-    @endphp
+    </div>
+</div>
 
-    @if ($hayFiltros)
-        <div class="bg-gray-900 p-4 rounded-md border border-gray-700 mb-4 text-sm text-white space-y-1 shadow">
-            <p class="font-semibold text-indigo-400">🎯 Mostrando resultados con los siguientes filtros:</p>
 
-            @if ($categoria_profesion)
-                <p><span class="font-semibold">Categoría:</span> {{ $categoria_profesion }}</p>
-            @endif
 
-            @if (count($habilidades_seleccionadas))
-                <p><span class="font-semibold">Habilidades:</span> {{ implode(', ', $habilidades_seleccionadas) }}</p>
-            @endif
+           <!-- Filtro: Idiomas -->
+<div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
+    <label class="block text-sm font-semibold text-white mb-1">
+        Idiomas
+        <span class="text-gray-400 font-normal text-xs">(Puedes escribir, seleccionar de la lista o ambas. Usa Ctrl o Cmd para selección múltiple.)</span>
+    </label>
 
-            @if (count($idiomas_seleccionados))
-                <p><span class="font-semibold">Idiomas:</span> {{ implode(', ', $idiomas_seleccionados) }}</p>
-            @endif
+    <div 
+        x-data="{
+            texto: '',
+            sugerencias: @entangle('idiomas_disponibles'),
+            seleccionadas: @entangle('idiomas_seleccionados'),
+            get filtradas() {
+                return this.texto.length > 0 
+                    ? this.sugerencias.filter(i => i.toLowerCase().includes(this.texto.toLowerCase()) && !this.seleccionadas.includes(i)) 
+                    : [];
+            },
+            agregar(idioma) {
+                if (!this.seleccionadas.includes(idioma)) {
+                    this.seleccionadas.push(idioma);
+                }
+                this.texto = '';
+            },
+            eliminar(idioma) {
+                this.seleccionadas = this.seleccionadas.filter(i => i !== idioma);
+            }
+        }" class="relative">
+
+        <!-- Input con autocompletado -->
+        <input type="text"
+               x-model="texto"
+               placeholder="Escribe un idioma..."
+               class="w-full rounded border border-gray-600 bg-gray-800 text-white px-3 py-2 mb-2"
+               @keydown.enter.prevent="if (filtradas.length) agregar(filtradas[0])">
+
+        <!-- Lista de sugerencias -->
+        <ul x-show="filtradas.length" class="absolute bg-gray-700 z-10 w-full rounded shadow max-h-40 overflow-auto border border-gray-600">
+            <template x-for="idioma in filtradas" :key="idioma">
+                <li @click="agregar(idioma)" class="px-4 py-2 hover:bg-gray-600 text-sm text-white cursor-pointer" x-text="idioma"></li>
+            </template>
+        </ul>
+
+        <!-- Select múltiple clásico -->
+        <select multiple
+                size="5"
+                wire:model="idiomas_seleccionados"
+                class="w-full mt-2 rounded border-gray-600 bg-gray-800 text-white px-3 py-2">
+            @foreach($idiomas_disponibles as $idioma)
+                <option value="{{ $idioma }}">{{ $idioma }}</option>
+            @endforeach
+        </select>
+
+        <!-- Etiquetas visuales -->
+        <div class="flex flex-wrap gap-2 mt-3">
+            <template x-for="idioma in seleccionadas" :key="idioma">
+                <span class="bg-green-600 text-white px-2 py-1 text-xs rounded-full flex items-center gap-1">
+                    <span x-text="idioma"></span>
+                    <button @click="eliminar(idioma)" class="hover:text-red-400 text-white">×</button>
+                </span>
+            </template>
         </div>
-    @endif
-@endif
+    </div>
+</div>
+
 
         <!-- Botones -->
         <div class="mt-4 flex flex-wrap gap-4">
