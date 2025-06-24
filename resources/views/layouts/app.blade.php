@@ -5,7 +5,27 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+       <title>CV Book | Encuentra talento profesional</title>
+<link rel="icon" type="image/svg+xml" href="{{ asset('images/logo_sivi.png') }}">
+
+<!-- SEO Básico -->
+<meta name="title" content="CV Book | Encuentra talento profesional de forma rápida">
+<meta name="description" content="CV Book conecta empresas con candidatos ideales usando filtros inteligentes: habilidades, idiomas y más.">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ url()->current() }}">
+<meta property="og:title" content="CV Book | Encuentra talento profesional">
+<meta property="og:description" content="Explora CVs públicos filtrando por habilidades, idiomas y categoría profesional.">
+<meta property="og:image" content="{{ url('images/logo_sivi.png') }}">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CV Book | Encuentra talento profesional">
+<meta name="twitter:description" content="Filtra CVs por habilidades, idiomas y más. Plataforma intuitiva para reclutadores.">
+<meta name="twitter:image" content="{{ url('images/logo_sivi.png') }}">
+
+
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
