@@ -75,6 +75,29 @@
                 <p class="text-xs text-gray-500 mt-2 italic">Usa <kbd>Ctrl</kbd> o <kbd>Cmd</kbd> para selección múltiple.</p>
             </div>
         </div>
+@if ($mostrarResultados || $solo_favoritos)
+    @php
+        $hayFiltros = $categoria_profesion || count($habilidades_seleccionadas) || count($idiomas_seleccionados);
+    @endphp
+
+    @if ($hayFiltros)
+        <div class="bg-gray-900 p-4 rounded-md border border-gray-700 mb-4 text-sm text-white space-y-1 shadow">
+            <p class="font-semibold text-indigo-400">🎯 Mostrando resultados con los siguientes filtros:</p>
+
+            @if ($categoria_profesion)
+                <p><span class="font-semibold">Categoría:</span> {{ $categoria_profesion }}</p>
+            @endif
+
+            @if (count($habilidades_seleccionadas))
+                <p><span class="font-semibold">Habilidades:</span> {{ implode(', ', $habilidades_seleccionadas) }}</p>
+            @endif
+
+            @if (count($idiomas_seleccionados))
+                <p><span class="font-semibold">Idiomas:</span> {{ implode(', ', $idiomas_seleccionados) }}</p>
+            @endif
+        </div>
+    @endif
+@endif
 
         <!-- Botones -->
         <div class="mt-4 flex flex-wrap gap-4">
