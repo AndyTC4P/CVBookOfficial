@@ -21,6 +21,8 @@ class EmpresaRegisterController extends Controller
             'nombre_contacto' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
+            'politica_privacidad' => 'accepted',
+            'g-recaptcha-response' => 'required|captcha', // 🔐 validación del captcha
         ]);
 
         User::create([
@@ -34,4 +36,5 @@ class EmpresaRegisterController extends Controller
         return redirect()->route('login')->with('status', 'Registro enviado. Un administrador revisará tu solicitud.');
     }
 }
+
 
