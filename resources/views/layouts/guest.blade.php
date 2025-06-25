@@ -37,7 +37,7 @@
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
             <div>
                 <a href="/" wire:navigate>
-                    <img src="{{ asset('images/logo_cvbook.svg') }}" alt="CV Book Logo" class="w-20 h-20">
+                    <img src="{{ asset('images/logo_sivi.png') }}" alt="CV Book Logo" class="w-20 h-20">
                 </a>
             </div>
 

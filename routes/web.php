@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\EmpresaController;
 
 
 
+
 Route::get('/admin/dashboard', function () {
     if (auth()->check() && auth()->user()->role === 'admin') {
        $users = User::all();
@@ -138,5 +139,9 @@ Route::middleware('auth')->group(function () {
 Route::get('/empresa/esperando-aprobacion', function () {
     return view('empresa.esperando-aprobacion');
 })->middleware('auth')->name('empresa.esperando');
+Route::delete('/admin/eliminar-usuario/{id}', [AdminController::class, 'eliminarUsuario'])
+    ->middleware(['auth']) // Aquí eliminamos 'admin'
+    ->name('admin.eliminarUsuario');
+
 
 
