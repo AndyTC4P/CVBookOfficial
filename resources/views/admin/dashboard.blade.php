@@ -35,6 +35,17 @@
                 </div>
             </div>
         @endif
+{{-- HABILIDADES RESTRINGIDAS --}}
+<div class="mt-8">
+    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+        🚫 Habilidades Restringidas
+    </h3>
+
+    <div class="bg-gray-900 text-white rounded-lg p-4 shadow-md">
+        @livewire('admin-habilidades')
+    </div>
+</div>
+
 
         {{-- USUARIOS --}}
         <div>

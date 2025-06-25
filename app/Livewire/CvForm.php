@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver as GdDriver;
+use App\Models\Habilidad;
+
 
 
 class CvForm extends Component
@@ -179,6 +181,27 @@ class CvForm extends Component
     public function save()
     {
         $this->validate();
+        // Validar si alguna habilidad está restringida
+$habilidadesRestringidas = \App\Models\Habilidad::whereIn('nombre', $this->habilidades)
+    ->where('restringida', true)
+    ->pluck('nombre')
+    ->toArray();
+
+if (!empty($habilidadesRestringidas)) {
+    $nombres = implode(', ', $habilidadesRestringidas);
+    $this->addError('habilidades', "Las siguientes habilidades no están permitidas: $nombres");
+    return;
+}
+
+// Registrar habilidades nuevas automáticamente
+foreach ($this->habilidades as $nombre) {
+    if (!empty($nombre)) {
+        \App\Models\Habilidad::firstOrCreate([
+            'nombre' => trim($nombre),
+        ]);
+    }
+}
+
         $this->cvGuardado = true;
 
        $imagenPath = null;
