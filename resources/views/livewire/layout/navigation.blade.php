@@ -109,19 +109,34 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="sm:hidden">
         @auth
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('cv.index')" :active="request()->routeIs('cv.index')" wire:navigate>
-                📄 {{ __('Mis CVs') }}
-            </x-responsive-nav-link>
+       <div class="pt-2 pb-3 space-y-1">
+    @if (Auth::user()->isEmpresa())
+        <x-responsive-nav-link :href="route('admin.busqueda-cvs')" :active="request()->routeIs('admin.busqueda-cvs')">
+            🔍 {{ __('Buscar CVs') }}
+        </x-responsive-nav-link>
+    @elseif (Auth::user()->isUsuario())
+        <x-responsive-nav-link :href="route('cv.index')" :active="request()->routeIs('cv.index')" wire:navigate>
+            📄 {{ __('Mis CVs') }}
+        </x-responsive-nav-link>
+        <x-responsive-nav-link :href="route('cv.create')" :active="request()->routeIs('cv.create')" wire:navigate>
+            ✍️ {{ __('Crear CV') }}
+        </x-responsive-nav-link>
+    @elseif (Auth::user()->isAdmin())
+        <x-responsive-nav-link :href="route('cv.index')" :active="request()->routeIs('cv.index')" wire:navigate>
+            📄 {{ __('Mis CVs') }}
+        </x-responsive-nav-link>
+        <x-responsive-nav-link :href="route('cv.create')" :active="request()->routeIs('cv.create')" wire:navigate>
+            ✍️ {{ __('Crear CV') }}
+        </x-responsive-nav-link>
+        <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" wire:navigate>
+            🛠️ {{ __('Admin Dashboard') }}
+        </x-responsive-nav-link>
+        <x-responsive-nav-link :href="route('admin.busqueda-cvs')" :active="request()->routeIs('admin.busqueda-cvs')">
+            🔍 {{ __('Buscar CVs') }}
+        </x-responsive-nav-link>
+    @endif
+</div>
 
-            <x-responsive-nav-link :href="route('cv.create')" :active="request()->routeIs('cv.create')" wire:navigate>
-    ✍️ {{ __('Crear CV') }}
-</x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" wire:navigate>
-    🛠️ {{ __('Admin Dashboard') }}
-</x-responsive-nav-link>
-
-        </div>
         @endauth
 
         <!-- Responsive Settings Options -->
