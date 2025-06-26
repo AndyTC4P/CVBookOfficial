@@ -19,61 +19,55 @@ class BuscarCVs extends Component
     public $solo_favoritos = false;
     public $idiomas_disponibles = [];
     public $idiomas_seleccionados = [];
-    public $mostrarResultados = false; // NUEVO
+    public $mostrarResultados = false;
 
     public function mount()
-{
-    if (!auth()->check() || auth()->user()->isUsuario()) {
-        abort(403);
+    {
+        if (!auth()->check() || auth()->user()->isUsuario()) {
+            abort(403);
+        }
+
+        $this->favoritos_ids = auth()->user()->favoritos->pluck('id')->toArray();
+        $this->categoria_profesion = '';
+
+        $this->categorias = DB::table('cvs')
+            ->select('categoria_profesion')
+            ->distinct()
+            ->whereNotNull('categoria_profesion')
+            ->pluck('categoria_profesion')
+            ->toArray();
+
+        $habilidadesRestringidas = Habilidad::where('restringida', true)
+            ->pluck('nombre')
+            ->map(fn($h) => strtolower(trim($h)))
+            ->toArray();
+
+        $this->habilidades_disponibles = CV::whereNotNull('habilidades')->get()
+            ->flatMap(function ($cv) {
+                $habilidades = json_decode($cv->habilidades ?? '[]', true);
+                return is_array($habilidades) ? $habilidades : [];
+            })
+            ->map(fn($h) => trim($h))
+            ->reject(fn($h) => in_array(strtolower($h), $habilidadesRestringidas))
+            ->unique()
+            ->values()
+            ->toArray();
+
+        $this->idiomas_disponibles = CV::whereNotNull('idiomas')->get()
+            ->flatMap(function ($cv) {
+                $idiomas = json_decode($cv->idiomas ?? '[]', true);
+                return collect($idiomas)
+                    ->pluck('nombre')
+                    ->filter()
+                    ->map(fn($nombre) => trim($nombre));
+            })
+            ->unique()
+            ->sort()
+            ->values()
+            ->toArray();
     }
 
-    $this->favoritos_ids = auth()->user()->favoritos->pluck('id')->toArray();
-    $this->categoria_profesion = '';
-
-    $this->categorias = DB::table('cvs')
-        ->select('categoria_profesion')
-        ->distinct()
-        ->whereNotNull('categoria_profesion')
-        ->pluck('categoria_profesion')
-        ->toArray();
-
-    // Obtener habilidades disponibles, excluyendo las restringidas
-    $habilidadesRestringidas = Habilidad::where('restringida', true)
-        ->pluck('nombre')
-        ->map(fn($h) => strtolower(trim($h)))
-        ->toArray();
-
-    $this->habilidades_disponibles = CV::whereNotNull('habilidades')->get()
-        ->flatMap(function ($cv) {
-            $habilidades = json_decode($cv->habilidades ?? '[]', true);
-            return is_array($habilidades) ? $habilidades : [];
-        })
-        ->map(fn($h) => trim($h))
-        ->reject(function ($h) use ($habilidadesRestringidas) {
-            return in_array(strtolower($h), $habilidadesRestringidas);
-        })
-        ->unique()
-        ->values()
-        ->toArray();
-
-    // Idiomas disponibles
-    $this->idiomas_disponibles = CV::whereNotNull('idiomas')->get()
-    ->flatMap(function ($cv) {
-        $idiomas = json_decode($cv->idiomas ?? '[]', true);
-        return collect($idiomas)
-            ->pluck('nombre')
-            ->filter()
-            ->map(fn($nombre) => trim($nombre));
-    })
-    ->unique()
-    ->sort()
-    ->values()
-    ->toArray();
-
-}
-
-
-    public function aplicarFiltros() // NUEVO
+    public function aplicarFiltros()
     {
         $this->mostrarResultados = true;
     }
@@ -87,12 +81,12 @@ class BuscarCVs extends Component
 
         $query = CV::query();
 
-        if (!empty($this->categoria_profesion)) {
-            $query->whereRaw('LOWER(TRIM(categoria_profesion)) = ?', [trim(strtolower($this->categoria_profesion))]);
-        }
-
         if (Auth::user()->role === 'empresa') {
             $query->where('publico', true);
+        }
+
+        if (!empty($this->categoria_profesion)) {
+            $query->whereRaw('LOWER(TRIM(categoria_profesion)) = ?', [trim(strtolower($this->categoria_profesion))]);
         }
 
         $cvs = $query->get();
@@ -101,32 +95,26 @@ class BuscarCVs extends Component
             $cvs = $cvs->filter(fn($cv) => in_array($cv->id, $this->favoritos_ids))->values();
         }
 
-       if (!empty($this->habilidades_seleccionadas)) {
-    $habilidadesRestringidas = Habilidad::where('restringida', true)
-        ->pluck('nombre')
-        ->map(fn($h) => strtolower(trim($h)))
-        ->toArray();
+        if (!empty($this->habilidades_seleccionadas)) {
+            $habilidadesRestringidas = Habilidad::where('restringida', true)
+                ->pluck('nombre')
+                ->map(fn($h) => strtolower(trim($h)))
+                ->toArray();
 
-    $habilidadesPermitidas = collect($this->habilidades_seleccionadas)
-        ->filter(fn($h) => !in_array(strtolower(trim($h)), $habilidadesRestringidas))
-        ->map(fn($h) => strtolower(trim($h)))
-        ->toArray();
+            $habilidadesPermitidas = collect($this->habilidades_seleccionadas)
+                ->filter(fn($h) => !in_array(strtolower(trim($h)), $habilidadesRestringidas))
+                ->map(fn($h) => strtolower(trim($h)))
+                ->toArray();
 
-    $cvs = $cvs->filter(function ($cv) use ($habilidadesPermitidas) {
-        $habilidadesCV = json_decode($cv->habilidades ?? '[]', true);
-        if (!is_array($habilidadesCV)) return false;
+            $cvs = $cvs->filter(function ($cv) use ($habilidadesPermitidas) {
+                $habilidadesCV = json_decode($cv->habilidades ?? '[]', true);
+                if (!is_array($habilidadesCV)) return false;
 
-        $habilidadesCVNormalizadas = array_map(fn($h) => strtolower(trim($h)), $habilidadesCV);
+                $habilidadesCVNormalizadas = array_map(fn($h) => strtolower(trim($h)), $habilidadesCV);
 
-        foreach ($habilidadesPermitidas as $habBuscada) {
-            if (in_array($habBuscada, $habilidadesCVNormalizadas)) {
-                return true;
-            }
+                return count(array_intersect($habilidadesPermitidas, $habilidadesCVNormalizadas)) === count($habilidadesPermitidas);
+            })->values();
         }
-        return false;
-    })->values();
-}
-
 
         if (!empty($this->idiomas_seleccionados)) {
             $cvs = $cvs->filter(function ($cv) {
@@ -134,10 +122,10 @@ class BuscarCVs extends Component
                 if (!is_array($idiomasCV)) return false;
 
                 $idiomasCVNormalizados = collect($idiomasCV)
-    ->pluck('nombre')
-    ->filter()
-    ->map(fn($nombre) => trim(strtolower($nombre)))
-    ->toArray();
+                    ->pluck('nombre')
+                    ->filter()
+                    ->map(fn($nombre) => trim(strtolower($nombre)))
+                    ->toArray();
 
                 foreach ($this->idiomas_seleccionados as $idiomaBuscado) {
                     if (!in_array(trim(strtolower($idiomaBuscado)), $idiomasCVNormalizados)) {
@@ -149,7 +137,7 @@ class BuscarCVs extends Component
         }
 
         return view('livewire.buscar-c-vs', [
-            'cvs' => ($this->mostrarResultados || $this->solo_favoritos) ? $cvs : collect(), // CONTROL DE RESULTADOS
+            'cvs' => ($this->mostrarResultados || $this->solo_favoritos) ? $cvs : collect(),
         ]);
     }
 
