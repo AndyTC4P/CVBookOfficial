@@ -183,29 +183,30 @@
 
 
         <!-- Botones -->
-<div class="mt-4 flex flex-wrap gap-4 items-center">
-    <button
-        wire:click="aplicarFiltros"
-        class="px-4 py-2 bg-indigo-600 text-white rounded-md font-semibold shadow hover:bg-indigo-700 text-sm">
-        🔍 Aplicar filtros
-    </button>
+        <div class="mt-4 flex flex-wrap gap-4">
+            <button
+                wire:click="aplicarFiltros"
+                class="px-4 py-2 bg-indigo-600 text-white rounded-md font-semibold shadow hover:bg-indigo-700 text-sm">
+                🔍 Aplicar filtros
+            </button>
 
-    <button
-        wire:click="$toggle('solo_favoritos')"
-        class="px-4 py-2 rounded-md font-semibold shadow transition text-sm
-               {{ $solo_favoritos 
-                    ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-500 ring-1 ring-yellow-300' 
-                    : 'bg-gray-700 text-white hover:bg-gray-600' }}">
-        {{ $solo_favoritos ? '✓ Mostrando solo favoritos' : 'Mostrar solo favoritos' }}
-    </button>
+            <button
+                wire:click="$toggle('solo_favoritos')"
+                class="px-4 py-2 rounded-md font-semibold shadow transition text-sm
+                       {{ $solo_favoritos 
+                            ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-500 ring-1 ring-yellow-300' 
+                            : 'bg-gray-700 text-white hover:bg-gray-600' }}">
+                {{ $solo_favoritos ? '✓ Mostrando solo favoritos' : 'Mostrar solo favoritos' }}
+            </button>
+            <!-- Botón: Reiniciar filtros -->
+<button
+    wire:click="reiniciarFiltros"
+    class="px-4 py-2 bg-red-600 text-white rounded-md font-semibold shadow hover:bg-red-700 text-sm">
+    🔄 Reiniciar filtros
+</button>
 
-    <button
-        wire:click="reiniciarFiltros"
-        class="px-4 py-2 bg-red-600 text-white rounded-md font-semibold shadow hover:bg-red-700 text-sm">
-        🔄 Reiniciar filtros
-    </button>
-</div>
-
+        </div>
+    </div>
 
     <!-- Mensaje -->
     @if ($mensaje)
@@ -296,17 +297,18 @@
         </div>
     @endif
 
-    <!-- Mensaje Sivi responsivo -->
-<div class="flex flex-col sm:flex-row items-center gap-4 bg-gray-800 border border-gray-700 rounded-lg px-4 py-4 mb-4 shadow">
-    <img src="{{ asset('images/sivigif.gif') }}" alt="Sivi icono" class="w-20 h-20 rounded-full object-contain">
-    <p class="text-sm text-gray-300 text-center sm:text-left m-0">
-        ¿Necesitas ayuda para encontrar el perfil ideal?
-        <a href="https://chat.openai.com/g/g-682e161092d08191bef1a1f6f879ae6f-sivi-asistente-cvbook"
-           target="_blank"
-           class="text-indigo-400 font-semibold hover:underline">
-            Habla con Sivi, nuestra asistente virtual.
-        </a>
-    </p>
+    <!-- Mensaje Sivi -->
+    <div class="flex items-center gap-3 bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 mb-4 shadow w-fit">
+        <img src="{{ asset('images/sivigif.gif') }}" alt="Sivi icono" class="w-10 h-10 rounded-full">
+        <p class="text-sm text-gray-300 m-0">
+            ¿Necesitas ayuda para encontrar el perfil ideal?
+            <a href="https://chat.openai.com/g/g-682e161092d08191bef1a1f6f879ae6f-sivi-asistente-cvbook"
+               target="_blank"
+               class="text-indigo-400 font-semibold hover:underline">
+                Habla con Sivi, nuestra asistente virtual.
+            </a>
+        </p>
+    </div>
 </div>
 
 
