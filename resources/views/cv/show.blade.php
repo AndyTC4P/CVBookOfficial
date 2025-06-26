@@ -133,18 +133,19 @@
             @endif
 
             {{-- Idiomas --}}
-            @if ($cv->idiomas)
-                <div class="mt-6">
-                    <h3 class="text-lg font-semibold text-gray-800">Idiomas</h3>
-                    <ul class="flex flex-wrap gap-2 text-sm mt-2">
-                        @foreach (json_decode($cv->idiomas, true) as $idioma)
-                            <li class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full">
-                                {{ $idioma }}
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+@if ($cv->idiomas)
+    <div class="mt-6">
+        <h3 class="text-lg font-semibold text-gray-800">Idiomas</h3>
+        <ul class="list-disc list-inside text-sm text-gray-700 mt-2">
+            @foreach (json_decode($cv->idiomas, true) as $idioma)
+                @if (is_array($idioma) && isset($idioma['nombre'], $idioma['nivel']))
+                    <li>{{ $idioma['nombre'] }} – {{ ucfirst($idioma['nivel']) }}</li>
+                @endif
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 
 {{-- Botón volver --}}
 @auth

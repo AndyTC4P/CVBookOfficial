@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>CV - {{ $cv->nombre }} {{ $cv->apellido }}</title>
     <style>
+        @page { margin: 0; }
+body { margin: 0; padding: 0; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { height: 100%; }
 
@@ -55,7 +57,7 @@
             object-fit: cover;
         }
 
-        .section { margin-bottom: 35px; }
+        .section { margin-bottom: 35px;  page-break-inside: avoid; }
 
         .section h3 {
             font-size: 14px;
@@ -146,16 +148,19 @@
                 </div>
 
                 <div class="section">
-                    <h3>Contacto</h3>
-                    <p style="font-weight: bold; font-size: 12px; margin-bottom: 2px;">Correo:</p>
-                    <p style="margin-bottom: 10px;">{{ $cv->correo }}</p>
+    <h3>Contacto</h3>
 
-                    <p style="font-weight: bold; font-size: 12px; margin-bottom: 2px;">Teléfono:</p>
-                    <p style="margin-bottom: 10px;">{{ $cv->telefono }}</p>
+    <p style="font-size: 12px; margin-bottom: 2px;">
+        <strong>Teléfono:</strong> {{ $cv->telefono }}
+    </p>
+    <p style="font-size: 12px; margin-bottom: 10px;">
+        <strong>Correo:</strong> {{ $cv->correo }}
+    </p>
 
-                    <p style="font-weight: bold; font-size: 12px; margin-bottom: 2px;">Ubicación:</p>
-                    <p>{{ $cv->ciudad }}, {{ $cv->pais }}</p>
-                </div>
+    <p style="font-weight: bold; font-size: 12px; margin-bottom: 2px;">Ubicación:</p>
+    <p style="font-size: 12px;">{{ $cv->ciudad }}, {{ $cv->pais }}</p>
+</div>
+
 
                 <div class="section">
                     <h3>Habilidades</h3>
@@ -170,16 +175,26 @@
                     </ul>
                 </div>
 
-                <div class="section">
-                    <h3>Idiomas</h3>
-                    @php
-                        $idiomas = is_array($cv->idiomas) ? $cv->idiomas : json_decode($cv->idiomas, true) ?? [];
-                        if (!empty($cv->otro_idioma)) {
-                            $idiomas[] = $cv->otro_idioma;
-                        }
-                    @endphp
-                    <p>{{ implode(', ', array_filter($idiomas)) }}</p>
-                </div>
+               <div class="section">
+    <h3>Idiomas</h3>
+    @php
+        $idiomas = is_array($cv->idiomas) ? $cv->idiomas : json_decode($cv->idiomas, true) ?? [];
+        if (!empty($cv->otro_idioma)) {
+            $idiomas[] = $cv->otro_idioma;
+        }
+        $idiomas = array_slice($idiomas, 0, 4); // Limita a máximo 4
+    @endphp
+    <ul style="padding-left: 1rem; margin: 0;">
+        @foreach ($idiomas as $idioma)
+            @if (is_array($idioma) && isset($idioma['nombre'], $idioma['nivel']))
+                <li>{{ $idioma['nombre'] }} – {{ ucfirst($idioma['nivel']) }}</li>
+            @elseif (is_string($idioma))
+                <li>{{ $idioma }}</li>
+            @endif
+        @endforeach
+    </ul>
+</div>
+
             </div>
 
             <!-- Columna derecha -->

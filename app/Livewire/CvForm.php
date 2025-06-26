@@ -11,8 +11,6 @@ use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver as GdDriver;
 use App\Models\Habilidad;
 
-
-
 class CvForm extends Component
 {
     use WithFileUploads;
@@ -33,13 +31,20 @@ class CvForm extends Component
     public $experiencia = [];
     public $educacion = [];
     public $habilidades = [];
-    public $idiomas = [];
-    public $idioma_otro = '';
+    public array $idiomas = [];
     public $publico = false;
     public $modo = 'crear';
 
     public bool $cvGuardado = false;
     public bool $imagenSubida = false;
+    public array $idiomasDisponibles = [
+    'Español', 'Inglés', 'Francés', 'Alemán', 'Italiano', 'Portugués',
+    'Japonés', 'Chino', 'Coreano', 'Árabe', 'Ruso', 'Hindi',
+    'Turco', 'Sueco', 'Noruego', 'Danés', 'Finés', 'Griego',
+    'Hebreo', 'Polaco', 'Checo', 'Húngaro', 'Rumano', 'Búlgaro',
+    'Tailandés', 'Vietnamita', 'Indonesio', 'Neerlandés', 'Ucraniano', 'Swahili'
+];
+
 
     public function rules()
     {
@@ -50,8 +55,8 @@ class CvForm extends Component
             'titulo_manual' => 'required|string|max:255',
             'perfil' => 'required|string|min:50|max:390',
             'imagen' => $this->modo === 'crear'
-    ? 'required|image|max:6144'
-    : 'nullable|image|max:6144',
+                ? 'required|image|max:6144'
+                : 'nullable|image|max:6144',
             'correo' => 'required|email|max:255',
             'telefono' => 'required|string|max:20',
             'direccion' => 'required|string|max:255',
@@ -60,8 +65,8 @@ class CvForm extends Component
             'habilidades' => 'nullable|array|min:5',
             'habilidades.*' => 'required|string|max:35',
             'idiomas' => 'nullable|array',
-            'idiomas.*' => 'required|string|max:100',
-            'idioma_otro' => 'nullable|string|max:100',
+            'idiomas.*.nombre' => 'required|string|max:100',
+            'idiomas.*.nivel' => 'required|in:básico,intermedio,avanzado,nativo',
             'experiencia' => 'nullable|array',
             'experiencia.*.empresa' => 'required|string|max:255',
             'experiencia.*.puesto' => 'required|string|max:255',
@@ -91,12 +96,11 @@ class CvForm extends Component
         'imagen.image' => 'El archivo debe ser una imagen válida.',
         'imagen.max' => 'La imagen no debe superar los 6MB.',
         'perfil.min' => 'El campo Perfil Profesional debe tener al menos 50 caracteres.',
-
     ];
 
     public function mount($cv = null)
     {
-        $this->profesionesPorCategoria = [
+       $this->profesionesPorCategoria = [
     'Administración y Finanzas',
     'Agroindustria y Veterinaria',
     'Artes Escénicas y Visuales',
@@ -141,7 +145,6 @@ class CvForm extends Component
     'Otro',
 ];
 
-
         if ($cv) {
             $this->cv_id = $cv->id;
             $this->nombre = $cv->nombre;
@@ -157,21 +160,18 @@ class CvForm extends Component
             $this->habilidades = is_array($cv->habilidades) ? $cv->habilidades : json_decode($cv->habilidades, true) ?? [];
 
             $idiomasCargados = is_array($cv->idiomas) ? $cv->idiomas : json_decode($cv->idiomas, true) ?? [];
-            $idiomasPredefinidos = ['Español', 'Inglés', 'Francés', 'Alemán', 'Portugués', 'Italiano'];
-
-            $this->idiomas = array_filter($idiomasCargados, fn($i) => in_array($i, $idiomasPredefinidos));
-            $this->idioma_otro = collect($idiomasCargados)->diff($idiomasPredefinidos)->first() ?? '';
+            $this->idiomas = collect($idiomasCargados)
+                ->filter(fn($i) => is_array($i) && isset($i['nombre'], $i['nivel']))
+                ->values()
+                ->toArray();
 
             $this->publico = (bool) $cv->publico;
-
             $this->experiencia = is_array($cv->experiencia)
                 ? $cv->experiencia
                 : json_decode($cv->experiencia, true) ?? [];
-
             $this->educacion = is_array($cv->educacion)
                 ? $cv->educacion
                 : json_decode($cv->educacion, true) ?? [];
-
             $this->modo = 'editar';
         }
 
@@ -181,61 +181,48 @@ class CvForm extends Component
     public function save()
     {
         $this->validate();
-        // Validar si alguna habilidad está restringida
-$habilidadesRestringidas = \App\Models\Habilidad::whereIn('nombre', $this->habilidades)
-    ->where('restringida', true)
-    ->pluck('nombre')
-    ->toArray();
 
-if (!empty($habilidadesRestringidas)) {
-    $nombres = implode(', ', $habilidadesRestringidas);
-    $this->addError('habilidades', "Las siguientes habilidades no están permitidas: $nombres");
-    return;
-}
+        $habilidadesRestringidas = Habilidad::whereIn('nombre', $this->habilidades)
+            ->where('restringida', true)
+            ->pluck('nombre')
+            ->toArray();
 
-// Registrar habilidades nuevas automáticamente
-foreach ($this->habilidades as $nombre) {
-    if (!empty($nombre)) {
-        \App\Models\Habilidad::firstOrCreate([
-            'nombre' => trim($nombre),
-        ]);
-    }
-}
+        if (!empty($habilidadesRestringidas)) {
+            $nombres = implode(', ', $habilidadesRestringidas);
+            $this->addError('habilidades', "Las siguientes habilidades no están permitidas: $nombres");
+            return;
+        }
+
+        foreach ($this->habilidades as $nombre) {
+            if (!empty($nombre)) {
+                Habilidad::firstOrCreate(['nombre' => trim($nombre)]);
+            }
+        }
 
         $this->cvGuardado = true;
+        $imagenPath = null;
 
-       $imagenPath = null;
+        if ($this->imagen) {
+            $imageName = Str::uuid() . '.' . $this->imagen->getClientOriginalExtension();
+            $manager = new ImageManager(new GdDriver());
+            $image = $manager->read($this->imagen->getRealPath())
+                ->cover(300, 400)
+                ->toJpeg(80);
+            $rutaFinal = 'imagenes_perfil/' . $imageName;
+            \Storage::disk('public')->put($rutaFinal, (string) $image);
+            $imagenPath = $rutaFinal;
 
-$imagenPath = null;
-
-if ($this->imagen) {
-    $imageName = Str::uuid() . '.' . $this->imagen->getClientOriginalExtension();
-
-    // ✅ Inicializar correctamente con el driver GD
-    $manager = new ImageManager(new GdDriver());
-
-    $image = $manager->read($this->imagen->getRealPath())
-        ->cover(300, 400)          // recorte centrado sin deformar
-        ->toJpeg(80);              // exportar como JPEG a 80% calidad
-
-    $rutaFinal = 'imagenes_perfil/' . $imageName;
-    \Storage::disk('public')->put($rutaFinal, (string) $image);
-    $imagenPath = $rutaFinal;
-
-    if ($this->modo === 'editar') {
-        $cv = CV::find($this->cv_id);
-        if ($cv && $cv->imagen && \Storage::disk('public')->exists($cv->imagen)) {
-            \Storage::disk('public')->delete($cv->imagen);
+            if ($this->modo === 'editar') {
+                $cv = CV::find($this->cv_id);
+                if ($cv && $cv->imagen && \Storage::disk('public')->exists($cv->imagen)) {
+                    \Storage::disk('public')->delete($cv->imagen);
+                }
+            }
         }
-    }
-}
 
-
-
-        $idiomas = $this->idiomas;
-        if (!empty($this->idioma_otro)) {
-            $idiomas[] = $this->idioma_otro;
-        }
+        $idiomas = array_values(array_filter($this->idiomas, function ($item) {
+            return !empty($item['nombre']) && !empty($item['nivel']);
+        }));
 
         $data = [
             'user_id' => Auth::id(),
@@ -272,13 +259,7 @@ if ($this->imagen) {
 
     public function addExperience()
     {
-        $this->experiencia[] = [
-            'empresa' => '',
-            'puesto' => '',
-            'inicio' => '',
-            'fin' => '',
-            'tareas' => [''],
-        ];
+        $this->experiencia[] = ['empresa' => '', 'puesto' => '', 'inicio' => '', 'fin' => '', 'tareas' => ['']];
     }
 
     public function removeExperience($index)
@@ -288,21 +269,14 @@ if ($this->imagen) {
     }
 
     public function agregarTarea($expIndex)
-{
-    // Asegura que 'tareas' sea un array antes de usar []
-    if (!isset($this->experiencia[$expIndex]['tareas']) || !is_array($this->experiencia[$expIndex]['tareas'])) {
-        $valorActual = $this->experiencia[$expIndex]['tareas'] ?? '';
+    {
+        if (!isset($this->experiencia[$expIndex]['tareas']) || !is_array($this->experiencia[$expIndex]['tareas'])) {
+            $valorActual = $this->experiencia[$expIndex]['tareas'] ?? '';
+            $this->experiencia[$expIndex]['tareas'] = $valorActual !== '' ? [$valorActual] : [];
+        }
 
-        // Si había un string, lo convertimos en el primer elemento del array
-        $this->experiencia[$expIndex]['tareas'] = $valorActual !== ''
-            ? [$valorActual]
-            : [];
+        $this->experiencia[$expIndex]['tareas'][] = '';
     }
-
-    // Ahora que es array, agregamos una nueva tarea
-    $this->experiencia[$expIndex]['tareas'][] = '';
-}
-
 
     public function eliminarTarea($expIndex, $tareaIndex)
     {
@@ -348,6 +322,11 @@ if ($this->imagen) {
     {
         $this->experiencia[$index]['tareas'] = $contenido;
     }
+    public function addLanguage()
+{
+    $this->idiomas[] = ['nombre' => '', 'nivel' => ''];
+}
+
 }
 
 

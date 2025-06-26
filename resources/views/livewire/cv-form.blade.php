@@ -165,27 +165,50 @@
 <div>
     <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Idiomas</label>
 
-    <div class="flex flex-wrap gap-4 mt-2">
-        @php
-            $opciones = ['Español', 'Inglés', 'Francés', 'Alemán', 'Portugués', 'Italiano'];
-        @endphp
+    @foreach ($idiomas as $index => $idioma)
+        <div class="flex flex-col sm:flex-row gap-2 mt-2">
+            <!-- Idioma -->
+            <div class="w-full sm:w-1/2">
+                <select wire:model="idiomas.{{ $index }}.nombre" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+                    <option value="">Selecciona un idioma</option>
+                    @foreach ($idiomasDisponibles as $lang)
+                        <option value="{{ $lang }}">{{ $lang }}</option>
+                    @endforeach
+                </select>
+                @error("idiomas.$index.nombre") <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+            </div>
 
-        @foreach($opciones as $idioma)
-            <label class="flex items-center space-x-2">
-                <input type="checkbox" wire:model="idiomas" value="{{ $idioma }}" class="text-blue-600">
-                <span class="text-gray-800 dark:text-gray-300">{{ $idioma }}</span>
-            </label>
-        @endforeach
+            <!-- Nivel -->
+            <div class="w-full sm:w-1/2">
+                <select wire:model="idiomas.{{ $index }}.nivel" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+                    <option value="">Selecciona nivel</option>
+                    <option value="básico">Básico</option>
+                    <option value="intermedio">Intermedio</option>
+                    <option value="avanzado">Avanzado</option>
+                    <option value="nativo">Lengua materna</option>
+                </select>
+                @error("idiomas.$index.nivel") <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+            </div>
+        </div>
+    @endforeach
+
+    <!-- Botones -->
+    <div class="flex gap-3 mt-3">
+        <button type="button" wire:click="addLanguage"
+        class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+    + Agregar idioma
+</button>
+
+
+        @if (count($idiomas) > 0)
+            <button type="button" wire:click="$set('idiomas', array_slice($idiomas, 0, -1))"
+                    class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+                🗑 Quitar último
+            </button>
+        @endif
     </div>
-
-    <div class="mt-4">
-        <label for="idioma_otro" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Otros idiomas</label>
-        <input type="text" id="idioma_otro" wire:model="idioma_otro" class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:ring focus:ring-indigo-200 dark:bg-gray-800 dark:text-white" placeholder="Ejemplo: Japonés, Árabe, etc.">
-        @error('idioma_otro') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-    </div>
-
-    @error('idiomas') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 </div>
+
 
 
    <!-- Experiencia laboral -->
