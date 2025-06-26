@@ -71,6 +71,15 @@ class BuscarCVs extends Component
     {
         $this->mostrarResultados = true;
     }
+    public function reiniciarFiltros()
+{
+    $this->categoria_profesion = '';
+    $this->habilidades_seleccionadas = [];
+    $this->idiomas_seleccionados = [];
+    $this->solo_favoritos = false;
+    $this->mostrarResultados = false;
+}
+
 
     public function render()
     {
