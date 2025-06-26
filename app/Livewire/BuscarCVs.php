@@ -58,14 +58,18 @@ class BuscarCVs extends Component
 
     // Idiomas disponibles
     $this->idiomas_disponibles = CV::whereNotNull('idiomas')->get()
-        ->flatMap(function ($cv) {
-            $idiomas = json_decode($cv->idiomas ?? '[]', true);
-            return is_array($idiomas) ? $idiomas : [];
-        })
-        ->map(fn($i) => trim($i))
-        ->unique()
-        ->values()
-        ->toArray();
+    ->flatMap(function ($cv) {
+        $idiomas = json_decode($cv->idiomas ?? '[]', true);
+        return collect($idiomas)
+            ->pluck('nombre')
+            ->filter()
+            ->map(fn($nombre) => trim($nombre));
+    })
+    ->unique()
+    ->sort()
+    ->values()
+    ->toArray();
+
 }
 
 
@@ -129,7 +133,12 @@ class BuscarCVs extends Component
                 $idiomasCV = json_decode($cv->idiomas ?? '[]', true);
                 if (!is_array($idiomasCV)) return false;
 
-                $idiomasCVNormalizados = array_map(fn($i) => trim(strtolower($i)), $idiomasCV);
+                $idiomasCVNormalizados = collect($idiomasCV)
+    ->pluck('nombre')
+    ->filter()
+    ->map(fn($nombre) => trim(strtolower($nombre)))
+    ->toArray();
+
                 foreach ($this->idiomas_seleccionados as $idiomaBuscado) {
                     if (!in_array(trim(strtolower($idiomaBuscado)), $idiomasCVNormalizados)) {
                         return false;

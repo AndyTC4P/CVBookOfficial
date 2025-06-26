@@ -247,8 +247,17 @@
                                     <p class="text-xs text-gray-400 font-semibold mb-1">Idiomas:</p>
                                     <ul class="flex flex-wrap gap-2">
                                         @foreach ($idiomas as $idioma)
-                                            <li class="px-2 py-1 bg-green-600 text-white text-xs rounded-full">{{ $idioma }}</li>
-                                        @endforeach
+    @if(is_array($idioma) && isset($idioma['nombre']))
+        <li class="px-2 py-1 bg-green-600 text-white text-xs rounded-full">
+            {{ $idioma['nombre'] }}{{ isset($idioma['nivel']) ? ' – ' . ucfirst($idioma['nivel']) : '' }}
+        </li>
+    @elseif(is_string($idioma))
+        <li class="px-2 py-1 bg-green-600 text-white text-xs rounded-full">
+            {{ $idioma }}
+        </li>
+    @endif
+@endforeach
+
                                     </ul>
                                 </div>
                             @endif
