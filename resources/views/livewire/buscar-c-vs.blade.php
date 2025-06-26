@@ -224,73 +224,73 @@
     @if ($mostrarResultados || $solo_favoritos)
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             @forelse($cvs as $cv)
-                <!-- Tarjeta individual -->
-                <div class="bg-gray-800 text-white rounded-lg p-4 shadow-md hover:shadow-lg transition flex flex-col h-full">
-                    <div class="flex-grow space-y-2">
-                        <h3 class="font-bold text-lg">{{ $cv->user->name }}</h3>
-                        <p class="text-sm text-gray-400">{{ $cv->titulo }}</p>
+              <!-- Tarjeta individual -->
+<div class="bg-gray-800 text-white rounded-xl border border-gray-700 hover:border-indigo-500 p-4 shadow-md hover:shadow-xl transition duration-300 flex flex-col h-full">
+    <div class="flex-grow space-y-2">
+        <h3 class="font-bold text-lg">{{ $cv->user->name }}</h3>
+        <p class="text-sm text-gray-400">{{ $cv->titulo }}</p>
 
-                        @if($cv->categoria_profesion)
-                            <p class="text-sm text-gray-500">
-                                <span class="font-semibold">Categoría:</span> {{ $cv->categoria_profesion }}
-                            </p>
-                        @endif
+        @if($cv->categoria_profesion)
+            <p class="text-sm text-gray-400">
+                <span class="font-semibold text-white">Categoría:</span> {{ $cv->categoria_profesion }}
+            </p>
+        @endif
 
-                        @if($cv->habilidades)
-                            <div>
-                                <p class="text-xs text-gray-400 font-semibold mb-1">Habilidades:</p>
-                                <ul class="flex flex-wrap gap-2">
-                                    @foreach (array_slice(json_decode($cv->habilidades, true) ?? [], 0, 5) as $hab)
-                                        <li class="px-2 py-1 bg-blue-600 text-white text-xs rounded-full">{{ $hab }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
+        @if($cv->habilidades)
+            <div>
+                <p class="text-xs text-gray-400 font-semibold mb-1">Habilidades:</p>
+                <ul class="flex flex-wrap gap-2">
+                    @foreach (array_slice(json_decode($cv->habilidades, true) ?? [], 0, 5) as $hab)
+                        <li class="px-2 py-1 bg-blue-600 text-white text-xs rounded-full">{{ $hab }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-                        @if($cv->idiomas && is_string($cv->idiomas))
-                            @php $idiomas = json_decode($cv->idiomas, true); @endphp
-                            @if(is_array($idiomas) && count($idiomas))
-                                <div>
-                                    <p class="text-xs text-gray-400 font-semibold mb-1">Idiomas:</p>
-                                    <ul class="flex flex-wrap gap-2">
-                                        @foreach ($idiomas as $idioma)
-    @if(is_array($idioma) && isset($idioma['nombre']))
-        <li class="px-2 py-1 bg-green-600 text-white text-xs rounded-full">
-            {{ $idioma['nombre'] }}{{ isset($idioma['nivel']) ? ' – ' . ucfirst($idioma['nivel']) : '' }}
-        </li>
-    @elseif(is_string($idioma))
-        <li class="px-2 py-1 bg-green-600 text-white text-xs rounded-full">
-            {{ $idioma }}
-        </li>
-    @endif
-@endforeach
-
-                                    </ul>
-                                </div>
+        @if($cv->idiomas && is_string($cv->idiomas))
+            @php $idiomas = json_decode($cv->idiomas, true); @endphp
+            @if(is_array($idiomas) && count($idiomas))
+                <div>
+                    <p class="text-xs text-gray-400 font-semibold mb-1">Idiomas:</p>
+                    <ul class="flex flex-wrap gap-2">
+                        @foreach ($idiomas as $idioma)
+                            @if(is_array($idioma) && isset($idioma['nombre']))
+                                <li class="px-2 py-1 bg-green-600 text-white text-xs rounded-full">
+                                    {{ $idioma['nombre'] }}{{ isset($idioma['nivel']) ? ' – ' . ucfirst($idioma['nivel']) : '' }}
+                                </li>
+                            @elseif(is_string($idioma))
+                                <li class="px-2 py-1 bg-green-600 text-white text-xs rounded-full">
+                                    {{ $idioma }}
+                                </li>
                             @endif
-                        @endif
-
-                        <p class="text-sm text-gray-300">
-                            {{ \Illuminate\Support\Str::limit($cv->descripcion, 100) }}
-                        </p>
-                    </div>
-
-                    <div class="mt-4 flex justify-between items-center gap-2 flex-wrap">
-                        <a href="{{ route('cv.show', ['slug' => $cv->slug]) }}"
-                           class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-1.5 rounded-md shadow transition">
-                            👁️ Ver CV
-                        </a>
-
-                        @if(in_array(auth()->user()->role, ['empresa', 'admin']))
-                            <button wire:click="toggleFavorito({{ $cv->id }})"
-                                    class="inline-flex items-center gap-2 px-4 py-1.5 text-sm font-medium rounded-md shadow transition
-                                           {{ in_array($cv->id, $favoritos_ids) ? 'bg-yellow-500 text-white hover:bg-yellow-600' : 'bg-gray-700 text-yellow-400 hover:bg-yellow-500 hover:text-white' }}"
-                                    title="{{ in_array($cv->id, $favoritos_ids) ? 'Quitar de favoritos' : 'Agregar a favoritos' }}">
-                                {{ in_array($cv->id, $favoritos_ids) ? '★ Guardado' : '☆ Marcar como favorito' }}
-                            </button>
-                        @endif
-                    </div>
+                        @endforeach
+                    </ul>
                 </div>
+            @endif
+        @endif
+
+        <p class="text-sm text-gray-300">
+            {{ \Illuminate\Support\Str::limit($cv->descripcion, 100) }}
+        </p>
+    </div>
+
+    <div class="mt-4 flex justify-between items-center gap-2 flex-wrap">
+        <a href="{{ route('cv.show', ['slug' => $cv->slug]) }}"
+           class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-1.5 rounded-md shadow transition">
+            👁️ Ver CV
+        </a>
+
+        @if(in_array(auth()->user()->role, ['empresa', 'admin']))
+            <button wire:click="toggleFavorito({{ $cv->id }})"
+                    class="inline-flex items-center gap-2 px-4 py-1.5 text-sm font-medium rounded-md shadow transition
+                           {{ in_array($cv->id, $favoritos_ids) ? 'bg-yellow-500 text-white hover:bg-yellow-600' : 'bg-gray-700 text-yellow-400 hover:bg-yellow-500 hover:text-white' }}"
+                    title="{{ in_array($cv->id, $favoritos_ids) ? 'Quitar de favoritos' : 'Agregar a favoritos' }}">
+                {{ in_array($cv->id, $favoritos_ids) ? '★ Guardado' : '☆ Marcar como favorito' }}
+            </button>
+        @endif
+    </div>
+</div>
+
             @empty
                 <p class="text-white">No se encontraron CVs con los filtros aplicados.</p>
             @endforelse
