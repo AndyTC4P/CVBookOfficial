@@ -94,11 +94,7 @@ Route::get('/cv/demo/pdf', function () {
     return $pdf->stream('cv-demo.pdf');
 })->name('cv.demo.pdf');
 Route::get('/cv/{slug}/pdf', [PdfCvController::class, 'export'])->name('cv.pdf');
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/admin/busqueda-cvs', function () {
-        return view('admin.busqueda-cvs');
-    })->name('admin.busqueda-cvs');
-});
+
 Route::post('/admin/cambiar-rol/{user}', function (Request $request, User $user) {
     if (!auth()->check() || auth()->user()->role !== 'admin') {
         abort(403, 'No autorizado');
@@ -126,11 +122,7 @@ Route::get('/cv/{slug}/word', [WordCvController::class, 'export'])->name('cv.wor
 Route::view('/privacidad', 'politica')->name('politica.privacidad');
 Route::get('/registro-empresa', [EmpresaRegisterController::class, 'create'])->name('empresa.registro');
 Route::post('/registro-empresa', [EmpresaRegisterController::class, 'store'])->name('empresa.registrar');
-Route::middleware(['auth', EmpresaAprobada::class])->group(function () {
-    Route::get('/admin/busqueda-cvs', function () {
-        return view('admin.busqueda-cvs');
-    })->name('admin.busqueda-cvs');
-});
+
 // Aprobación de empresas por el admin
 Route::middleware('auth')->group(function () {
     Route::post('/admin/empresas/{user}/aprobar', [EmpresaController::class, 'aprobar'])->name('admin.empresas.aprobar');
@@ -142,6 +134,13 @@ Route::get('/empresa/esperando-aprobacion', function () {
 Route::delete('/admin/eliminar-usuario/{id}', [AdminController::class, 'eliminarUsuario'])
     ->middleware(['auth']) // Aquí eliminamos 'admin'
     ->name('admin.eliminarUsuario');
+    // Solo empresas con correo verificado Y aprobadas pueden buscar CVs
+Route::middleware(['auth', 'verified', EmpresaAprobada::class])->group(function () {
+    Route::get('/admin/busqueda-cvs', function () {
+        return view('admin.busqueda-cvs');
+    })->name('admin.busqueda-cvs');
+});
+
 
 
 

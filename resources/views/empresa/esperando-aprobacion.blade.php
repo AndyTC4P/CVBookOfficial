@@ -6,7 +6,7 @@
             Tu cuenta está siendo revisada por nuestro equipo para verificar que pertenece a una empresa real.
         </p>
         <p class="text-gray-600 dark:text-gray-300 mt-4">
-            Una vez aprobada, recibirás un correo de confirmación y tendrás acceso completo a la búsqueda de talento profesional.
+           Ahora tu solicitud está pendiente de revisión por el equipo de CV Book. Te notificaremos por correo cuando tu cuenta empresarial esté activada.
         </p>
         <p class="text-sm text-gray-500 mt-6 italic">Esto nos ayuda a mantener la calidad y seguridad del sistema.</p>
     </div>
