@@ -164,6 +164,13 @@ class BuscarCVs extends Component
             $this->mensaje = 'CV guardado como favorito.';
         }
     }
+    public function getFiltrosActivosProperty()
+{
+    return $this->categoria_profesion 
+        || !empty($this->habilidades_seleccionadas) 
+        || !empty($this->idiomas_seleccionados);
+}
+
 }
 
 
