@@ -305,7 +305,7 @@ x
 
             <!-- Título -->
             <div class="flex flex-col">
-                <label class="text-sm text-gray-300 mb-1">Título obtenido</label>
+                <label class="text-sm text-gray-300 mb-1">Título obtenido / a obtener</label>
                 <input type="text" wire:model="educacion.{{ $index }}.carrera"
                        class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm text-sm">
             </div>
