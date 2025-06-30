@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+
 
 class EmpresaRegisterController extends Controller
 {
@@ -32,11 +34,14 @@ class EmpresaRegisterController extends Controller
         'role' => 'empresa',
         'status' => null, // aún no se valida por el admin
     ]);
+     // ✅ Iniciar sesión automáticamente para que se redirija a /verify-email
+    Auth::login($user);
 
     // Enviar email de verificación
     $user->sendEmailVerificationNotification();
 
-    return redirect()->route('login')->with('status', '✅ Paso 1: Verifica tu correo electrónico. Luego de confirmar tu email, CV Book revisará tus datos y te informará cuando tu cuenta empresarial haya sido aprobada.');
+    return redirect()->route('verification.notice');
+
 }
 
 }

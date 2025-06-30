@@ -36,9 +36,14 @@ new #[Layout('layouts.guest')] class extends Component
 }; ?>
 
 <div>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('¡Gracias por registrarte! Antes de comenzar, ¿podrías verificar tu dirección de correo electrónico haciendo clic en el enlace que te acabamos de enviar? Si no recibiste el correo, con gusto te enviaremos otro..') }}
-    </div>
+    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400 space-y-2 text-center">
+    <p class="text-green-500 font-semibold">✅ Paso 1 de 2</p>
+    <p>
+        {{ __('Gracias por registrarte. Antes de comenzar, ¿podrías verificar tu dirección de correo electrónico haciendo clic en el enlace que te acabamos de enviar?') }}
+        {{ __('Si no recibiste el correo, con gusto te enviaremos otro.') }}
+    </p>
+</div>
+
 
     @if (session('status') == 'verification-link-sent')
         <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
