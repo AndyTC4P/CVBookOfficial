@@ -137,6 +137,16 @@ Route::view('/privacidad', 'politica')->name('politica.privacidad');
 Route::get('/registro-empresa', [EmpresaRegisterController::class, 'create'])->name('empresa.registro');
 Route::post('/registro-empresa', [EmpresaRegisterController::class, 'store'])->name('empresa.registrar');
 
+// ✅ Ruta AJAX para saber si la empresa ya fue aprobada
+Route::match(['get', 'post'], '/empresa/check-aprobacion', function () {
+    if (auth()->check() && auth()->user()->role === 'empresa') {
+        return response()->json([
+            'aprobada' => auth()->user()->status === 'aprobado',
+        ]);
+    }
+    return response()->json(['aprobada' => false], 401);
+})->middleware('auth')->name('check.aprobacion');
+
 // 🧾 Aprobación de empresas por el admin
 Route::middleware('auth')->group(function () {
     Route::post('/admin/empresas/{user}/aprobar', [EmpresaController::class, 'aprobar'])->name('admin.empresas.aprobar');
@@ -165,6 +175,7 @@ Route::middleware(['auth', 'verified', EmpresaAprobada::class])->group(function 
         return view('admin.busqueda-cvs');
     })->name('admin.busqueda-cvs');
 });
+
 
 
 

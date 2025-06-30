@@ -9,19 +9,52 @@
             Tu cuenta está siendo revisada por nuestro equipo para verificar que pertenece a una empresa real.
         </p>
         <p class="text-gray-600 dark:text-gray-300 mt-4">
-           Te notificaremos por correo cuando tu cuenta sea activada. Mientras tanto, puedes revisar el estado manualmente más adelante.
+            Te notificaremos por correo cuando tu cuenta sea activada. Mientras tanto, puedes revisar el estado manualmente más adelante.
         </p>
 
-        <form method="POST" action="{{ route('check.aprobacion') }}" class="mt-6">
-            @csrf
-            <x-primary-button>
+        <div class="mt-6">
+            <button
+                type="button"
+                onclick="verificarEstado()"
+                class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md shadow transition">
                 🔄 Revisar estado ahora
-            </x-primary-button>
-        </form>
+            </button>
+        </div>
+
+        <!-- Mensaje visual integrado -->
+        <div id="mensaje-estado" class="mt-4 text-sm font-medium text-yellow-600 dark:text-yellow-400 hidden">
+            <!-- Aquí se mostrará el mensaje dinámico -->
+        </div>
 
         <p class="text-sm text-gray-500 mt-6 italic">Esto nos ayuda a mantener la calidad y seguridad del sistema.</p>
     </div>
+
+    <script>
+        function verificarEstado() {
+            fetch("{{ route('check.aprobacion') }}", {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                const mensaje = document.getElementById('mensaje-estado');
+
+                if (data.aprobada) {
+                    window.location.href = "{{ route('admin.busqueda-cvs') }}";
+                } else {
+                    mensaje.textContent = '⚠️ Tu cuenta aún no ha sido aprobada. Por favor, vuelve a intentarlo más tarde.';
+                    mensaje.classList.remove('hidden');
+                }
+            });
+        }
+    </script>
 </x-guest-layout>
+
+
+
 
 
 
