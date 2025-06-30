@@ -290,45 +290,69 @@ x
 
 <!-- Educación -->
 <div class="mt-6">
-    <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Estudios Superiores</label>
-    @foreach($educacion as $index => $edu)
-        <div class="mt-2 flex flex-col gap-2">
-            <div class="flex flex-wrap items-end gap-2">
-                <div class="flex flex-col md:w-1/4">
-                    <label class="text-sm text-gray-700 dark:text-gray-300 mb-1">Universidad</label>
-                    <input type="text" wire:model="educacion.{{ $index }}.universidad"
-                           class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
-                </div>
+    <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Formación Profesional</label>
 
-                <div class="flex flex-col md:w-1/4">
-                    <label class="text-sm text-gray-700 dark:text-gray-300 mb-1">Carrera</label>
-                    <input type="text" wire:model="educacion.{{ $index }}.carrera"
-                           class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
-                </div>
+@foreach($educacion as $index => $edu)
+    <div class="mt-3 border border-gray-700 rounded-md p-4 space-y-3 bg-gray-900">
 
-                <div class="flex flex-col md:w-1/5">
-                    <label class="text-sm text-gray-700 dark:text-gray-300 mb-1">Ingreso</label>
-                    <input type="date" wire:model="educacion.{{ $index }}.inicio"
-                           class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
-                </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Universidad -->
+            <div class="flex flex-col">
+                <label class="text-sm text-gray-300 mb-1">Universidad / Escuela / Instituto</label>
+                <input type="text" wire:model="educacion.{{ $index }}.universidad"
+                       class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm text-sm">
+            </div>
 
-                <div class="flex flex-col md:w-1/5">
-                    <label class="text-sm text-gray-700 dark:text-gray-300 mb-1">Egreso</label>
-                    <input type="date" wire:model="educacion.{{ $index }}.fin"
-                           class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
-                </div>
+            <!-- Título -->
+            <div class="flex flex-col">
+                <label class="text-sm text-gray-300 mb-1">Título obtenido</label>
+                <input type="text" wire:model="educacion.{{ $index }}.carrera"
+                       class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm text-sm">
+            </div>
+        </div>
 
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+            <!-- Ingreso -->
+            <div class="flex flex-col">
+                <label class="text-sm text-gray-300 mb-1">Ingreso</label>
+                <input type="date" wire:model="educacion.{{ $index }}.inicio"
+                       class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm text-sm">
+            </div>
+
+            <!-- Egreso -->
+            <div class="flex flex-col">
+                <label class="text-sm text-gray-300 mb-1">Egreso</label>
+                <input type="date" wire:model="educacion.{{ $index }}.fin"
+                       class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm text-sm">
+            </div>
+
+            <!-- Estado -->
+            <div class="flex flex-col">
+                <label class="text-sm text-gray-300 mb-1">Estado</label>
+                <select wire:model="educacion.{{ $index }}.estado"
+                        class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm text-sm">
+                    <option value="">Seleccione una opción</option>
+                    <option value="finalizado">Finalizado</option>
+                    <option value="en_progreso">En progreso</option>
+                </select>
+            </div>
+
+            <!-- Botón eliminar -->
+            <div class="mt-2 md:mt-0 flex justify-start md:justify-end">
                 <button type="button" wire:click="removeEducation({{ $index }})"
                         class="text-red-500 text-xl hover:text-red-700">
                     🗑
                 </button>
             </div>
         </div>
-    @endforeach
+    </div>
+@endforeach
 
-    <button type="button" wire:click="addEducation" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">+ Agregar Estudio</button>
+
+    <button type="button" wire:click="addEducation" class="mt-4 px-4 py-2 bg-green-500 text-white rounded shadow hover:bg-green-600 transition">
+        + Agregar Estudio
+    </button>
 </div>
-
 
       <!-- Público -->
 <div class="flex items-center">

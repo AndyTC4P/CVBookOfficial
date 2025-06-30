@@ -79,6 +79,7 @@ class CvForm extends Component
             'educacion.*.carrera' => 'required|string|max:255',
             'educacion.*.inicio' => 'required|date',
             'educacion.*.fin' => 'nullable|date|after_or_equal:educacion.*.inicio',
+            'educacion.*.estado' => 'nullable|string|in:finalizado,en_progreso',
             'publico' => 'boolean',
         ];
     }
@@ -286,7 +287,7 @@ class CvForm extends Component
 
     public function addEducation()
     {
-        $this->educacion[] = ['universidad' => '', 'carrera' => '', 'inicio' => '', 'fin' => ''];
+        $this->educacion[] = ['universidad' => '', 'carrera' => '', 'inicio' => '', 'fin' => '',  'estado' => '',];
     }
 
     public function removeEducation($index)

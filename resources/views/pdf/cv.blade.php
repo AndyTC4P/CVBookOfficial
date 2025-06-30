@@ -238,24 +238,35 @@ body { margin: 0; padding: 0; }
                 </div>
 
                 <div class="section education-block">
-                    <h3 style="color: #111;">Estudios Superiores</h3>
-                    @php
-                        $educacion = is_array($cv->educacion) ? $cv->educacion : json_decode($cv->educacion, true) ?? [];
-                    @endphp
-                    @foreach($educacion as $edu)
-                        <div>
-                            <h4>{{ $edu['centro'] ?? '' }} - {{ $edu['carrera'] ?? '' }}</h4>
-                            <div class="date">
-                                @php
-                                    $eduInicio = !empty($edu['inicio']) ? ucfirst(Carbon::parse($edu['inicio'])->translatedFormat('F, Y')) : 'Fecha no especificada';
-                                    $eduFin = !empty($edu['fin']) ? ucfirst(Carbon::parse($edu['fin'])->translatedFormat('F, Y')) : 'Actual';
-                                @endphp
-                                {{ $eduInicio }} - {{ $eduFin }}
-                            </div>
-                        </div>
-                        <br>
-                    @endforeach
-                </div>
+    <h3 style="color: #111;">Formación Profesional</h3>
+    @php
+        $educacion = is_array($cv->educacion) ? $cv->educacion : json_decode($cv->educacion, true) ?? [];
+    @endphp
+    @foreach($educacion as $edu)
+        <div>
+            <h4 style="margin: 0;">
+                {{ $edu['carrera'] ?? '' }} – {{ $edu['centro'] ?? $edu['universidad'] ?? '' }}
+            </h4>
+
+            @if(!empty($edu['ciudad']))
+                <p style="margin: 0; font-size: 12px;">
+                    {{ $edu['ciudad'] }}
+                </p>
+            @endif
+
+            <p class="date" style="margin: 0; font-size: 12px;">
+                @php
+                    $eduInicio = !empty($edu['inicio']) ? ucfirst(Carbon::parse($edu['inicio'])->locale('es')->translatedFormat('F, Y')) : 'Fecha no especificada';
+                    $eduFin = !empty($edu['fin']) ? ucfirst(Carbon::parse($edu['fin'])->locale('es')->translatedFormat('F, Y')) : 'Actualidad';
+                    $estado = ucfirst($edu['estado'] ?? 'Desconocido');
+                @endphp
+                {{ $eduInicio }} – {{ $eduFin }} — <span style="font-style: italic;">{{ $estado }}</span>
+            </p>
+        </div>
+        <br>
+    @endforeach
+</div>
+
             </div>
         </div>
     </div>

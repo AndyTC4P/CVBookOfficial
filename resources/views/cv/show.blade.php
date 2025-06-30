@@ -68,8 +68,7 @@
                 </div>
             @endif
 
-        {{-- Experiencia Laboral --}}
-{{-- Experiencia Laboral --}}
+    {{-- Experiencia Laboral --}}
 @if ($cv->experiencia)
     <div class="mt-6">
         <h3 class="text-lg font-semibold text-gray-900">Experiencia Laboral</h3>
@@ -80,7 +79,9 @@
                     {{ $exp['empresa'] }} — {{ $exp['puesto'] }}
                 </p>
                 <p class="text-sm text-gray-600 mb-2">
-                    {{ $exp['inicio'] }} al {{ $exp['fin'] ?? 'Actualidad' }}
+                    {{ \Carbon\Carbon::parse($exp['inicio'])->locale('es')->translatedFormat('F Y') }}
+                    al
+                    {{ $exp['fin'] ? \Carbon\Carbon::parse($exp['fin'])->locale('es')->translatedFormat('F Y') : 'Actualidad' }}
                 </p>
 
                 @if (!empty($exp['tareas']) && is_array($exp['tareas']))
@@ -97,26 +98,31 @@
     </div>
 @endif
 
+{{-- Educación --}}
+@if ($cv->educacion)
+    <div class="mt-6">
+        <h3 class="text-lg font-semibold text-gray-800">Formación Profesional</h3>
+        <ul class="space-y-2 text-gray-700">
+            @foreach (json_decode($cv->educacion, true) as $edu)
+                <li>
+                    <strong>{{ $edu['universidad'] }}</strong> – {{ $edu['carrera'] }}
+                    <br>
+                    <small class="text-sm text-gray-600">
+                        {{ \Carbon\Carbon::parse($edu['inicio'])->locale('es')->translatedFormat('F Y') }}
+                        al
+                        {{ $edu['fin'] ? \Carbon\Carbon::parse($edu['fin'])->locale('es')->translatedFormat('F Y') : 'Actualidad' }}
+                        –
+                        <span class="italic">
+                            {{ ucfirst($edu['estado'] ?? 'Desconocido') }}
+                        </span>
+                    </small>
+                </li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
 
-
-            {{-- Educación --}}
-            @if ($cv->educacion)
-                <div class="mt-6">
-                    <h3 class="text-lg font-semibold text-gray-800">Estudios Superiores</h3>
-                    <ul class="space-y-2 text-gray-700">
-                        @foreach (json_decode($cv->educacion, true) as $edu)
-                            <li>
-                                <strong>{{ $edu['universidad'] }}</strong> - {{ $edu['carrera'] }}
-                                <br>
-                                <small class="text-sm text-gray-600">
-                                    {{ $edu['inicio'] }} al {{ $edu['fin'] ?? 'Actualidad' }}
-                                </small>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
 
             {{-- Habilidades --}}
             @if ($cv->habilidades)
