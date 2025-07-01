@@ -22,5 +22,11 @@ yarn-error.log
 /.vscode
 /.zed
 /public/build.zip
+# Base de datos local de pruebas si usás SQLite
+/database/*.sqlite
+
+# Backups o exportaciones personales
+/backups/
+/exportaciones/
 
 
