@@ -54,9 +54,7 @@ class CvForm extends Component
             'categoria_profesion' => 'required|string|max:255',
             'titulo_manual' => 'required|string|max:255',
             'perfil' => 'required|string|min:50|max:390',
-            'imagen' => $this->modo === 'crear'
-                ? 'required|image|max:6144'
-                : 'nullable|image|max:6144',
+           'imagen' => 'nullable|image|max:6144',
             'correo' => 'required|email|max:255',
             'telefono' => 'required|string|max:20',
             'direccion' => 'required|string|max:255',
@@ -182,6 +180,20 @@ class CvForm extends Component
     public function save()
     {
         $this->validate();
+
+       $idiomasValidos = array_filter($this->idiomas, function ($idioma) {
+    return !empty($idioma['nombre']) && !empty($idioma['nivel']);
+});
+
+$tieneLenguaMaterna = collect($idiomasValidos)->contains(function ($idioma) {
+    return $idioma['nivel'] === 'nativo';
+});
+
+if (!$tieneLenguaMaterna) {
+    $this->addError('idiomas', 'Debes seleccionar al menos un idioma con nivel "Lengua materna".');
+    return;
+}
+
 
         $habilidadesRestringidas = Habilidad::whereIn('nombre', $this->habilidades)
             ->where('restringida', true)

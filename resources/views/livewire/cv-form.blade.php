@@ -96,6 +96,10 @@
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
     📌 La imagen se ajustará automáticamente a 300x400 px. Formato JPEG o PNG, máx. 1MB.
 </p>
+<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+    Si no subes una imagen, se mostrará un ícono predeterminado en tu CV.
+</p>
+
 </p>
 
     @if ($imagenSubida)
@@ -171,7 +175,17 @@
 
 <!-- Idiomas -->
 <div>
-    <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Idiomas</label>
+    <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">
+        Idiomas <span class="text-red-500">*</span>
+    </label>
+
+    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+        👉 Agrega al menos un idioma con nivel <strong>Lengua materna</strong>. Esto nos permite identificar tu idioma nativo y mejora la precisión en los filtros de búsqueda.
+    </p>
+
+    @error('idiomas')
+        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+    @enderror
 
     @foreach ($idiomas as $index => $idioma)
         <div class="flex flex-col sm:flex-row gap-2 mt-2">
@@ -183,44 +197,44 @@
                         <option value="{{ $lang }}">{{ $lang }}</option>
                     @endforeach
                 </select>
-                @error("idiomas.$index.nombre") <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                @error("idiomas.$index.nombre") 
+                    <span class="text-red-500 text-sm">{{ $message }}</span> 
+                @enderror
             </div>
 
-           <!-- Nivel -->
-<div class="w-full sm:w-1/2">
-    <select wire:model="idiomas.{{ $index }}.nivel" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
-        <option value="">Selecciona nivel</option>
-        <option value="básico">Básico</option>
-        <option value="intermedio">Intermedio</option>
-        <option value="avanzado">Avanzado</option>
-        <option value="fluido">Fluido</option>
-        <option value="business">Business</option>
-        <option value="nativo">Lengua materna</option>
-    </select>
-    @error("idiomas.$index.nivel") <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-</div>
-
+            <!-- Nivel -->
+            <div class="w-full sm:w-1/2">
+                <select wire:model="idiomas.{{ $index }}.nivel" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+                    <option value="">Selecciona nivel</option>
+                    <option value="básico">Básico</option>
+                    <option value="intermedio">Intermedio</option>
+                    <option value="avanzado">Avanzado</option>
+                    <option value="fluido">Fluido</option>
+                    <option value="business">Business</option>
+                    <option value="nativo">Lengua materna</option>
+                </select>
+                @error("idiomas.$index.nivel") 
+                    <span class="text-red-500 text-sm">{{ $message }}</span> 
+                @enderror
+            </div>
         </div>
     @endforeach
 
     <!-- Botones -->
     <div class="flex gap-3 mt-3">
         <button type="button" wire:click="addLanguage"
-        class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
-    + Agregar idioma
-</button>
-
+                class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+            + Agregar idioma
+        </button>
 
         @if (count($idiomas) > 0)
-    <button type="button" wire:click="removeLanguage"
-            class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
-        🗑 Quitar último
-    </button>
-@endif
-
+            <button type="button" wire:click="removeLanguage"
+                    class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+                🗑 Quitar último
+            </button>
+        @endif
     </div>
 </div>
-
 
 
    <!-- Experiencia laboral -->
@@ -396,6 +410,10 @@ x
            @if ($errors->has('imagen'))
     <li>La <strong>Imagen de Perfil</strong> debe ser un archivo de imagen y no debe superar los 6MB.</li>
 @endif
+@if ($errors->has('idiomas'))
+    <li>Debes seleccionar al menos un idioma con nivel <strong>Lengua materna</strong>.</li>
+@endif
+
 
             @if ($errors->has('correo'))
                 <li>El campo <strong>Correo Electrónico</strong> debe contener una dirección válida y tener máximo 255 caracteres.</li>
