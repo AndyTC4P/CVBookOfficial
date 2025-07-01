@@ -208,7 +208,7 @@
     </div>
 
     <p class="text-xs text-gray-400 italic -mt-1 ms-1">
-        También puedes ver todos los CVs disponibles sin usar filtros.
+        También puedes ver todos los CVs disponibles sin usar filtros usando el boton "Iniciar busqueda".
     </p>
 </div>
 

@@ -86,13 +86,45 @@
                             </form>
 
                             {{-- Botón Eliminar --}}
-                            <form method="POST" action="{{ route('admin.eliminarUsuario', $user->id) }}" class="mt-2 eliminar-usuario-form">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 text-sm rounded w-full">
-                                    🗑️ Eliminar
-                                </button>
-                            </form>
+                            <!-- Botón para abrir el modal -->
+<div x-data="{ openModal{{ $user->id }}: false }" class="mt-2">
+    <button 
+        @click="openModal{{ $user->id }} = true" 
+        class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 text-sm rounded w-full">
+        🗑️ Eliminar
+    </button>
+
+    <!-- Modal visual -->
+    <div 
+        x-show="openModal{{ $user->id }}" 
+        x-transition 
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+    >
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-sm shadow-lg">
+            <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-2">¿Eliminar usuario?</h2>
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+                Esta acción eliminará permanentemente al usuario <strong>{{ $user->name }}</strong>. ¿Estás seguro?
+            </p>
+            <div class="flex justify-end gap-2">
+                <button 
+                    @click="openModal{{ $user->id }} = false" 
+                    class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded">
+                    Cancelar
+                </button>
+                <form method="POST" action="{{ route('admin.eliminarUsuario', $user->id) }}">
+                    @csrf
+                    @method('DELETE')
+                    <button 
+                        type="submit" 
+                        class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
+                        Confirmar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
                         @else
                             <p class="text-xs text-gray-400 italic mt-2">No puedes editar tu propio rol</p>
                         @endif
