@@ -66,7 +66,7 @@ class CvForm extends Component
             'habilidades.*' => 'required|string|max:35',
             'idiomas' => 'nullable|array',
             'idiomas.*.nombre' => 'required|string|max:100',
-            'idiomas.*.nivel' => 'required|in:básico,intermedio,avanzado,nativo',
+           'idiomas.*.nivel' => 'required|in:básico,intermedio,avanzado,fluido,business,nativo',
             'experiencia' => 'nullable|array',
             'experiencia.*.empresa' => 'required|string|max:255',
             'experiencia.*.puesto' => 'required|string|max:255',
@@ -327,6 +327,11 @@ class CvForm extends Component
 {
     $this->idiomas[] = ['nombre' => '', 'nivel' => ''];
 }
+public function removeLanguage()
+{
+    array_pop($this->idiomas);
+}
+
 
 }
 

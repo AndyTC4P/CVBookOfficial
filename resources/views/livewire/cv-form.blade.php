@@ -178,17 +178,20 @@
                 @error("idiomas.$index.nombre") <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
 
-            <!-- Nivel -->
-            <div class="w-full sm:w-1/2">
-                <select wire:model="idiomas.{{ $index }}.nivel" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
-                    <option value="">Selecciona nivel</option>
-                    <option value="básico">Básico</option>
-                    <option value="intermedio">Intermedio</option>
-                    <option value="avanzado">Avanzado</option>
-                    <option value="nativo">Lengua materna</option>
-                </select>
-                @error("idiomas.$index.nivel") <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-            </div>
+           <!-- Nivel -->
+<div class="w-full sm:w-1/2">
+    <select wire:model="idiomas.{{ $index }}.nivel" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
+        <option value="">Selecciona nivel</option>
+        <option value="básico">Básico</option>
+        <option value="intermedio">Intermedio</option>
+        <option value="avanzado">Avanzado</option>
+        <option value="fluido">Fluido</option>
+        <option value="business">Business</option>
+        <option value="nativo">Lengua materna</option>
+    </select>
+    @error("idiomas.$index.nivel") <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+</div>
+
         </div>
     @endforeach
 
@@ -201,11 +204,12 @@
 
 
         @if (count($idiomas) > 0)
-            <button type="button" wire:click="$set('idiomas', array_slice($idiomas, 0, -1))"
-                    class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
-                🗑 Quitar último
-            </button>
-        @endif
+    <button type="button" wire:click="removeLanguage"
+            class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+        🗑 Quitar último
+    </button>
+@endif
+
     </div>
 </div>
 
@@ -371,8 +375,8 @@ x
                 <li>El campo <strong>Apellido</strong> es obligatorio y debe tener máximo 100 caracteres.</li>
             @endif
             @if ($errors->has('perfil'))
-                <li>El campo <strong>Perfil Profesional</strong> es obligatorio y debe tener máximo 1000 caracteres.</li>
-            @endif
+    <li>El campo <strong>Perfil Profesional</strong> es obligatorio y debe tener entre 50 y 390 caracteres.</li>
+@endif
             @if ($errors->has('categoria_profesion'))
     <li>Debe seleccionar una <strong>categoría profesional</strong>.</li>
 @endif
@@ -381,9 +385,10 @@ x
     <li>Debe escribir su <strong>profesión o título</strong> para mostrar en el CV.</li>
 @endif
 
-            @if ($errors->has('imagen'))
-    <li>La <strong>Imagen de Perfil</strong> debe ser un archivo de imagen y no debe superar los 2MB.</li>
+           @if ($errors->has('imagen'))
+    <li>La <strong>Imagen de Perfil</strong> debe ser un archivo de imagen y no debe superar los 6MB.</li>
 @endif
+
             @if ($errors->has('correo'))
                 <li>El campo <strong>Correo Electrónico</strong> debe contener una dirección válida y tener máximo 255 caracteres.</li>
             @endif
