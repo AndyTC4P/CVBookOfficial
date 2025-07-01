@@ -150,16 +150,24 @@
         </div>
 
         <!-- Habilidades -->
-        <div>
-            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Habilidades</label>
-            @foreach($habilidades as $index => $habilidad)
-                <div class="flex gap-2 mt-2">
-                <input type="text" wire:model="habilidades.{{ $index }}" maxlength="50" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm" placeholder="Ej: Trabajo en equipo. Max 50 caracteres">
-                    <button type="button" wire:click="removeSkill({{ $index }})" class="text-red-500">🗑</button>
-                </div>
-            @endforeach
-            <button type="button" wire:click="addSkill" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">+ Agregar Habilidad</button>
+<div>
+    <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">
+        Habilidades <span class="text-red-500">*</span>
+    </label>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+        👉 Debes agregar al menos <strong>5 habilidades</strong>. Esto mejora la visibilidad de tu CV ante reclutadores y permite que los filtros de búsqueda te encuentren más fácilmente.
+    </p>
+
+    @foreach($habilidades as $index => $habilidad)
+        <div class="flex gap-2 mt-2">
+            <input type="text" wire:model="habilidades.{{ $index }}" maxlength="50" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm" placeholder="Ej: Trabajo en equipo. Max 50 caracteres">
+            <button type="button" wire:click="removeSkill({{ $index }})" class="text-red-500">🗑</button>
         </div>
+    @endforeach
+
+    <button type="button" wire:click="addSkill" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">+ Agregar Habilidad</button>
+</div>
+
 
 <!-- Idiomas -->
 <div>
@@ -288,7 +296,7 @@ x
         </div>
     @endforeach
 
-    <button type="button" wire:click="addExperience" class="mt-4 px-4 py-2 bg-green-500 text-white rounded">+ Agregar Experiencia</button>
+    <button type="button" wire:click="addExperience" class="mt-4 px-4 py-2 bg-green-500 text-white rounded">+ Agregar Experiencia o Empresa</button>
 </div>
 
 
