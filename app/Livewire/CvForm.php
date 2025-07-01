@@ -95,6 +95,11 @@ class CvForm extends Component
         'imagen.image' => 'El archivo debe ser una imagen válida.',
         'imagen.max' => 'La imagen no debe superar los 6MB.',
         'perfil.min' => 'El campo Perfil Profesional debe tener al menos 50 caracteres.',
+        'idiomas.*.nombre.required' => 'Debes seleccionar un idioma.',
+    'idiomas.*.nombre.max' => 'El nombre del idioma no debe superar los 100 caracteres.',
+    'idiomas.*.nivel.required' => 'Debes seleccionar el nivel para cada idioma.',
+    'idiomas.*.nivel.in' => 'El nivel seleccionado no es válido.',
+
     ];
 
     public function mount($cv = null)

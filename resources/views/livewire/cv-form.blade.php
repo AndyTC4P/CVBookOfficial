@@ -433,9 +433,13 @@ x
             @if ($errors->has('habilidades.*'))
                 <li>Cada <strong>Habilidad</strong> es obligatoria y debe tener máximo 35 caracteres.</li>
             @endif
-            @if ($errors->has('idiomas.*'))
-                <li>Cada <strong>Idioma</strong> es obligatorio y debe tener máximo 100 caracteres.</li>
-            @endif
+           @if ($errors->has('idiomas.*.nombre'))
+    <li>Debes seleccionar un <strong>idioma</strong> en cada fila completada.</li>
+@endif
+
+@if ($errors->has('idiomas.*.nivel'))
+    <li>Debes seleccionar el <strong>nivel</strong> correspondiente para cada idioma.</li>
+@endif
             @if ($errors->has('experiencia.*.empresa'))
                 <li>El campo <strong>Empresa</strong> en la sección de experiencia es obligatorio y debe tener máximo 255 caracteres.</li>
             @endif
