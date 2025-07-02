@@ -14,6 +14,7 @@ use App\Http\Controllers\WordCvController;
 use App\Http\Controllers\Auth\EmpresaRegisterController;
 use App\Http\Middleware\EmpresaAprobada;
 use App\Http\Controllers\Admin\EmpresaController;
+use Illuminate\Support\Str;
 
 // 🧠 Panel de administración
 Route::get('/admin/dashboard', function () {
@@ -174,6 +175,63 @@ Route::middleware(['auth', 'verified', EmpresaAprobada::class])->group(function 
     Route::get('/admin/busqueda-cvs', function () {
         return view('admin.busqueda-cvs');
     })->name('admin.busqueda-cvs');
+});
+
+Route::get('/gpt-cvs', function (Request $request) {
+    // 🔐 Validar clave de seguridad
+    if ($request->header('x-sivi-key') !== config('sivi.secret')) {
+        return response()->json(['error' => 'No autorizado'], 403);
+    }
+
+    $query = CV::query()->where('publico', 1);
+
+    // Filtros
+    if ($request->filled('categoria')) {
+        $query->where('categoria_profesion', $request->categoria);
+    }
+
+    if ($request->filled('habilidades')) {
+        $habilidades = explode(',', $request->habilidades);
+        $query->where(function ($q) use ($habilidades) {
+            foreach ($habilidades as $h) {
+                $q->orWhereRaw('LOWER(habilidades) LIKE ?', ['%' . strtolower(trim($h)) . '%']);
+            }
+        });
+    }
+
+    // Idiomas (procesamiento similar al actual)
+    $normalizar = fn($texto) => Str::of($texto)->lower()->ascii()->trim()->__toString();
+
+    $idiomas_validos = [
+        'espanol' => 'Español', 'ingles' => 'Inglés',
+        'frances' => 'Francés', 'aleman' => 'Alemán',
+        'portugues' => 'Portugués', 'italiano' => 'Italiano',
+        'japones' => 'Japonés',
+    ];
+
+    $cvs = $query->get();
+
+    if ($request->filled('idiomas')) {
+        $idiomas_buscados = collect(explode(',', $request->idiomas))
+            ->map($normalizar)
+            ->filter(fn($i) => isset($idiomas_validos[$i]))
+            ->map(fn($k) => $idiomas_validos[$k])
+            ->toArray();
+
+        $cvs = $cvs->filter(function ($cv) use ($idiomas_buscados, $normalizar) {
+            $idiomas_cv = is_array($cv->idiomas) ? $cv->idiomas : json_decode($cv->idiomas ?? '[]', true);
+            if (!is_array($idiomas_cv)) return false;
+            $idiomas_cv_norm = array_map($normalizar, $idiomas_cv);
+            foreach ($idiomas_buscados as $idioma) {
+                if (in_array($normalizar($idioma), $idiomas_cv_norm)) return true;
+            }
+            return false;
+        })->values();
+    }
+
+    return response()
+        ->json($cvs->take(10))
+        ->header('Content-Type', 'application/json');
 });
 
 
