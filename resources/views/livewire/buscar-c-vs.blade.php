@@ -34,15 +34,14 @@
             </div>
 
             <!-- Cuadro 2 -->
-            <div class="bg-gray-900 p-4 rounded-lg border border-gray-700 flex flex-col items-center text-center">
-                <img src="{{ asset('images/sivigif.gif') }}" alt="Sivi saludando" class="w-20 h-20 rounded-full object-contain mb-3">
-                <p class="text-sm text-gray-300 mb-2">¿Necesitas ayuda para encontrar el perfil ideal?</p>
-                <a href="https://chat.openai.com/g/g-682e161092d08191bef1a1f6f879ae6f-sivi-asistente-cvbook"
-                   target="_blank"
-                   class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-1.5 rounded-md shadow transition">
-                    💬 Habla con Sivi
-                </a>
-            </div>
+<div class="bg-gray-900 p-4 rounded-lg border border-gray-700 flex flex-col items-center text-center">
+    <img src="{{ asset('images/sivigif.gif') }}" alt="Sivi saludando" class="w-20 h-20 rounded-full object-contain mb-3">
+    <p class="text-sm text-gray-300 mb-2">¿Necesitas ayuda para encontrar el perfil ideal?</p>
+    <button disabled
+        class="inline-flex items-center gap-2 bg-gray-500 text-white text-sm font-medium px-4 py-1.5 rounded-md shadow opacity-70 cursor-not-allowed">
+        💬 Próximamente
+    </button>
+</div>
         </div>
     </div>
 
