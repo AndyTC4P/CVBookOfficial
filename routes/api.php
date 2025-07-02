@@ -89,7 +89,11 @@ Route::get('/cvs/buscar', function (Request $request) {
     }
 
     // 📦 Respuesta final (máximo 10 resultados)
-    return response()->json($cvs->take(10));
+    return response()
+    ->json($cvs->take(10))
+    ->header('Content-Type', 'application/json')
+    ->header('Accept', 'application/json');
+
 });
 
 
