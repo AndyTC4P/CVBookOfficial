@@ -178,11 +178,8 @@ Route::middleware(['auth', 'verified', EmpresaAprobada::class])->group(function 
 });
 
 Route::get('/gpt-cvs', function (Request $request) {
-    
-
     $query = CV::query()->where('publico', 1);
 
-    // Filtros
     if ($request->filled('categoria')) {
         $query->where('categoria_profesion', $request->categoria);
     }
@@ -196,7 +193,6 @@ Route::get('/gpt-cvs', function (Request $request) {
         });
     }
 
-    // Idiomas (procesamiento similar al actual)
     $normalizar = fn($texto) => Str::of($texto)->lower()->ascii()->trim()->__toString();
 
     $idiomas_validos = [
@@ -226,9 +222,12 @@ Route::get('/gpt-cvs', function (Request $request) {
         })->values();
     }
 
-    return response()
-        ->json($cvs->take(10))
-        ->header('Content-Type', 'application/json');
+    // 👉 Vista simulada como HTML con <script> JSON que ChatGPT puede leer
+    return response("
+        <html><body>
+        <script type='application/json'>" . json_encode($cvs->take(10)) . "</script>
+        </body></html>
+    ", 200)->header('Content-Type', 'text/html');
 });
 
 
