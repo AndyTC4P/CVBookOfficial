@@ -178,10 +178,7 @@ Route::middleware(['auth', 'verified', EmpresaAprobada::class])->group(function 
 });
 
 Route::get('/gpt-cvs', function (Request $request) {
-    // 🔐 Validar clave de seguridad
-    if ($request->header('x-sivi-key') !== config('sivi.secret')) {
-        return response()->json(['error' => 'No autorizado'], 403);
-    }
+    
 
     $query = CV::query()->where('publico', 1);
 
