@@ -1,3 +1,14 @@
+
+<div x-data x-cloak>
+    <!-- Pantalla de carga -->
+    <div x-show="@entangle('cargando').defer" class="fixed inset-0 z-50 bg-gray-900 bg-opacity-90 flex items-center justify-center">
+        <div class="text-white text-xl font-semibold animate-pulse">
+            🔄 Cargando información...
+        </div>
+    </div>
+
+    <!-- Contenido principal solo visible cuando termina de cargar -->
+    <div x-show="!@entangle('cargando').defer" x-cloak>
 <div class="space-y-6">
     <!-- Banner ajustado -->
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
@@ -307,6 +318,8 @@
         </div>
     </div>
 </div>
+    </div> <!-- Cierre del contenido visible -->
+</div> <!-- Cierre de x-data -->
 @endif
 
 

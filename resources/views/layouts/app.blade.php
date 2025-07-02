@@ -25,6 +25,7 @@
 <meta name="twitter:description" content="Filtra CVs por habilidades, idiomas y más. Plataforma intuitiva para reclutadores.">
 <meta name="twitter:image" content="{{ url('images/logo_sivi.png') }}">
 
+<style>[x-cloak] { display: none !important; }</style>
 
 
         <!-- Fonts -->

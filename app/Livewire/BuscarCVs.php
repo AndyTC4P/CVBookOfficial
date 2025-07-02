@@ -20,6 +20,8 @@ class BuscarCVs extends Component
     public $idiomas_disponibles = [];
     public $idiomas_seleccionados = [];
     public $mostrarResultados = false;
+    public $cargando = true;
+
 
     public function mount()
     {
@@ -65,6 +67,8 @@ class BuscarCVs extends Component
             ->sort()
             ->values()
             ->toArray();
+            $this->cargando = false;
+
     }
 
     public function aplicarFiltros()
