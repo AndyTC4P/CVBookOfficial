@@ -430,9 +430,6 @@ x
             @if ($errors->has('ciudad'))
                 <li>El campo <strong>Ciudad</strong> debe tener máximo 100 caracteres.</li>
             @endif
-            @if ($errors->has('habilidades.*'))
-                <li>Cada <strong>Habilidad</strong> es obligatoria y debe tener máximo 35 caracteres.</li>
-            @endif
            @if ($errors->has('idiomas.*.nombre'))
     <li>Debes seleccionar un <strong>idioma</strong> en cada fila completada.</li>
 @endif
@@ -464,9 +461,6 @@ x
             @if ($errors->has('educacion.*.fin'))
                 <li>La <strong>Fecha de Fin</strong> en estudios debe ser posterior o igual a la fecha de inicio.</li>
             @endif
-            @if ($errors->has('habilidades'))
-    <li>Debe ingresar al menos <strong>5 habilidades</strong> para completar el CV.</li>
-@endif
 
         </ul>
     </div>
