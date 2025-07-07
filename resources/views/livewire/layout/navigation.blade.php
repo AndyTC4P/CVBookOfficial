@@ -39,6 +39,17 @@
             🔍 {{ __('Buscar CVs') }}
         </x-nav-link>
     @endif
+    @if (Auth::user()->isEmpresa())
+    <x-nav-link :href="route('empresa.vacantes')" :active="request()->routeIs('empresa.vacantes')" wire:navigate>
+        📌 {{ __('Vacantes Publicadas') }}
+    </x-nav-link>
+@endif
+@if (Auth::user()->isUsuario())
+    <x-nav-link :href="route('vacantes.lista')" :active="request()->routeIs('vacantes.lista')" wire:navigate>
+        🧭 {{ __('Buscar Vacantes') }}
+    </x-nav-link>
+@endif
+
 </div>
 @endauth
 
@@ -135,6 +146,17 @@
             🔍 {{ __('Buscar CVs') }}
         </x-responsive-nav-link>
     @endif
+    @if (Auth::user()->isEmpresa())
+    <x-responsive-nav-link :href="route('empresa.vacantes')" :active="request()->routeIs('empresa.vacantes')" wire:navigate>
+        📌 {{ __('Vacantes Publicadas') }}
+    </x-responsive-nav-link>
+@endif
+@if (Auth::user()->isUsuario())
+    <x-responsive-nav-link :href="route('vacantes.lista')" :active="request()->routeIs('vacantes.lista')" wire:navigate>
+        🧭 {{ __('Buscar Vacantes') }}
+    </x-responsive-nav-link>
+@endif
+
 </div>
 
         @endauth

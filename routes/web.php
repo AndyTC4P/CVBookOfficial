@@ -15,6 +15,10 @@ use App\Http\Controllers\Auth\EmpresaRegisterController;
 use App\Http\Middleware\EmpresaAprobada;
 use App\Http\Controllers\Admin\EmpresaController;
 use Illuminate\Support\Str;
+use App\Livewire\DetalleVacante;
+use App\Livewire\VerPostulaciones;
+use App\Livewire\VacantesEmpresa;
+use App\Livewire\ListaVacantes;
 
 // 🧠 Panel de administración
 Route::get('/admin/dashboard', function () {
@@ -229,7 +233,17 @@ Route::get('/gpt-cvs', function (Request $request) {
         </body></html>
     ", 200)->header('Content-Type', 'text/html');
 });
-
+Route::get('/vacantes/{id}', DetalleVacante::class)->name('vacantes.detalle');
+Route::get('/empresa/vacantes/{id}/postulaciones', VerPostulaciones::class)
+    ->middleware(['auth']) // ✅ solo auth, SIN 'empresa.only'
+    ->name('empresa.vacantes.postulaciones');
+    
+Route::get('/empresa/vacantes', VacantesEmpresa::class)
+    ->middleware(['auth', 'verified']) // <- agrega esto
+    ->name('empresa.vacantes');
+    Route::get('/vacantes', ListaVacantes::class)
+    ->middleware(['auth', 'verified']) // si usas verificación por correo
+    ->name('vacantes.lista');
 
 
 

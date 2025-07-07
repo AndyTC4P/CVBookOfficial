@@ -66,6 +66,17 @@ public function favoritos()
 {
     return $this->belongsToMany(CV::class, 'cv_favoritos', 'user_id', 'cv_id')->withTimestamps();
 }
+// Para empresas
+public function vacantes()
+{
+    return $this->hasMany(Vacante::class, 'empresa_id');
+}
+
+// Para usuarios normales
+public function postulaciones()
+{
+    return $this->hasMany(Postulacion::class, 'usuario_id');
+}
 
 
 
