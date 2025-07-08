@@ -17,14 +17,16 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var list<string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'genero',
-        'role',
+   protected $fillable = [
+    'name',
+    'email',
+    'password',
+    'genero',
+    'role',
+    'nombre_empresa',
+    'telefono',
+];
 
-    ];
 
     /**
      * The attributes that should be hidden for serialization.

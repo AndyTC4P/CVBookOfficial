@@ -11,62 +11,60 @@ new class extends Component
     public string $name = '';
     public string $email = '';
     public string $genero = 'no_especificado';
+    public ?string $nombre_empresa = null;
+    public ?string $telefono = null;
 
-
-    /**
-     * Mount the component.
-     */
     public function mount(): void
     {
-        $this->name = Auth::user()->name;
-        $this->email = Auth::user()->email;
-        $this->genero = Auth::user()->genero ?? 'no_especificado';
-
+        $user = Auth::user();
+        $this->name = $user->name;
+        $this->email = $user->email;
+        $this->genero = $user->genero ?? 'no_especificado';
+        $this->nombre_empresa = $user->nombre_empresa;
+        $this->telefono = $user->telefono;
     }
 
-    /**
-     * Update the profile information for the currently authenticated user.
-     */
     public function updateProfileInformation(): void
     {
         $user = Auth::user();
-    
-        $validated = $this->validate([
+
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
             'genero' => ['required', Rule::in(['masculino', 'femenino', 'no_especificado'])],
-        ]);
-    
+        ];
+
+        if ($user->role === 'empresa') {
+            $rules['nombre_empresa'] = ['required', 'string', 'max:255'];
+            $rules['telefono'] = ['nullable', 'string', 'max:25'];
+        }
+
+        $validated = $this->validate($rules);
         $user->fill($validated);
-    
+
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
-    
+
         $user->save();
-    
+
         $this->dispatch('profile-updated', name: $user->name);
     }
-    
 
-    /**
-     * Send an email verification notification to the current user.
-     */
     public function sendVerification(): void
     {
         $user = Auth::user();
 
         if ($user->hasVerifiedEmail()) {
             $this->redirectIntended(default: route('dashboard', absolute: false));
-
             return;
         }
 
         $user->sendEmailVerificationNotification();
-
         Session::flash('status', 'verification-link-sent');
     }
-}; ?>
+};
+?>
 
 <section>
     <header>
@@ -80,20 +78,37 @@ new class extends Component
     </header>
 
     <form wire:submit="updateProfileInformation" class="mt-6 space-y-6">
+        @if (auth()->user()->isEmpresa())
+            <div>
+                <x-input-label for="nombre_empresa" :value="'Nombre de la Empresa'" />
+                <x-text-input wire:model="nombre_empresa" id="nombre_empresa" name="nombre_empresa" type="text" class="mt-1 block w-full" required />
+                <x-input-error class="mt-2" :messages="$errors->get('nombre_empresa')" />
+            </div>
+        @endif
+
         <div>
-            <x-input-label for="name" :value="__('Name')" />
+            <x-input-label for="name" :value="auth()->user()->isEmpresa() ? 'Nombre del Contacto' : __('Name')" />
             <x-text-input wire:model="name" id="name" name="name" type="text" class="mt-1 block w-full" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
+
+        @if (auth()->user()->isEmpresa())
+            <div>
+                <x-input-label for="telefono" :value="'Número de Contacto'" />
+                <x-text-input wire:model="telefono" id="telefono" name="telefono" type="text" class="mt-1 block w-full" />
+                <x-input-error class="mt-2" :messages="$errors->get('telefono')" />
+            </div>
+        @endif
+
         <div>
-    <x-input-label for="genero" :value="__('Género')" />
-    <select wire:model="genero" id="genero" name="genero" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-        <option value="masculino">Masculino</option>
-        <option value="femenino">Femenino</option>
-        <option value="no_especificado">Prefiero no decirlo</option>
-    </select>
-    <x-input-error class="mt-2" :messages="$errors->get('genero')" />
-</div>
+            <x-input-label for="genero" :value="__('Género')" />
+            <select wire:model="genero" id="genero" name="genero" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                <option value="masculino">Masculino</option>
+                <option value="femenino">Femenino</option>
+                <option value="no_especificado">Prefiero no decirlo</option>
+            </select>
+            <x-input-error class="mt-2" :messages="$errors->get('genero')" />
+        </div>
 
         <div>
             <x-input-label for="email" :value="__('Email')" />
@@ -121,10 +136,10 @@ new class extends Component
 
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
-
             <x-action-message class="me-3" on="profile-updated">
                 {{ __('Saved.') }}
             </x-action-message>
         </div>
     </form>
 </section>
+
