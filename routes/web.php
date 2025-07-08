@@ -19,6 +19,9 @@ use App\Livewire\DetalleVacante;
 use App\Livewire\VerPostulaciones;
 use App\Livewire\VacantesEmpresa;
 use App\Livewire\ListaVacantes;
+use App\Http\Controllers\VacantePublicaController;
+
+
 
 // 🧠 Panel de administración
 Route::get('/admin/dashboard', function () {
@@ -244,6 +247,9 @@ Route::get('/empresa/vacantes', VacantesEmpresa::class)
     Route::get('/vacantes', ListaVacantes::class)
     ->middleware(['auth', 'verified']) // si usas verificación por correo
     ->name('vacantes.lista');
+    Route::get('/vacante/{slug}', [VacantePublicaController::class, 'ver'])->name('vacante.publica');
+Route::get('/vacante/{slug}', [VacantePublicaController::class, 'ver'])->name('vacante.publica');
+
 
 
 

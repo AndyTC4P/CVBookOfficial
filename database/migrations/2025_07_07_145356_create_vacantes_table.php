@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->string('ubicacion')->nullable();
             $table->string('modalidad')->nullable(); // Presencial / Remoto / Híbrido
             $table->string('tipo_contrato')->nullable(); // Tiempo completo, medio tiempo, etc.
+            $table->string('slug')->unique(); // 🔗 Enlace público
             $table->timestamps();
 
             $table->foreign('empresa_id')->references('id')->on('users')->onDelete('cascade');
@@ -27,4 +28,5 @@ return new class extends Migration {
         Schema::dropIfExists('vacantes');
     }
 };
+
 

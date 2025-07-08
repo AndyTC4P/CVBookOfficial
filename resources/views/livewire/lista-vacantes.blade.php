@@ -10,10 +10,13 @@
             @forelse ($vacantes as $vacante)
                 <div class="bg-gray-900 border border-gray-700 hover:border-indigo-500 rounded-lg p-4 shadow-md transition duration-300 flex flex-col justify-between h-full">
                     <div class="space-y-2">
-                        <h3 class="text-lg font-bold text-indigo-400">{{ $vacante->titulo }}</h3>
+                        <h3 class="text-lg font-bold text-white">{{ $vacante->titulo }}</h3>
+
 
                         @if($vacante->empresa && $vacante->empresa->name)
-                            <p class="text-sm text-gray-400 italic">Empresa: {{ $vacante->empresa->name }}</p>
+                         <p class="text-sm text-gray-400 italic">
+    Empresa: {{ $vacante->empresa->nombre_empresa ?? $vacante->empresa->name }}
+</p>
                         @endif
 
                         @if($vacante->ubicacion || $vacante->modalidad || $vacante->tipo_contrato)

@@ -96,11 +96,13 @@ class VacantesEmpresa extends Component
         $this->modo_edicion = false;
     }
 
-   public function render()
+public function render()
 {
-    return view('livewire.vacantes-empresa')
-        ->layout('layouts.app'); // ✅ Correcto
+    return view('livewire.vacantes-empresa', [
+        'vacantes' => $this->vacantes
+    ])->layout('layouts.app');
 }
+
 
 }
 

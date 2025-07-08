@@ -98,6 +98,27 @@
                                 📥 {{ $vacante->postulaciones->count() }} Postulante{{ $vacante->postulaciones->count() > 1 ? 's' : '' }}
                             </a>
                         @endif
+                        <!-- Botón: Copiar enlace -->
+<button
+    x-data="{ copied: false }"
+    @click="
+        navigator.clipboard.writeText('{{ route('vacante.publica', $vacante->slug) }}');
+        copied = true;
+        setTimeout(() => copied = false, 3000);
+    "
+    class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-md shadow relative"
+    title="Copiar enlace de la vacante"
+>
+    🔗 Copiar enlace para compartir
+    <span
+        x-show="copied"
+        x-transition
+        class="absolute -top-6 left-0 text-green-400 text-xs bg-gray-900 border border-green-400 rounded px-2 py-1"
+    >
+        ✅ Enlace copiado
+    </span>
+</button>
+
                     </div>
                 </div>
             @endforeach

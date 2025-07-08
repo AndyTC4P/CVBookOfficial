@@ -80,6 +80,11 @@ public function postulaciones()
     return $this->hasMany(Postulacion::class, 'usuario_id');
 }
 
+// Relación para acceder a los CVs del usuario
+public function cvs()
+{
+    return $this->hasMany(CV::class, 'user_id');
+}
 
 
 }
