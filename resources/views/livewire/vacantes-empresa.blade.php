@@ -58,44 +58,54 @@
             @endif
         </div>
     </div>
+<!-- Lista de Vacantes Publicadas -->
+<div class="bg-gray-800 p-6 rounded-lg shadow space-y-6">
+    <h2 class="text-2xl font-bold text-white">📋 Vacantes Publicadas</h2>
 
-    <!-- Lista de Vacantes Publicadas -->
-    <div class="bg-gray-800 p-6 rounded-lg shadow space-y-6">
-        <h2 class="text-2xl font-bold text-white">📋 Vacantes Publicadas</h2>
+    @if ($vacantes->count())
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            @foreach ($vacantes as $vacante)
+                <div class="bg-gray-900 border border-gray-700 rounded-lg p-4 flex flex-col justify-between shadow hover:border-indigo-500 transition">
+                    
+                    <!-- Información -->
+                    <div class="space-y-1">
+                        <h3 class="text-lg text-white font-semibold">{{ $vacante->titulo }}</h3>
+                        <p class="text-sm text-white">
+                            {{ $vacante->ubicacion ?? 'Ubicación no especificada' }} • 
+                            {{ $vacante->modalidad ?? 'Modalidad no definida' }} • 
+                            {{ $vacante->tipo_contrato ?? 'Contrato no definido' }}
+                        </p>
+                        @if ($vacante->categoria)
+                            <p class="text-sm text-white italic">Categoría: {{ $vacante->categoria }}</p>
+                        @endif
+                    </div>
 
-        @forelse ($vacantes as $vacante)
-            <div class="bg-gray-900 border border-gray-700 rounded-lg p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-indigo-500 transition">
-                <div class="space-y-1">
-                    <h3 class="text-lg text-indigo-400 font-semibold">{{ $vacante->titulo }}</h3>
-                    <p class="text-sm text-gray-300">{{ $vacante->ubicacion }} • {{ $vacante->modalidad }} • {{ $vacante->tipo_contrato }}</p>
-                    @if ($vacante->categoria)
-                        <p class="text-sm text-gray-400 italic">Categoría: {{ $vacante->categoria }}</p>
-                    @endif
+                    <!-- Botones -->
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        <button wire:click="edit({{ $vacante->id }})"
+                            class="px-3 py-1.5 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-semibold rounded-md shadow">
+                            ✏️ Editar
+                        </button>
+
+                        <button wire:click="delete({{ $vacante->id }})"
+                            class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-md shadow">
+                            🗑️ Eliminar
+                        </button>
+
+                        @if ($vacante->postulaciones->count())
+                            <a href="{{ route('empresa.vacantes.postulaciones', ['id' => $vacante->id]) }}"
+                               class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-md shadow">
+                                📥 {{ $vacante->postulaciones->count() }} Postulante{{ $vacante->postulaciones->count() > 1 ? 's' : '' }}
+                            </a>
+                        @endif
+                    </div>
                 </div>
-
-                <div class="flex flex-wrap gap-2 items-center">
-                    <button wire:click="edit({{ $vacante->id }})"
-                        class="px-3 py-1.5 bg-yellow-500 hover:bg-yellow-600 text-gray-900 text-sm font-semibold rounded-md shadow">
-                        ✏️ Editar
-                    </button>
-
-                    <button wire:click="delete({{ $vacante->id }})"
-                        class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-md shadow">
-                        🗑️ Eliminar
-                    </button>
-
-                    @if ($vacante->postulaciones->count())
-                        <a href="{{ route('empresa.vacantes.postulaciones', ['id' => $vacante->id]) }}"
-                           class="px-3 py-1.5 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-semibold rounded-md shadow">
-                            📥 {{ $vacante->postulaciones->count() }} Postulantes
-                        </a>
-                    @endif
-                </div>
-            </div>
-        @empty
-            <p class="text-sm text-gray-400">Aún no has publicado vacantes.</p>
-        @endforelse
-    </div>
+            @endforeach
+        </div>
+    @else
+        <p class="text-sm text-white">Aún no has publicado vacantes.</p>
+    @endif
+</div>
 </div>
 
 
