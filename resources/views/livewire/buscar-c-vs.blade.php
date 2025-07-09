@@ -193,13 +193,18 @@
 
 <!-- Botones y mensaje -->
 <div class="mt-4 flex flex-col gap-2">
+
+    <!-- Texto arriba de los botones -->
+    <p class="text-xs text-gray-400 italic ms-1">
+        También puedes ver todos los CVs disponibles sin usar filtros usando el botón "Iniciar búsqueda".
+    </p>
+
     <div class="flex gap-4 items-center flex-nowrap overflow-x-auto">
         <button
-    wire:click="aplicarFiltros"
-    class="px-4 py-2 bg-green-600 text-white rounded-md font-semibold shadow hover:bg-green-700 text-sm">
-    🔍 Iniciar búsqueda
-</button>
-
+            wire:click="aplicarFiltros"
+            class="px-4 py-2 bg-green-600 text-white rounded-md font-semibold shadow hover:bg-green-700 text-sm">
+            🔍 Iniciar búsqueda
+        </button>
 
         <button
             wire:click="$toggle('solo_favoritos')"
@@ -217,10 +222,8 @@
         </button>
     </div>
 
-    <p class="text-xs text-gray-400 italic -mt-1 ms-1">
-        También puedes ver todos los CVs disponibles sin usar filtros usando el boton "Iniciar busqueda".
-    </p>
 </div>
+
 
     <!-- Mensaje -->
     @if ($mensaje)
