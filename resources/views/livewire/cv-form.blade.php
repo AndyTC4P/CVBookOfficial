@@ -347,7 +347,7 @@ x
 
             <!-- Egreso -->
             <div class="flex flex-col">
-                <label class="text-sm text-gray-300 mb-1">Egreso</label>
+                <label class="text-sm text-gray-300 mb-1">Egreso/Progreso actual</label>
                 <input type="date" wire:model="educacion.{{ $index }}.fin"
                        class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm text-sm">
             </div>

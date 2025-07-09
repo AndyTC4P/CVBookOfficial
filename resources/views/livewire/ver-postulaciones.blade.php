@@ -7,7 +7,7 @@
         <div class="bg-gray-900 border border-gray-700 rounded-lg p-4 flex justify-between items-center hover:border-indigo-500 transition">
             <div>
                 <p class="text-white font-semibold">{{ $postulacion->usuario->name }}</p>
-                <p class="text-sm text-gray-400">Carrera / Profesión: {{ $postulacion->cv->titulo_manual ?? 'Sin título' }}</p>
+              <p class="text-sm text-gray-400">Carrera / Profesión: {{ $postulacion->cv->titulo ?? 'Sin título' }}</p>
                 <p class="text-sm text-gray-500">📅 Postulado el {{ \Carbon\Carbon::parse($postulacion->fecha_postulacion)->format('d/m/Y H:i') }}</p>
             </div>
             <a href="{{ route('cv.show', ['slug' => $postulacion->cv->slug]) }}"

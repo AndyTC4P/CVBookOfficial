@@ -339,10 +339,14 @@ if (!$tieneLenguaMaterna) {
     {
         $this->experiencia[$index]['tareas'] = $contenido;
     }
-    public function addLanguage()
+public function addLanguage()
 {
-    $this->idiomas[] = ['nombre' => '', 'nivel' => ''];
+    $this->idiomas[] = [
+        'nombre' => '',
+        'nivel' => count($this->idiomas) === 0 ? 'nativo' : '',
+    ];
 }
+
 public function removeLanguage()
 {
     array_pop($this->idiomas);
