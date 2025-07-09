@@ -58,75 +58,78 @@
             @endif
         </div>
     </div>
-<!-- Lista de Vacantes Publicadas -->
-<div class="bg-gray-800 p-6 rounded-lg shadow space-y-6">
-    <h2 class="text-2xl font-bold text-white">📋 Vacantes Publicadas</h2>
 
-    @if ($vacantes->count())
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            @foreach ($vacantes as $vacante)
-                <div class="bg-gray-900 border border-gray-700 rounded-lg p-4 flex flex-col justify-between shadow hover:border-indigo-500 transition">
-                    
-                    <!-- Información -->
-                    <div class="space-y-1">
-                        <h3 class="text-lg text-white font-semibold">{{ $vacante->titulo }}</h3>
-                        <p class="text-sm text-white">
-                            {{ $vacante->ubicacion ?? 'Ubicación no especificada' }} • 
-                            {{ $vacante->modalidad ?? 'Modalidad no definida' }} • 
-                            {{ $vacante->tipo_contrato ?? 'Contrato no definido' }}
-                        </p>
-                        @if ($vacante->categoria)
-                            <p class="text-sm text-white italic">Categoría: {{ $vacante->categoria }}</p>
-                        @endif
+    <!-- Lista de Vacantes Publicadas -->
+    <div class="bg-gray-800 p-6 rounded-lg shadow space-y-6">
+        <h2 class="text-2xl font-bold text-white">📋 Vacantes Publicadas</h2>
+
+        @if ($vacantes->count())
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                @foreach ($vacantes as $vacante)
+                    <div class="bg-gray-900 border border-gray-700 rounded-lg p-4 flex flex-col justify-between shadow hover:border-indigo-500 transition">
+                        <!-- Información -->
+                        <div class="space-y-1">
+                            <h3 class="text-lg text-white font-semibold">{{ $vacante->titulo }}</h3>
+                            <p class="text-sm text-white">
+                                {{ $vacante->ubicacion ?? 'Ubicación no especificada' }} • 
+                                {{ $vacante->modalidad ?? 'Modalidad no definida' }} • 
+                                {{ $vacante->tipo_contrato ?? 'Contrato no definido' }}
+                            </p>
+                            @if ($vacante->categoria)
+                                <p class="text-sm text-white italic">Categoría: {{ $vacante->categoria }}</p>
+                            @endif
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            <button wire:click="edit({{ $vacante->id }})"
+                                class="px-3 py-1.5 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-semibold rounded-md shadow">
+                                ✏️ Editar
+                            </button>
+
+                            <button wire:click="delete({{ $vacante->id }})"
+                                class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-md shadow">
+                                🗑️ Eliminar
+                            </button>
+
+                            @if ($vacante->postulaciones->count())
+                                <a href="{{ route('empresa.vacantes.postulaciones', ['id' => $vacante->id]) }}"
+                                   class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-md shadow">
+                                    📥 {{ $vacante->postulaciones->count() }} Postulante{{ $vacante->postulaciones->count() > 1 ? 's' : '' }}
+                                </a>
+                            @endif
+
+                            <!-- Botón: Copiar enlace -->
+                            <div x-data="{ copied: false }" class="relative">
+                                <button
+                                    @click="
+                                        navigator.clipboard.writeText('{{ route('vacante.publica', $vacante->slug) }}');
+                                        copied = true;
+                                        setTimeout(() => copied = false, 3000);
+                                    "
+                                    class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-md shadow"
+                                    title="Copiar enlace de la vacante"
+                                >
+                                    🔗 Copiar enlace para compartir
+                                </button>
+
+                                <span
+                                    x-show="copied"
+                                    x-transition
+                                    x-cloak
+                                    class="absolute -top-6 left-0 text-green-400 text-xs bg-gray-900 border border-green-400 rounded px-2 py-1"
+                                >
+                                    ✅ Enlace copiado
+                                </span>
+                            </div>
+                        </div>
                     </div>
-
-                    <!-- Botones -->
-                    <div class="flex flex-wrap gap-2 mt-4">
-                        <button wire:click="edit({{ $vacante->id }})"
-                            class="px-3 py-1.5 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-semibold rounded-md shadow">
-                            ✏️ Editar
-                        </button>
-
-                        <button wire:click="delete({{ $vacante->id }})"
-                            class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-md shadow">
-                            🗑️ Eliminar
-                        </button>
-
-                        @if ($vacante->postulaciones->count())
-                            <a href="{{ route('empresa.vacantes.postulaciones', ['id' => $vacante->id]) }}"
-                               class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-md shadow">
-                                📥 {{ $vacante->postulaciones->count() }} Postulante{{ $vacante->postulaciones->count() > 1 ? 's' : '' }}
-                            </a>
-                        @endif
-                        <!-- Botón: Copiar enlace -->
-<button
-    x-data="{ copied: false }"
-    @click="
-        navigator.clipboard.writeText('{{ route('vacante.publica', $vacante->slug) }}');
-        copied = true;
-        setTimeout(() => copied = false, 3000);
-    "
-    class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-md shadow relative"
-    title="Copiar enlace de la vacante"
->
-    🔗 Copiar enlace para compartir
-    <span
-        x-show="copied"
-        x-transition
-        class="absolute -top-6 left-0 text-green-400 text-xs bg-gray-900 border border-green-400 rounded px-2 py-1"
-    >
-        ✅ Enlace copiado
-    </span>
-</button>
-
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    @else
-        <p class="text-sm text-white">Aún no has publicado vacantes.</p>
-    @endif
-</div>
+                @endforeach
+            </div>
+        @else
+            <p class="text-sm text-white">Aún no has publicado vacantes.</p>
+        @endif
+    </div>
 </div>
 
 
