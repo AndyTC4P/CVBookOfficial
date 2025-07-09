@@ -463,6 +463,31 @@ x
         </ul>
     </div>
 @endif
+@php
+    $erroresManejados = [
+        'nombre', 'apellido', 'perfil', 'categoria_profesion', 'titulo_manual', 'imagen',
+        'correo', 'telefono', 'direccion', 'pais', 'ciudad',
+        'idiomas', 'idiomas.*.nombre', 'idiomas.*.nivel',
+        'experiencia.*.empresa', 'experiencia.*.puesto', 'experiencia.*.inicio', 'experiencia.*.fin',
+        'educacion.*.universidad', 'educacion.*.carrera', 'educacion.*.inicio', 'educacion.*.fin',
+    ];
+
+    $erroresNoManejados = collect($errors->getMessages())
+        ->filter(fn($_, $campo) => !in_array($campo, $erroresManejados));
+@endphp
+
+@if ($erroresNoManejados->isNotEmpty())
+    <div class="p-4 mb-4 text-yellow-900 bg-yellow-100 rounded-lg mt-4">
+        <strong>⚠️ Se detectaron errores no identificados directamente:</strong>
+        <ul class="list-disc list-inside text-sm mt-2">
+            @foreach ($erroresNoManejados as $campo => $mensajes)
+                @foreach ($mensajes as $mensaje)
+                    <li><strong>{{ $campo }}:</strong> {{ $mensaje }}</li>
+                @endforeach
+            @endforeach
+        </ul>
+    </div>
+@endif
 
 
 
