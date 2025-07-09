@@ -207,8 +207,6 @@
                 <select wire:model="idiomas.{{ $index }}.nivel" class="w-full dark:bg-gray-800 dark:text-white rounded-md shadow-sm">
                     <option value="">Selecciona nivel</option>
                     <option value="básico">Básico</option>
-                    <option value="intermedio">Intermedio</option>
-                    <option value="avanzado">Avanzado</option>
                     <option value="fluido">Fluido</option>
                     <option value="business">Business</option>
                     <option value="nativo">Lengua materna</option>
