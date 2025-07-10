@@ -8,7 +8,7 @@
             <p><span class="font-semibold text-white">Empresa:</span> {{ $vacante->empresa->name ?? 'No especificada' }}</p>
             <p><span class="font-semibold text-white">Ubicación:</span> {{ $vacante->ubicacion ?? 'No definida' }}</p>
             <p><span class="font-semibold text-white">Modalidad:</span> {{ $vacante->modalidad ?? 'No definida' }}</p>
-            <p><span class="font-semibold text-white">Tipo de contrato:</span> {{ $vacante->tipo_contrato ?? 'No definido' }}</p>
+            <p><span class="font-semibold text-white">Tipo de contratación:</span> {{ $vacante->tipo_contrato ?? 'No definido' }}</p>
             @if($vacante->categoria)
                 <p><span class="font-semibold text-white">Categoría:</span> {{ $vacante->categoria }}</p>
             @endif

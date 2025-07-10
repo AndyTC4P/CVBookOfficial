@@ -34,12 +34,22 @@
                     <option value="Híbrido">Híbrido</option>
                 </select>
             </div>
+<!-- Tipo de Contratación -->
+<div class="md:col-span-2">
+    <label class="block text-sm font-semibold text-white mb-1">Tipo de Contratación</label>
+    <select wire:model.defer="tipo_contrato" class="w-full rounded border border-gray-600 bg-gray-800 text-white px-3 py-2">
+        <option value="">Seleccionar...</option>
+        <option value="Planilla">Planilla</option>
+        <option value="Prácticas Profesionales">Prácticas Profesionales</option>
+        <option value="Horas Sociales">Horas Sociales</option>
+        <option value="Freelance">Freelance</option>
+        <option value="Contrato Temporal">Contrato Temporal</option>
+        <option value="Otro">Otro</option>
+    </select>
+    @error('tipo_contrato') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
+</div>
 
-            <!-- Tipo de contrato -->
-            <div class="md:col-span-2">
-                <label class="block text-sm font-semibold text-white mb-1">Tipo de Contrato</label>
-                <input type="text" wire:model.defer="tipo_contrato" class="w-full rounded border border-gray-600 bg-gray-800 text-white px-3 py-2">
-            </div>
+
 
             <!-- Descripción -->
             <div class="md:col-span-2">

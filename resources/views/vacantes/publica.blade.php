@@ -9,7 +9,7 @@
         <li><span class="font-semibold">Empresa:</span> {{ $vacante->empresa->nombre_empresa ?? $vacante->empresa->name ?? 'No especificada' }}</li>
         <li><span class="font-semibold">Ubicación:</span> {{ $vacante->ubicacion ?? 'No especificada' }}</li>
         <li><span class="font-semibold">Modalidad:</span> {{ $vacante->modalidad ?? 'No definida' }}</li>
-        <li><span class="font-semibold">Tipo de contrato:</span> {{ $vacante->tipo_contrato ?? 'No definido' }}</li>
+        <li><span class="font-semibold">Tipo de contratación:</span> {{ $vacante->tipo_contrato ?? 'No definido' }}</li>
         <li><span class="font-semibold">Categoría:</span> {{ $vacante->categoria ?? 'No especificada' }}</li>
     </ul>
 
@@ -27,15 +27,23 @@
                 </a>
             </div>
         @endif
-    @else
-        <div class="mt-4 text-center">
-            <p class="text-sm text-white">¿Te interesa esta vacante?</p>
-            <a href="{{ route('register') }}"
-               class="mt-2 inline-block bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded shadow text-sm font-semibold">
-                Crea tu cuenta ahora y envía tu CV
-            </a>
-        </div>
-    @endauth
+   @else
+    <div class="mt-4 text-center space-y-2">
+        <p class="text-sm text-white">¿Te interesa esta vacante?</p>
+
+        <a href="{{ route('register') }}"
+           class="inline-block bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded shadow text-sm font-semibold">
+            Crea tu cuenta ahora y envía tu CV
+        </a>
+        <br>
+<p class="text-sm text-white">ó</p>
+        <a href="{{ route('login') }}"
+           class="inline-block bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded shadow text-sm font-semibold">
+            Iniciar sesión
+        </a>
+    </div>
+@endauth
+
 
 </div>
 
