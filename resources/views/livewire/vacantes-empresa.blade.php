@@ -12,11 +12,61 @@
                 @error('titulo') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
             </div>
 
-            <!-- Categoría -->
-            <div>
-                <label class="block text-sm font-semibold text-white mb-1">Categoría</label>
-                <input type="text" wire:model.defer="categoria" class="w-full rounded border border-gray-600 bg-gray-800 text-white px-3 py-2">
-            </div>
+            <!-- Categoría Profesional -->
+<div>
+    <label class="block text-sm font-semibold text-white mb-1">Categoría Profesional</label>
+    <select wire:model.defer="categoria" class="w-full rounded border border-gray-600 bg-gray-800 text-white px-3 py-2">
+        <option value="">Seleccionar...</option>
+        @foreach([
+            'Administración y Finanzas',
+            'Agroindustria y Veterinaria',
+            'Artes Escénicas y Visuales',
+            'Ciencia de Datos e Inteligencia Artificial',
+            'Ciencias Ambientales',
+            'Ciencias Sociales y Humanidades',
+            'Cocina y Preparación de Alimentos',
+            'Comunicaciones y Medios',
+            'Construcción y Obras Civiles',
+            'Contabilidad y Auditoría',
+            'Derecho y Asistencia Legal',
+            'Diseño Gráfico y Multimedios',
+            'Diseño UX/UI',
+            'Docencia Técnica y Capacitación',
+            'Educación Inicial y Básica',
+            'Educación Media y Universitaria',
+            'Electricidad y Electrónica',
+            'Estudiantes y Primer Empleo',
+            'Fotografía y Producción Audiovisual',
+            'Freelancers y Servicios Independientes',
+            'Hospitalidad y Turismo',
+            'Ingeniería',
+            'Ingeniería en Sistemas',
+            'Logística y Distribución',
+            'Mantenimiento Industrial y Mecánica',
+            'Marketing Digital',
+            'Operaciones y Call Center',
+            'Personas con Discapacidad o Reincorporación',
+            'Producción y Manufactura',
+            'Publicidad y Comunicación Visual',
+            'Recursos Humanos',
+            'Salud - Enfermería',
+            'Salud - Medicina General',
+            'Salud - Odontología',
+            'Salud - Psicología',
+            'Seguridad y Vigilancia',
+            'Servicios Personales',
+            'Soporte Técnico y Redes',
+            'Tecnología y Desarrollo Web',
+            'Transporte y Conducción',
+            'Ventas y Atención al Cliente',
+            'Otro'
+        ] as $cat)
+            <option value="{{ $cat }}">{{ $cat }}</option>
+        @endforeach
+    </select>
+    @error('categoria') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
+</div>
+
 
             <!-- Ubicación -->
             <div>
